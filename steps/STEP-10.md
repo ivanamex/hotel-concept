@@ -19,10 +19,13 @@ Status: collecting. Ivana adds items and inspo here; build starts when she says 
 4. **Hero** — image carousel behind the search form, slow crossfade (6–7 s per slide, Ken-Burns push-in), 4–5 slides from the area; optionally 2–3 of them as short looping video clips (image-to-video from our generated stills: water moving, light shifting, 5 s, muted, poster fallback, respects reduced-motion). Needs 2–4 new area images (Ouchy pier with a belle-époque boat, cathedral from Sauvabelin, winter lake with snowed Alps, Vidy beach in summer) — generate first, pick, then animate. Video generation costs credits: estimate and confirm with Ivana before running.
 5. **Perks strip under the hero** — give it movement. Options: (a) continuous ticker (perks + live-feel lines: "Lake 14 °C · Sunset 18:52 · Next boat to Montreux 15:10 · Terrace open", pause on hover) — recommended; (b) staggered reveal with icons drawing in on scroll; (c) both: reveal once, then ticker.
 6. **Entrance video** — inspo coming (door opens, you walk into the hotel). Decide where it lives (hero? intro section? a "Step inside" overlay?) once we see it.
-7. (Ivana to add more)
+7. **Email lightbox with an offer** (inspo: thepopuphotel.com "Join our community", lasalaplazahotel.com "Otoño en Lasala: 20 % con el promocode"). Ours: "Stay in touch" / claim-your-discount — image left (a room or the lake), copy + email field + CTA right, in the new button style. Offer: 10 % off a direct booking with the code you get by email (demo code VIDY10, applied in the booking engine as a promo field). Trigger: after ~45 % scroll or 25 s on page, whichever first; once per visitor (remembered 30 days); never on /book, /office or the confirmation; closes on Esc / outside click; no exit-intent tricks. Subscribers land in the back office as a "Subscribers" list under Inbox (name optional, email, date, source page) so the hotel can export them.
+8. (Ivana to add more)
 
 ## Inspo
-- (links Ivana shares go here, one line each with what to take from it)
+- hotelaurelia.online — booking as its own page with a date picker that marks available / limited / sold-out days (we could colour the calendar in /book the same way)
+- thepopuphotel.com — "Join our community" lightbox: photo left, headline + one line + email + full-width button right; close X top-right
+- lasalaplazahotel.com — promo-code lightbox: small caps eyebrow, big headline with the offer, validity line, short paragraph, one CTA with arrow; room photo with a person in it on the left
 
 ## Done when
 Every item above is either built or struck through with a reason; site re-checked desktop + mobile; Ivana says "ok"; then production.
