@@ -145,7 +145,7 @@ export const ROOMS: Room[] = [
     summary: "Two beds, one view of the garden — for friends or colleagues.",
     description: "Two single beds with padded blue headboards, a desk for two laptops and a bathroom with a rain shower. The beds can be joined into a 180 cm bed on request.",
     features: [F.garden, F.twin, F.wifi, F.ac, F.nespresso, F.desk, F.rain, F.safe, F.tv],
-    images: ["/images/rooms/room-twin.jpg", "/images/house/bathroom.jpg"],
+    images: ["/images/rooms/room-twin.jpg", "/images/rooms/room-twin-2.jpg", "/images/house/bathroom.jpg"],
     status: "active",
   },
   {
@@ -163,7 +163,7 @@ export const ROOMS: Room[] = [
     summary: "A private balcony over the lake and a bed you will not want to leave.",
     description: "Third floor, French windows opening to a balcony with two chairs and the whole lake in front of you. A king bed, a salon corner, a marble bathroom with bathtub and rain shower. Breakfast served on the balcony on request.",
     features: [F.balcony, F.lakeview, F.sofa, F.wifi, F.ac, F.nespresso, F.minibar, F.bath, F.rain, F.safe, F.tv, F.robes],
-    images: ["/images/rooms/room-junior-suite.jpg", "/images/house/lounge.jpg", "/images/house/breakfast-balcony.jpg", "/images/house/bathroom.jpg"],
+    images: ["/images/rooms/room-junior-suite.jpg", "/images/lake/terrace-view-2.jpg", "/images/house/breakfast-balcony.jpg", "/images/house/bathroom.jpg"],
     status: "active",
   },
   {

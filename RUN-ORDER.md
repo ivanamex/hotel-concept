@@ -5,7 +5,6 @@ Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
 - STEP-09 deploy: import `ivanamex/hotel-concept` in Vercel (ivanamex's projects), deployment protection off, then paste the live URL into steps/STEP-09.md
-- Replace the 11 placeholder photos (soft gradients) with the picks from the image flow: lake/hero-lake, lake/marina, lake/swans, lake/lakeside-path, around/lavaux, around/old-town, house/terrace-dusk, rooms/room-junior-suite, rooms/room-family, rooms/room-attic, rooms/room-twin (same file names, ≤ 1600 px, JPG)
 
 ## Next
 - STEP-10 FR + DE languages (Swiss client; EN is default now)
@@ -30,6 +29,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - Push to main after every step; Ivana checks in the browser and says "ok"
 - Demo only: data lives in the browser (seeded on first load, "Reset demo data" in /office settings)
 - Hotel name, address, phone, email, prices and reviews are concept placeholders — replace before any client use
+- Photos: rooms 1–3, 5, 9 and the house shots are the client's own; the rest are generated concept images, to be replaced by real photography at go-live
 - No traces: nothing shipped names a tool, a model or a step; commit attribution off
 - Footer carries "by 20°N" → https://20north.art on every page
 - Sans-serif only (Bricolage Grotesque + Figtree, self-hosted); no gold/leather tones; metric; prices in CHF

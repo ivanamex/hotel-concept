@@ -53,7 +53,7 @@ export const AROUND: Attraction[] = [
     name: "Montreux & Château de Chillon",
     distance: "35 min by train · 90 min by boat",
     kind: "Day trip",
-    image: "/images/lake/hero-lake.jpg",
+    image: "/images/lake/terrace-view.jpg",
     blurb: "The lakeside castle at the far end of the lake, the Montreux promenade and, in July, the Jazz Festival. Go by boat, come back by train through the vineyards.",
   },
   {
@@ -170,6 +170,12 @@ export const GALLERY = [
   { src: "/images/rooms/room-twin.jpg", alt: "Twin Garden room", cat: "Rooms", w: 4, h: 3 },
   { src: "/images/lake/beach-aerial.jpg", alt: "Vidy beach from above", cat: "Lake", w: 4, h: 3 },
   { src: "/images/rooms/classic-garden.jpg", alt: "Classic Garden room", cat: "Rooms", w: 3, h: 2 },
+  { src: "/images/lake/terrace-view.jpg", alt: "The terrace at first light", cat: "House", w: 16, h: 9 },
+  { src: "/images/around/old-town-2.jpg", alt: "Old town at blue hour", cat: "Lausanne", w: 16, h: 9 },
+  { src: "/images/lake/lakeside-path-2.jpg", alt: "Under the plane trees", cat: "Lake", w: 16, h: 9 },
+  { src: "/images/rooms/room-twin-2.jpg", alt: "Twin Garden, morning light", cat: "Rooms", w: 4, h: 3 },
+  { src: "/images/around/lavaux-2.jpg", alt: "Lavaux village above the lake", cat: "Lausanne", w: 16, h: 9 },
+  { src: "/images/lake/terrace-view-2.jpg", alt: "Evening on the deck", cat: "House", w: 16, h: 9 },
 ];
 
 export const FAQ = [

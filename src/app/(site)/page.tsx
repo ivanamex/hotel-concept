@@ -262,8 +262,8 @@ export default function HomePage() {
 
       {/* CTA */}
       <section className="relative overflow-hidden">
-        <Image src="/images/house/terrace-dusk.jpg" alt="The garden terrace at dusk" fill sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-ink/60" />
+        <Image src="/images/lake/terrace-view.jpg" alt="Two chairs on the deck facing the lake and the Alps" fill sizes="100vw" className="object-cover" />
+        <div className="absolute inset-0 bg-ink/55" />
         <Container className="relative py-24 text-center sm:py-32">
           <h2 className="mx-auto max-w-2xl font-display text-4xl font-semibold leading-tight text-white sm:text-5xl">
             The lake is waiting. Pick your dates.
