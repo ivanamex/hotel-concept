@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/figtree";
+
+@theme {
+  --font-display: "Bricolage Grotesque Variable", "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-sand: #f4efe6;
+  --color-paper: #fbf8f2;
+  --color-ink: #171a1f;
+  --color-ink-soft: #2b3038;
+  --color-slate: #5b6470;
+  --color-line: #e4ddd1;
+  --color-line-strong: #cfc6b8;
+  --color-lake: #1b4b73;
+  --color-lake-deep: #13395a;
+  --color-lake-soft: #2f6a99;
+  --color-sky: #d7e6f0;
+  --color-mist: #eef4f8;
+  --color-clay: #c25e3a;
+  --color-clay-soft: #f3e2da;
+  --color-moss: #3f6b4f;
+  --color-moss-soft: #e1ece4;
+
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+
+  --shadow-soft: 0 1px 2px rgba(23, 26, 31, 0.04), 0 8px 24px -12px rgba(23, 26, 31, 0.18);
+  --shadow-lift: 0 2px 4px rgba(23, 26, 31, 0.05), 0 20px 40px -20px rgba(23, 26, 31, 0.28);
+  --shadow-card: 0 1px 0 rgba(23, 26, 31, 0.03), 0 10px 30px -16px rgba(19, 57, 90, 0.25);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+::selection {
+  background: var(--color-sky);
+  color: var(--color-lake-deep);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.hatched {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(23, 26, 31, 0.08) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.fade-up-2 { animation-delay: 0.12s; }
+.fade-up-3 { animation-delay: 0.24s; }
