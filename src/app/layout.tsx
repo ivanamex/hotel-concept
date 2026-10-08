@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Maison Vidy",
-    images: [{ url: "/images/lake/hero-lake.jpg", width: 1600, height: 900 }],
+    images: [{ url: "/images/lake/aerial-day.jpg", width: 2048, height: 1152 }],
   },
 };
 

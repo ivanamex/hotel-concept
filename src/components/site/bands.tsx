@@ -13,7 +13,7 @@ import { VideoLayer } from "./video-layer";
 
 /* ---------- VIDY: video inside the letters ---------- */
 
-export function KnockoutBand({ video = "/videos/swans.mp4", image = "/images/lake/swans.jpg" }: { video?: string; image?: string }) {
+export function KnockoutBand({ video = ["/videos/aerial-day.mp4", "/videos/swans.mp4"], image = "/images/lake/aerial-day.jpg" }: { video?: string | string[]; image?: string }) {
   return (
     <section className="relative isolate overflow-hidden bg-black" aria-label="Vidy">
       <VideoLayer video={video} image={image} alt="" drift />

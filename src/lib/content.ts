@@ -149,7 +149,9 @@ export const RESTAURANT_PICKS = [
 ];
 
 export const GALLERY = [
+  { src: "/images/lake/aerial-day.jpg", alt: "The house, the harbour and the lake from above", cat: "House", w: 16, h: 9 },
   { src: "/images/lake/hero-lake.jpg", alt: "Lake Geneva from the terrace at golden hour", cat: "Lake", w: 16, h: 9 },
+  { src: "/images/lake/aerial-dusk.jpg", alt: "The garden lit at blue hour, from the air", cat: "House", w: 16, h: 9 },
   { src: "/images/rooms/classic-lake.jpg", alt: "Classic Lake room", cat: "Rooms", w: 3, h: 2 },
   { src: "/images/house/lounge.jpg", alt: "The salon", cat: "House", w: 4, h: 3 },
   { src: "/images/around/old-town.jpg", alt: "Lausanne old town in the evening", cat: "Lausanne", w: 16, h: 9 },

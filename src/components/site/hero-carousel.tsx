@@ -9,7 +9,7 @@ import { VideoLayer } from "./video-layer";
 
 export interface Slide {
   image: string;
-  video?: string;
+  video?: string | string[];
   alt: string;
   caption: string;
 }
@@ -17,12 +17,14 @@ export interface Slide {
 /* Video paths are optional: add the file to public/videos and the slide switches to video. */
 export const SLIDES: Record<Season, Slide[]> = {
   summer: [
+    { image: "/images/lake/aerial-day.jpg", video: ["/videos/aerial-day.mp4"], alt: "Maison Vidy from the air: the house, the harbour and the lake at golden hour", caption: "Vidy from above" },
     { image: "/images/lake/hero-lake.jpg", video: "/videos/hero-lake.mp4", alt: "Deck chairs facing Lake Geneva at first light", caption: "The deck, 7 a.m." },
     { image: "/images/lake/marina.jpg", alt: "Port de Vidy in the morning", caption: "Port de Vidy, three minutes away" },
     { image: "/images/house/terrace-dusk.jpg", video: "/videos/terrace-dusk.mp4", alt: "The garden terrace at dusk", caption: "Aperitif on the terrace" },
     { image: "/images/lake/lakeside-path.jpg", alt: "Lakeside path under the plane trees", caption: "The lakeside path to Ouchy" },
   ],
   winter: [
+    { image: "/images/lake/aerial-dusk.jpg", video: ["/videos/aerial-dusk.mp4"], alt: "The house and its lit garden by the lake at dusk, seen from the air", caption: "Blue hour over the garden" },
     { image: "/images/lake/swans.jpg", video: "/videos/swans.mp4", alt: "Swans on the lake at blue hour", caption: "The lake in winter" },
     { image: "/images/lake/terrace-view.jpg", alt: "Two chairs on the deck facing the misty Alps", caption: "The Alps, snow on top" },
     { image: "/images/around/old-town-2.jpg", alt: "Lausanne old town at blue hour", caption: "The old town, fifteen minutes away" },
