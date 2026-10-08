@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Info, Lock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { defaultDates } from "@/components/site/booking-bar";
 import { ExtraIcon, UNIT_LABEL } from "@/components/site/extra-icon";
 import { Button, Field, Input, Select, Textarea, inputClass } from "@/components/ui";
@@ -79,15 +79,13 @@ export function BookingFlow() {
     return { available, unavailable, tooSmall };
   }, [hydrated, rooms, reservations, checkIn, checkOut, adults, children, nights, preRoom]);
 
-  useEffect(() => {
-    if (step !== 2) return;
-    document.getElementById("booking-top")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [step]);
+  const goTop = () => document.getElementById("booking-top")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   const goSearch = () => {
     if (dateError) return;
     setRoomId(null);
     setStep(2);
+    goTop();
     const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children) });
     router.replace(`/book?${params.toString()}`, { scroll: false });
   };
@@ -96,6 +94,7 @@ export function BookingFlow() {
     setRoomId(room.id);
     setPlanId(pid);
     setStep(3);
+    goTop();
   };
 
   const toggleExtra = (id: string) => setExtras((xs) => (xs.includes(id) ? xs.filter((x) => x !== id) : [...xs, id]));
