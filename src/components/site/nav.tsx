@@ -14,6 +14,7 @@ import { scrollTo } from "./motion";
 import { whatsappUrl } from "./whatsapp";
 
 export const NAV = [
+  { href: "/", label: "Home", image: "/images/lake/aerial-dusk.jpg", note: "Lausanne, by the lake" },
   { href: "/rooms", label: "Rooms & suites", image: "/images/rooms/room-junior-suite.jpg", note: "Ten rooms, three views" },
   { href: "/experiences", label: "Experiences", image: "/images/around/lavaux.jpg", note: "The lake, Lavaux, the city" },
   { href: "/dining", label: "Dining & services", image: "/images/house/terrace-dusk.jpg", note: "Breakfast, terrace, concierge" },
@@ -53,6 +54,7 @@ export function SiteNav() {
         </button>
         <Link href="/" onClick={(e) => { if (pathname === "/") { e.preventDefault(); scrollTo(0); } }} className="flex flex-col items-center gap-4" aria-label="Maison Vidy — home / back to top">
           <Mark className="h-7 w-7" />
+          <span className="caps !text-[9px] text-slate">Home</span>
           <span className="caps rotate-180 !text-[10px] text-ink [writing-mode:vertical-rl]">Maison Vidy · Lausanne</span>
         </Link>
         <Link href="/book" className="flex h-36 w-full items-center justify-center bg-lake text-white transition hover:bg-lake-deep">
@@ -98,7 +100,7 @@ export function SiteNav() {
           <nav className="my-10" aria-label="Main">
             <ol>
               {NAV.map((item, i) => {
-                const active = pathname === item.href || pathname.startsWith(item.href + "/");
+                const active = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(item.href + "/");
                 return (
                   <li key={item.href} className="border-b border-line">
                     <Link
@@ -106,13 +108,13 @@ export function SiteNav() {
                       onMouseEnter={() => setHover(i)}
                       onFocus={() => setHover(i)}
                       className={clsx(
-                        "group flex items-baseline gap-5 py-3.5 transition sm:py-4",
+                        "group flex items-baseline gap-5 py-3 transition sm:py-3.5",
                         open && "animate-[fade-up_0.6s_both]",
                       )}
                       style={{ animationDelay: `${120 + i * 50}ms` }}
                     >
-                      <span className="caps w-6 !text-[10px] text-slate">0{i + 1}</span>
-                      <span className={clsx("font-display text-3xl leading-none text-ink transition sm:text-4xl lg:text-[2.75rem]", active ? "italic" : "group-hover:italic")}>{item.label}</span>
+                      <span className="caps w-6 !text-[10px] text-slate">0{i}</span>
+                      <span className={clsx("font-display text-3xl leading-none text-ink transition sm:text-4xl lg:text-[2.6rem]", active ? "italic" : "group-hover:italic")}>{item.label}</span>
                       <ArrowUpRight className="ml-auto h-5 w-5 shrink-0 text-slate opacity-0 transition group-hover:opacity-100" />
                     </Link>
                   </li>

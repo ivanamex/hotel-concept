@@ -1,9 +1,9 @@
 import { Quote, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Closing, KnockoutBand, LocationBlock, NextPage, StepInside } from "@/components/site/bands";
+import { Closing, FilmBreak, KnockoutBand, LocationBlock, NextPage } from "@/components/site/bands";
 import { BookingBar } from "@/components/site/booking-bar";
-import { HeroCarousel } from "@/components/site/hero-carousel";
+import { HeroFilm } from "@/components/site/hero-film";
 import { FadeIn, Parallax, Reveal } from "@/components/site/motion";
 import { RoomsTrack } from "@/components/site/rooms-track";
 import { Ticker } from "@/components/site/ticker";
@@ -15,11 +15,11 @@ export default function HomePage() {
   return (
     <>
       {/* HERO */}
-      <HeroCarousel>
+      <HeroFilm>
         <Container className="flex min-h-[92svh] flex-col justify-end pb-28 pt-24 sm:pb-16">
           <div className="max-w-3xl">
             <Eyebrow light className="mb-5">Vidy · Lausanne · ten rooms by the lake</Eyebrow>
-            <Reveal as="h1" className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
+            <Reveal as="h1" delay={1.4} className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
               Lausanne,<br /><em>by the lake.</em>
             </Reveal>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
@@ -31,7 +31,7 @@ export default function HomePage() {
             <p className="caps mt-3 !text-[10px] text-white/70">Direct bookings get our best rate and free cancellation on flexible plans</p>
           </div>
         </Container>
-      </HeroCarousel>
+      </HeroFilm>
 
       <Ticker />
 
@@ -77,11 +77,11 @@ export default function HomePage() {
         </Container>
       </section>
 
+      {/* PAGE BREAK — the lake film */}
+      <FilmBreak />
+
       {/* ROOMS — horizontal track */}
       <RoomsTrack rooms={ROOMS} />
-
-      {/* STEP INSIDE */}
-      <StepInside />
 
       {/* AROUND */}
       <section className="py-20 sm:py-28 lg:py-36">

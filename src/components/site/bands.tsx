@@ -13,7 +13,7 @@ import { VideoLayer } from "./video-layer";
 
 /* ---------- VIDY: video inside the letters ---------- */
 
-export function KnockoutBand({ video = ["/videos/aerial-dusk.mp4", "/videos/aerial-day.mp4", "/videos/swans.mp4"], image = "/images/lake/aerial-dusk.jpg" }: { video?: string | string[]; image?: string }) {
+export function KnockoutBand({ video = ["/videos/swans.mp4", "/videos/aerial-dusk.mp4"], image = "/images/lake/swans.jpg" }: { video?: string | string[]; image?: string }) {
   return (
     <section className="relative isolate overflow-hidden bg-black" aria-label="Vidy">
       <VideoLayer video={video} image={image} alt="" drift />
@@ -62,18 +62,18 @@ export function Closing() {
   );
 }
 
-/* ---------- Step inside: entrance video ---------- */
+/* ---------- Page break: the lake film ---------- */
 
-export function StepInside() {
+export function FilmBreak() {
   return (
     <section className="relative overflow-hidden bg-ink">
-      <div className="relative aspect-[16/9] max-h-[88vh] w-full">
-        <VideoLayer video="/videos/entrance.mp4" image="/images/house/entrance-poster.jpg" alt="The front door of Maison Vidy opening onto the hall" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20" />
+      <div className="relative aspect-[16/9] max-h-[86vh] w-full">
+        <VideoLayer video={["/videos/hero.mp4", "/videos/aerial-dusk.mp4"]} image="/images/lake/aerial-dusk.jpg" alt="Maison Vidy from the air at dusk, the terrace lit, the lake" driftVideo={false} />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-ink/10" />
         <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 lg:p-14">
-          <p className="caps !text-[10px] text-sky">Step inside</p>
-          <p className="mt-3 max-w-xl font-display text-3xl leading-tight text-white sm:text-4xl lg:text-5xl">The door is open. The lake is at the end of the hall.</p>
-          <div className="mt-6"><RuleLink href="/rooms" light>See the rooms</RuleLink></div>
+          <p className="caps !text-[10px] text-sky">Vidy, from the air to the water</p>
+          <p className="mt-3 max-w-xl font-display text-3xl leading-tight text-white sm:text-4xl lg:text-5xl">Two hundred metres <em>and the lake is yours.</em></p>
+          <div className="mt-6"><RuleLink href="/experiences" light>What’s around</RuleLink></div>
         </div>
       </div>
     </section>

@@ -40,7 +40,7 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
       <section className="pt-10 sm:pt-14 lg:pt-20">
         <Container>
           <nav className="caps mb-6 !text-[10px] text-slate" aria-label="Breadcrumb">
-            <Link href="/rooms" className="hover:text-ink">Rooms & suites</Link> <span className="mx-2">/</span> <span className="text-ink">{room.name}</span>
+            <Link href="/" className="hover:text-ink">Maison Vidy</Link> <span className="mx-2">/</span> <Link href="/rooms" className="hover:text-ink">Rooms & suites</Link> <span className="mx-2">/</span> <span className="text-ink">{room.name}</span>
           </nav>
           <RoomGallery images={room.images} name={room.name} />
         </Container>
