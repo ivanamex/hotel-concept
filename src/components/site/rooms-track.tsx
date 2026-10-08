@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Eyebrow, RuleLink } from "@/components/ui";
 import { localizeRoom, viewLabel } from "@/i18n";
 import { useT } from "@/i18n/context";
@@ -33,7 +33,9 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
   const st = useRef<ScrollTrigger | null>(null);
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
+  // layout effect on purpose: the pin wraps the section in a spacer, and the cleanup must unwrap it
+  // before React removes the section on navigation (a passive cleanup runs too late → removeChild error)
+  useLayoutEffect(() => {
     const el = section.current;
     const tr = track.current;
     if (!el || !tr || prefersReducedMotion()) return;

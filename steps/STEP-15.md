@@ -18,5 +18,7 @@ Status: built and live 8 Oct 2026 (go at 17:46).
 
 6. DONE 18:15 — **Rail language code opened the whole menu** (Ivana 18:06: "put a little arrow next to EN so they know it opens, and it must open a language dropdown, not the menu"). Build: "EN ⌄" on the desktop rail opens a small popover beside the rail with the four languages (full name + code, current one in ink); closes on choice, outside click or Escape; the overlay menu is untouched.
 
+7. DONE 18:25 — **"Something went wrong" when leaving the home page** (Ivana 18:09, screenshot on /rooms). Found the real cause of every "page couldn't load" since round 1: the pinned rooms track wraps its section in a spacer element; when you navigate away, React removes the section from where it put it, finds the spacer instead and crashes (`removeChild … not a child`). It was never deployment skew — the un-pinned track in round 2 had only hidden it. Fix: the pin is undone before React removes the section (layout-effect cleanup). Verified by clicking every page from the home menu on the production build.
+
 ## Done when
 Every item built or struck through with a reason; Ivana clicks through; "ok".
