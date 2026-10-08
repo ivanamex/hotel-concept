@@ -9,7 +9,7 @@ Status: built and live 8 Oct 2026.
 5. **VIDY band** — the lake-water clip was too still inside the letters; now the swans clip with a slow push-in. Switches to the aerial when it arrives.
 6. **Horizontal rooms track no longer pins the page.** A native horizontal scroller: drag, swipe, trackpad, arrow buttons; vertical scrolling is never captured. Scroll-snap per card.
 7. **Back to top** — floating "mark + ↑ Top" button bottom-left after 900 px; the rail mark also scrolls to top when already on the home page.
-8. **"Page couldn't load" / dead links** — deployment skew: Ivana had the old build open while the new one deployed, the router then fetched pages that no longer existed. Fixes: Vercel skew protection on (12 h), and a client guard that reloads once when a chunk fails to load. Hash links (/experiences#…) now scroll to the section instead of the top.
+8. **"Page couldn't load" / dead links** — deployment skew: Ivana had the old build open while the new one deployed, the router then fetched pages that no longer existed. Fix: a client guard that reloads the page once when a chunk fails to load (Vercel skew protection is not available on this team — API says "not found"). Hash links (/experiences#…) now scroll to the section instead of the top.
 
 ## Done when
 Ivana reloads once (old tab), clicks through; aerial clips uploaded and placed.
