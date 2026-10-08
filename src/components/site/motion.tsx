@@ -9,8 +9,24 @@ import { createElement, useEffect, useRef, type ElementType, type ReactNode } fr
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
+let lenisRef: Lenis | null = null;
+
 export function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+/** Scroll the page (through Lenis when it runs) to the top or to an element / selector. */
+export function scrollTo(target: number | string | HTMLElement = 0, opts: { offset?: number; immediate?: boolean } = {}) {
+  if (typeof window === "undefined") return;
+  if (lenisRef) {
+    lenisRef.scrollTo(target, { offset: opts.offset ?? 0, immediate: opts.immediate, duration: 1.1 });
+    return;
+  }
+  if (typeof target === "number") window.scrollTo({ top: target, behavior: opts.immediate ? "auto" : "smooth" });
+  else {
+    const el = typeof target === "string" ? document.querySelector(target) : target;
+    el?.scrollIntoView({ behavior: opts.immediate ? "auto" : "smooth", block: "start" });
+  }
 }
 
 /** Smooth scrolling for the public site, wired to ScrollTrigger. */
@@ -20,6 +36,7 @@ export function MotionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (prefersReducedMotion()) return;
     const lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95, smoothWheel: true });
+    lenisRef = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);
@@ -27,11 +44,37 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     return () => {
       gsap.ticker.remove(tick);
       lenis.destroy();
+      lenisRef = null;
+    };
+  }, []);
+
+  // a stale client after a fresh deploy can fail to load the next page's code — reload once instead of dying quietly
+  useEffect(() => {
+    const onError = (e: ErrorEvent | PromiseRejectionEvent) => {
+      const msg = String(("reason" in e ? e.reason?.message ?? e.reason : e.message) ?? "");
+      if (/ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed/i.test(msg)) {
+        const key = "mv-reloaded-once";
+        if (!sessionStorage.getItem(key)) {
+          sessionStorage.setItem(key, "1");
+          window.location.reload();
+        }
+      }
+    };
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onError);
+    return () => {
+      window.removeEventListener("error", onError);
+      window.removeEventListener("unhandledrejection", onError);
     };
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const hash = window.location.hash;
+    if (hash && document.querySelector(hash)) {
+      const id = setTimeout(() => scrollTo(hash, { offset: -24 }), 250);
+      return () => clearTimeout(id);
+    }
+    scrollTo(0, { immediate: true });
     const id = setTimeout(() => ScrollTrigger.refresh(), 150);
     return () => clearTimeout(id);
   }, [pathname]);
@@ -97,6 +140,28 @@ export function FadeIn({ children, className, delay = 0, y = 24 }: { children: R
     });
     return () => ctx.revert();
   }, [delay, y]);
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+}
+
+/** Moves its children vertically with the scroll: speed −1…1 (negative = slower than the page). */
+export function Parallax({ children, className, speed = 0.2, scale = 1 }: { children: ReactNode; className?: string; speed?: number; scale?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { yPercent: -speed * 40, scale },
+        { yPercent: speed * 40, scale: 1, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } },
+      );
+    });
+    return () => ctx.revert();
+  }, [speed, scale]);
   return (
     <div ref={ref} className={className}>
       {children}

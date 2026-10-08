@@ -4,14 +4,14 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- Ivana reviews the facelift on https://hotel-concept.vercel.app (desktop + phone), says "ok" or lists round 2
+- Ivana: hard-reload the old tab, click through round 2; download 2–3 aerial stills from the image flow, make two 10 s clips in Gemini, upload here → I place them as hero slide 1 + VIDY band
+- STEP-12 Languages EN · FR · DE · IT — spec written, build on "go"
 
 ## Next
-- STEP-11 FR + DE languages (Swiss client; EN is default now)
-- STEP-12 Supabase backend (rooms, reservations, inquiries, auth for /office) — replaces the local demo store
-- STEP-13 Payments (Stripe or Datatrans for CH) + email confirmations (Resend)
-- STEP-14 Channel manager (Channex.io) for Booking.com, Expedia, Airbnb, Google — availability + rates out, bookings in by webhook
-- STEP-15 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
+- STEP-13 Supabase backend (rooms, reservations, inquiries, subscribers, auth for /office) — replaces the local demo store
+- STEP-14 Payments (Stripe or Datatrans for CH) + email confirmations (Resend)
+- STEP-15 Channel manager (Channex.io) for Booking.com, Expedia, Airbnb, Google — availability + rates out, bookings in by webhook
+- STEP-16 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
 - STEP-01 Foundation: Next.js + Tailwind, fonts, tokens, header/footer/WhatsApp, data model + seed (10 rooms, 40 reservations), pricing + availability engine
@@ -23,6 +23,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-07 Back office shell: login, sidebar, overview dashboard
 - STEP-08 Back office modules: reservations, calendar, rooms, rates & extras, guests, inbox, settings
 - STEP-09 QA + deploy — live at https://hotel-concept.vercel.app (auto-deploys from main)
+- STEP-11 Round 2 — Cormorant Garamond, motion on every clip, parallax intro photos, closing section + contact modal + WhatsApp line, swans in the VIDY band, rooms track without scroll-hijack, back-to-top, skew protection + chunk-reload guard, hash links
 - STEP-10 Polish round 1 — serif/caps/grotesk type system, ticket buttons, rail + overlay menu, hero carousel with video, ticker, horizontal rooms track, step-inside video, illustrated map block, script accents, VIDY video band, next-page links, email lightbox + VIDY10 code + subscribers in the office, Winter/Summer mode
 
 ## Notes — answers if anyone asks
@@ -39,6 +40,6 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - Promo code VIDY10 (10 % off the room) is the demo newsletter code; the lightbox shows once per browser per 30 days
 - No traces: nothing shipped names a tool, a model or a step; commit attribution off
 - Footer carries "by 20°N" → https://20north.art on every page
-- Fonts self-hosted (fontsource); serif allowed for display on this project (decided 8 Oct), sans for nav, UI and the office; no gold/leather tones; metric; prices in CHF
+- Fonts self-hosted (fontsource): Cormorant Garamond display (serif allowed on this project, decided 8 Oct), Archivo caps for nav/buttons/labels, Hanken Grotesk body + office, Mrs Saint Delafield script accents; no gold/leather tones; metric; prices in CHF
 - noindex + robots disallow until the client signs
 - Office login (demo): manager@maisonvidy.ch / vidy2026

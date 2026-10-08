@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Closing, KnockoutBand, LocationBlock, NextPage, StepInside } from "@/components/site/bands";
 import { BookingBar } from "@/components/site/booking-bar";
 import { HeroCarousel } from "@/components/site/hero-carousel";
-import { FadeIn, Reveal } from "@/components/site/motion";
+import { FadeIn, Parallax, Reveal } from "@/components/site/motion";
 import { RoomsTrack } from "@/components/site/rooms-track";
 import { Ticker } from "@/components/site/ticker";
 import { Badge, ButtonLink, Container, Eyebrow, RuleLink, SectionHeading } from "@/components/ui";
@@ -62,14 +62,18 @@ export default function HomePage() {
               </div>
             </FadeIn>
           </div>
-          <FadeIn className="relative grid grid-cols-5 gap-4" delay={0.1}>
-            <div className="relative col-span-3 aspect-[4/5] overflow-hidden rounded-lg shadow-card">
-              <Image src="/images/house/lounge.jpg" alt="The salon of Maison Vidy" fill sizes="(min-width:1024px) 360px, 60vw" className="object-cover" />
-            </div>
-            <div className="relative col-span-2 mt-16 aspect-[4/5] overflow-hidden rounded-lg shadow-card">
-              <Image src="/images/house/breakfast-balcony.jpg" alt="Breakfast on a balcony above the garden" fill sizes="(min-width:1024px) 240px, 40vw" className="object-cover" />
-            </div>
-          </FadeIn>
+          <div className="relative grid grid-cols-5 gap-4">
+            <Parallax speed={-0.25} className="col-span-3">
+              <div className="group relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
+                <Image src="/images/house/lounge.jpg" alt="The salon of Maison Vidy" fill sizes="(min-width:1024px) 360px, 60vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.05]" />
+              </div>
+            </Parallax>
+            <Parallax speed={0.35} className="col-span-2 mt-16">
+              <div className="group relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
+                <Image src="/images/house/breakfast-balcony.jpg" alt="Breakfast on a balcony above the garden" fill sizes="(min-width:1024px) 240px, 40vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.05]" />
+              </div>
+            </Parallax>
+          </div>
         </Container>
       </section>
 

@@ -10,6 +10,7 @@ import { HOTEL } from "@/lib/seed";
 import { resolveSeason } from "@/lib/season";
 import { useHotel, useHydrated } from "@/lib/store";
 import { Mark } from "./logo";
+import { scrollTo } from "./motion";
 import { whatsappUrl } from "./whatsapp";
 
 export const NAV = [
@@ -50,7 +51,7 @@ export function SiteNav() {
           <Menu className="h-5 w-5" />
           <span className="caps !text-[9px]">Menu</span>
         </button>
-        <Link href="/" className="flex flex-col items-center gap-4" aria-label="Maison Vidy — home">
+        <Link href="/" onClick={(e) => { if (pathname === "/") { e.preventDefault(); scrollTo(0); } }} className="flex flex-col items-center gap-4" aria-label="Maison Vidy — home / back to top">
           <Mark className="h-7 w-7" />
           <span className="caps rotate-180 !text-[10px] text-ink [writing-mode:vertical-rl]">Maison Vidy · Lausanne</span>
         </Link>
@@ -63,7 +64,7 @@ export function SiteNav() {
       <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-line bg-sand/95 px-5 backdrop-blur lg:hidden">
         <Link href="/" className="inline-flex items-center gap-2" aria-label="Maison Vidy — home">
           <Mark className="h-7 w-7" />
-          <span className="font-display text-lg text-ink">Maison Vidy</span>
+          <span className="font-display text-2xl text-ink">Maison Vidy</span>
         </Link>
         <div className="flex items-center gap-2">
           <Link href="/book" className="caps rounded-xs bg-lake px-3 py-2 !text-[10px] text-white">Book</Link>
@@ -87,7 +88,7 @@ export function SiteNav() {
           <div className="flex items-center justify-between">
             <Link href="/" className="inline-flex items-center gap-2.5">
               <Mark className="h-8 w-8" />
-              <span className="font-display text-xl text-ink">Maison Vidy</span>
+              <span className="font-display text-2xl text-ink">Maison Vidy</span>
             </Link>
             <button type="button" onClick={() => setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-xs text-ink transition hover:bg-ink hover:text-white" aria-label="Close menu">
               <X className="h-5 w-5" />

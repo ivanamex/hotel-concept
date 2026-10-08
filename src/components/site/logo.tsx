@@ -15,7 +15,7 @@ export function Logo({ light, className, href = "/" }: { light?: boolean; classN
   return (
     <Link href={href} className={clsx("group inline-flex items-center gap-2.5", className)} aria-label="Maison Vidy — home">
       <Mark light={light} />
-      <span className={clsx("whitespace-nowrap font-display text-[1.4rem] tracking-tight", light ? "text-white" : "text-ink")}>
+      <span className={clsx("whitespace-nowrap font-display text-[1.6rem] tracking-tight", light ? "text-white" : "text-ink")}>
         Maison <em>Vidy</em>
       </span>
     </Link>

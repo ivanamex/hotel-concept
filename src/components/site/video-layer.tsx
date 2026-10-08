@@ -29,7 +29,7 @@ export function VideoLayer({ video, image, alt, drift = false, priority = false,
       <Image src={image} alt={alt} fill priority={priority} sizes="100vw" className={clsx("object-cover", drift && !playing && "drift")} />
       {enabled && (
         <video
-          className={clsx("absolute inset-0 h-full w-full object-cover transition-opacity duration-1000", playing ? "opacity-100" : "opacity-0")}
+          className={clsx("absolute inset-0 h-full w-full object-cover transition-opacity duration-1000", playing ? "opacity-100" : "opacity-0", drift && "drift-slow")}
           src={video}
           autoPlay
           muted

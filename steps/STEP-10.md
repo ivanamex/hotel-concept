@@ -31,7 +31,7 @@ Principle (Ivana, 8 Oct): two jobs at once — the functionality a hotel needs (
 13. **Seasons** (benchmark: badruttspalace.com/en/winter — the big video hero is what sells the class; we need to be better). A Winter / Summer mode: picked by date (Nov–Mar winter) with a small switch in the menu; it changes the hero slide/video set, the ticker lines, the order of offers and the closing photo. Copy stays, imagery and accents shift. Cheap to build on top of the carousel; reads as "the hotel breathes with the year".
 
 ## Decisions taken to build (Ivana gave autopilot)
-- Fonts: Fraunces (display) · Archivo caps (nav, buttons, labels) · Hanken Grotesk (body, office) · Mrs Saint Delafield (script accents)
+- Fonts: Fraunces (display) → replaced by Cormorant Garamond in STEP-11 (rendering) · Archivo caps (nav, buttons, labels) · Hanken Grotesk (body, office) · Mrs Saint Delafield (script accents)
 - Buttons: square ticket button primary, rule link secondary; office gets the same at small size; badges square-cornered
 - Navigation: option B — left rail + full-screen overlay menu on desktop, hamburger on mobile, Book always visible
 - Hero: carousel with Ken-Burns crossfade on existing stills now; video clips added when they arrive (generated in parallel, Ivana downloads from the flow and uploads)
