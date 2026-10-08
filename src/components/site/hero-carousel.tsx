@@ -17,6 +17,7 @@ export interface Slide {
 /* Video paths are optional: add the file to public/videos and the slide switches to video. */
 export const SLIDES: Record<Season, Slide[]> = {
   summer: [
+    { image: "/images/lake/aerial-dusk.jpg", video: ["/videos/aerial-dusk.mp4"], alt: "The house and its lit garden by the lake at dusk, seen from the air", caption: "Blue hour over the garden" },
     { image: "/images/lake/aerial-day.jpg", video: ["/videos/aerial-day.mp4"], alt: "Maison Vidy from the air: the house, the harbour and the lake at golden hour", caption: "Vidy from above" },
     { image: "/images/lake/hero-lake.jpg", video: "/videos/hero-lake.mp4", alt: "Deck chairs facing Lake Geneva at first light", caption: "The deck, 7 a.m." },
     { image: "/images/lake/marina.jpg", alt: "Port de Vidy in the morning", caption: "Port de Vidy, three minutes away" },
