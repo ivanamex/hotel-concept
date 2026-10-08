@@ -39,6 +39,7 @@ export default async function HomePage({ params }: LangParams) {
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">{h.lead}</p>
           </div>
           <div className="mt-10 max-w-5xl">
+            <p className="caps mb-3 !text-[10px] text-white/80">{t.bookingBar.eyebrow}</p>
             <BookingBar />
             <p className="caps mt-3 !text-[10px] text-white/70">{t.bookingBar.note}</p>
           </div>

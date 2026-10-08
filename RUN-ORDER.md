@@ -4,8 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- Ivana clicks through round 4 (forms as lines, hover motion) and the four languages; FR proofread
-- STEP-15 Round 5 — collecting (language control in the menu, trust marks: payments public / channels in the office); Ivana sends the logo files; build on "go"
+- Ivana clicks through rounds 4–5 and the four languages; FR proofread; OTA + Amex logo files still welcome
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
 
 ## Next
@@ -15,6 +14,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-19 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
+- STEP-15 Round 5 — EN|FR|DE|IT segmented control (menu, footer, rail code), payment marks in footer + payment step (Stripe, Visa, Mastercard, Twint), channels panel in the office, discreet back-to-top above WhatsApp, eyebrow on the booking bar, stale-tab auto-reload
 - STEP-12 Languages EN · FR · DE · IT — `/fr /de /it`, translated section slugs, dictionaries for every public string, switch in menu + footer, hreflang + sitemap; office stays EN
 - STEP-01 Foundation: Next.js + Tailwind, fonts, tokens, header/footer/WhatsApp, data model + seed (10 rooms, 40 reservations), pricing + availability engine
 - STEP-02 Home page
@@ -37,7 +37,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Rules
 - One step at a time; nothing is built without its STEP file
-- Push to main after every step; Ivana checks in the browser and says "ok"
+- Push to main after every step; Ivana checks in the browser and says "ok" — a tab open across a push reloads itself on the first click (stale-tab guard)
 - Demo only: data lives in the browser (seeded on first load, "Reset demo data" in /office settings)
 - Hotel name, address, phone, email, prices and reviews are concept placeholders — replace before any client use
 - Photos: rooms 1–3, 5, 9 and the house shots are the client's own; the rest are generated concept images and clips (public/videos), to be replaced by real photography at go-live

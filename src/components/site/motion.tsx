@@ -6,6 +6,7 @@ import { SplitText } from "gsap/SplitText";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { isStale } from "./stale-guard";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -51,11 +52,17 @@ export function MotionProvider({ children }: { children: ReactNode }) {
   // a stale client after a fresh deploy can fail to load the next page's code — reload once instead of dying quietly
   useEffect(() => {
     const onError = (e: ErrorEvent | PromiseRejectionEvent) => {
-      const msg = String(("reason" in e ? e.reason?.message ?? e.reason : e.message) ?? "");
-      if (/ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed/i.test(msg)) {
-        const key = "mv-reloaded-once";
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, "1");
+      const err = "reason" in e ? e.reason : e.error ?? { message: e.message };
+      if (isStale(err)) {
+        const key = "mv-reloaded-at";
+        let last = 0;
+        try {
+          last = Number(sessionStorage.getItem(key) ?? 0);
+        } catch {}
+        if (Date.now() - last > 30_000) {
+          try {
+            sessionStorage.setItem(key, String(Date.now()));
+          } catch {}
           window.location.reload();
         }
       }

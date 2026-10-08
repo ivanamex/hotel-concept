@@ -4,9 +4,9 @@ import { clsx } from "clsx";
 import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useT } from "@/i18n/context";
-import { Mark } from "./logo";
 import { scrollTo } from "./motion";
 
+/** A quiet arrow above the WhatsApp button once the page has been scrolled. */
 export function BackToTop() {
   const t = useT();
   const [show, setShow] = useState(false);
@@ -21,14 +21,13 @@ export function BackToTop() {
       type="button"
       onClick={() => scrollTo(0)}
       aria-label={t.common.backToTop}
+      title={t.common.backToTop}
       className={clsx(
-        "group fixed bottom-5 left-5 z-40 flex h-12 items-center gap-2 rounded-xs bg-white pl-1.5 pr-3 text-ink shadow-lift ring-1 ring-ink/10 transition-all duration-300 hover:bg-ink hover:text-white lg:left-[calc(var(--spacing-rail)+1.25rem)]",
-        show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
+        "group rise fixed bottom-[4.9rem] right-5 z-40 flex h-10 w-10 items-center justify-center rounded-xs bg-white/90 text-ink shadow-soft ring-1 ring-ink/10 backdrop-blur hover:bg-ink hover:text-white sm:bottom-[4.6rem]",
+        show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0",
       )}
     >
-      <Mark className="h-8 w-8" />
-      <ArrowUp className="h-4 w-4 transition group-hover:-translate-y-0.5" />
-      <span className="caps !text-[10px]">{t.common.top}</span>
+      <ArrowUp className="h-4 w-4 transition duration-300 group-hover:-translate-y-0.5" />
     </button>
   );
 }

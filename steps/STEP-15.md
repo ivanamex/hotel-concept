@@ -1,14 +1,20 @@
-# STEP-15 — Round 5 (collecting)
+# STEP-15 — Round 5
 
-Status: collecting since 8 Oct 2026 17:40. Built one by one on "go".
+Status: built and live 8 Oct 2026 (go at 17:46).
 
 ## Items
 
-1. **Language switch in the menu** (Ivana 17:40, phone screenshot: the four languages stacked as a list looks like a list, not a control). Options she named: a select dropdown or flags.
+1. DONE 18:00 — **Language switch in the menu** (Ivana 17:40, phone screenshot: the four languages stacked as a list looks like a list, not a control). Options she named: a select dropdown or flags.
    Sanity: **Sane with a change.** Flags are the wrong signal on a Swiss hotel — French is not France and German is not Germany here; 🇫🇷 🇩🇪 🇮🇹 under "Maison Vidy · Lausanne" reads as a foreign site, and Swiss guests notice. A native `<select>` is system UI (grey box, OS arrow) inside a page where every control is ours. Build instead: the same segmented control the Season switch already uses, one row — `EN | FR | DE | IT`, current one filled ink — on mobile and desktop, in the menu and the footer; on the desktop rail a small current-language code (e.g. FR) under the MENU button that opens the menu. Full language names on hover/aria. If Ivana still wants flags after seeing it: a 1-px-ring round flag set can be added later, but the recommendation is no flags.
-2. **Trust marks — secure payments and the channels** (Ivana 17:40: "decorate the website with secure card payments — Stripe logo — and the reservation platform that goes out to Booking, Expedia"). The second one is **Channex** (channel manager, STEP-18).
+2. DONE 18:00 — **Trust marks — secure payments and the channels** (Ivana 17:40: "decorate the website with secure card payments — Stripe logo — and the reservation platform that goes out to Booking, Expedia"). The second one is **Channex** (channel manager, STEP-18).
    Sanity: **Sane with a change.** Payment marks belong on the public site: a "Secure payment" strip in the booking's payment step (Stripe · Visa · Mastercard · Amex · **Twint** — the Swiss one, guests look for it) and a one-line trust row in the footer. OTA logos do **not** belong on the public pages: a direct-booking site that shows Booking.com and Expedia logos sends guests to Booking.com and Expedia. They belong in the back office, where the client sees the plumbing: the Channels block in Settings and a "Connected channels" tile on the dashboard with the logos (Booking.com, Expedia, Airbnb, Google Hotel Ads, "via Channex"), live/paused per channel. On the public site the only mention stays in words, as a conversion argument: "Best rate here — lower than on Booking.com or Expedia" under the booking bar.
+   Built: Ivana sent Stripe, Visa, Mastercard and Twint (17:46); backgrounds removed in-house, marks sit in the footer (grey, colour on hover) and in the booking's payment step; the footer carries the best-rate line; the office dashboard got a Channels panel (live / synced, via Channex) and the Settings copy was updated. Amex and the OTA marks are typeset until files arrive.
    Logos: brand marks are not drawn in-house — Ivana sends the files (SVG or PNG on transparent): Stripe, Visa, Mastercard, Amex, Twint; Booking.com, Expedia, Airbnb, Google. Until they arrive the strip is typeset in caps (Visa · Mastercard · Amex · Twint), which is a legitimate final look on its own.
+
+3. DONE 18:00 — **Back to top too prominent** (Ivana 17:47, screenshot of the mark + "TOP" pill bottom-left): "a discreet arrow above the WhatsApp button, it takes a lot of space for nothing". Build: a 40 px square with an arrow only, bottom-right, stacked above WhatsApp; appears after one screen.
+4. DONE 18:00 — **Eyebrow on the search bar** (Ivana 17:49): a small caps line above the booking bar on the home hero — "Your dates" (FR Vos dates · DE Ihre Daten · IT Le vostre date). The overlay menu stays as it is for now (Ivana: "looks nice, not really functional — keep it like this for now").
+
+5. DONE 18:05 — **"This page couldn't load" on the first click after a deploy** (Ivana 17:50: first click fails, reload fixes it). Cause: her tab was loaded with the previous build; every push during the click-through replaces the chunks, and the old tab asks for files that no longer exist. Vercel's skew protection is not available on this team. Build: error boundaries on the public site and the office recognise a stale tab (chunk/module/RSC fetch failures) and reload the page by themselves, at most once every 30 s; the window-level guard uses the same rule. Second line of defence: a proper error page with a Reload button in all four languages.
 
 ## Done when
 Every item built or struck through with a reason; Ivana clicks through; "ok".

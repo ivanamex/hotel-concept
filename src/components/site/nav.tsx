@@ -5,7 +5,8 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useHref, useT } from "@/i18n/context";
+import { useHref, useLang, useT } from "@/i18n/context";
+import { LANG_SHORT } from "@/i18n/config";
 import { HOTEL } from "@/lib/seed";
 import { resolveSeason } from "@/lib/season";
 import { useHotel, useHydrated } from "@/lib/store";
@@ -28,6 +29,7 @@ export const NAV = [
 export function SiteNav() {
   const pathname = usePathname();
   const t = useT();
+  const lang = useLang();
   const href = useHref();
   const home = href("/");
   const [open, setOpen] = useState(false);
@@ -53,10 +55,15 @@ export function SiteNav() {
     <>
       {/* desktop rail */}
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-rail flex-col items-center justify-between border-r border-line bg-sand lg:flex">
-        <button type="button" onClick={() => setOpen(true)} className="flex h-20 w-full flex-col items-center justify-center gap-1.5 border-b border-line text-ink transition duration-300 hover:bg-ink hover:text-white" aria-label={t.nav.openMenu}>
-          <Menu className="h-5 w-5" />
-          <span className="caps !text-[9px]">{t.nav.menu}</span>
-        </button>
+        <div className="w-full">
+          <button type="button" onClick={() => setOpen(true)} className="flex h-20 w-full flex-col items-center justify-center gap-1.5 border-b border-line text-ink transition duration-300 hover:bg-ink hover:text-white" aria-label={t.nav.openMenu}>
+            <Menu className="h-5 w-5" />
+            <span className="caps !text-[9px]">{t.nav.menu}</span>
+          </button>
+          <button type="button" onClick={() => setOpen(true)} className="caps mt-3 block w-full py-1 !text-[9px] text-slate transition hover:text-ink" aria-label={t.common.language} title={t.common.language}>
+            {LANG_SHORT[lang]}
+          </button>
+        </div>
         <Link href="/" onClick={(e) => { if (pathname === home) { e.preventDefault(); scrollTo(0); } }} className="flex flex-col items-center gap-4" aria-label={t.nav.homeLabel}>
           <Mark className="h-7 w-7" />
           <span className="caps !text-[9px] text-slate">{t.nav.home}</span>
@@ -132,7 +139,7 @@ export function SiteNav() {
           <div className="grid gap-6 text-sm text-ink-soft sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <p className="caps mb-2 !text-[10px] text-slate">{t.common.language}</p>
-              <LangSwitch long className="flex-col items-start gap-1.5" />
+              <LangSwitch />
             </div>
             <div>
               <p className="caps mb-2 !text-[10px] text-slate">{t.nav.season}</p>

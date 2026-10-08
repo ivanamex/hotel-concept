@@ -99,6 +99,8 @@ export const fr: Dict = {
     },
     copyright: "Lausanne · Suisse",
     staffLogin: "Accès équipe",
+    securePayment: "Paiement sécurisé",
+    bestRate: "Le meilleur tarif est ici — moins cher que sur Booking.com ou Expedia",
   },
 
   ticker: {
@@ -114,6 +116,7 @@ export const fr: Dict = {
   },
 
   bookingBar: {
+    eyebrow: "Vos dates",
     checkIn: "Arrivée",
     checkOut: "Départ",
     adults: "Adultes",
@@ -708,6 +711,13 @@ export const fr: Dict = {
     { name: "Matthias", country: "Allemagne", date: "Août 2026", text: "Un petit hôtel fait comme il faut. Tout est à quelques pas et l’équipe a réservé notre tour de Lavaux en quelques minutes sur WhatsApp." },
     { name: "Aline", country: "Suisse", date: "Juin 2026", text: "Nous sommes venus pour le Musée Olympique avec les enfants et avons pris la chambre Familiale. Calme, impeccable, des gens très gentils." },
   ],
+
+  errorPage: {
+    title: "Cette page *ne s’est pas chargée.*",
+    text: "En général, une nouvelle version du site a été mise en ligne pendant que cet onglet était ouvert. Un rechargement et tout rentre dans l’ordre.",
+    reload: "Recharger la page",
+    retry: "Réessayer",
+  },
 
   notFound: {
     title: "Cette page est partie *se baigner.*",

@@ -14,6 +14,7 @@ export default function OverviewPage() {
   const rooms = useHotel((s) => s.rooms);
   const reservations = useHotel((s) => s.reservations);
   const inquiries = useHotel((s) => s.inquiries);
+  const settings = useHotel((s) => s.settings);
   const setStatus = useHotel((s) => s.setReservationStatus);
   const [open, setOpen] = useState<string | null>(null);
   const today = todayISO();
@@ -70,6 +71,7 @@ export default function OverviewPage() {
           </div>
         </Panel>
 
+        <div className="space-y-6">
         <Panel title="Inbox" action={<Link href="/office/inbox" className="inline-flex items-center gap-1 text-sm font-semibold text-lake">All messages <ArrowRight className="h-4 w-4" /></Link>}>
           <ul className="divide-y divide-ink/5">
             {unread.slice(0, 4).map((i) => (
@@ -85,6 +87,22 @@ export default function OverviewPage() {
             {unread.length === 0 && <li className="px-5 py-8 text-center text-sm text-slate">Inbox zero.</li>}
           </ul>
         </Panel>
+
+        <Panel title="Channels" action={<Link href="/office/settings" className="inline-flex items-center gap-1 text-sm font-semibold text-lake">Settings <ArrowRight className="h-4 w-4" /></Link>}>
+          <ul className="divide-y divide-ink/5">
+            {settings.channels.map((c, i) => (
+              <li key={c.name} className="flex items-center justify-between gap-3 px-5 py-2.5">
+                <div className="flex items-center gap-3">
+                  <span className={c.connected ? "h-2 w-2 rounded-full bg-moss" : "h-2 w-2 rounded-full bg-line-strong"} />
+                  <p className="text-sm font-semibold text-ink">{c.name}</p>
+                </div>
+                <p className="text-xs text-slate">{c.connected ? (i === 0 ? "live" : `synced ${[2, 4, 7][i % 3]} min ago`) : "not connected"}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="border-t border-ink/5 px-5 py-3 text-xs text-slate">Rates and availability go out through Channex; bookings come back in here, dates blocked both ways.</p>
+        </Panel>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-2">

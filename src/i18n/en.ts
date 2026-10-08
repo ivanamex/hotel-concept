@@ -98,6 +98,8 @@ export const en = {
     },
     copyright: "Lausanne · Switzerland",
     staffLogin: "Staff login",
+    securePayment: "Secure payment",
+    bestRate: "Best rate here — lower than on Booking.com or Expedia",
   },
 
   ticker: {
@@ -113,6 +115,7 @@ export const en = {
   },
 
   bookingBar: {
+    eyebrow: "Your dates",
     checkIn: "Check-in",
     checkOut: "Check-out",
     adults: "Adults",
@@ -707,6 +710,13 @@ export const en = {
     { name: "Matthias", country: "Germany", date: "August 2026", text: "Small hotel done right. Everything is a short walk away and the staff booked our Lavaux tour in minutes over WhatsApp." },
     { name: "Aline", country: "Switzerland", date: "June 2026", text: "We came for the Olympic Museum with the kids and stayed in the Family room. Quiet, spotless, very kind people." },
   ],
+
+  errorPage: {
+    title: "That page *didn’t load.*",
+    text: "Usually a new version of the site went live while this tab was open. One reload and you are back.",
+    reload: "Reload the page",
+    retry: "Try again",
+  },
 
   notFound: {
     title: "That page went *for a swim.*",

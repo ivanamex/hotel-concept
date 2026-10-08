@@ -6,6 +6,7 @@ import { HOTEL } from "@/lib/seed";
 import { LangSwitch } from "./lang-switch";
 import { Link } from "./link";
 import { Logo } from "./logo";
+import { PaymentMarks } from "./payment-marks";
 
 export function SiteFooter() {
   const t = useT();
@@ -45,10 +46,19 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
-        <div className="caps mt-14 flex flex-col gap-3 border-t border-line pt-6 !text-[10px] text-slate sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-6 border-t border-line pt-8 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <PaymentMarks />
+            <p className="mt-3 text-xs text-slate">{f.bestRate}</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="caps !text-[10px] text-slate">{t.common.language}</span>
+            <LangSwitch />
+          </div>
+        </div>
+        <div className="caps mt-8 flex flex-col gap-3 border-t border-line pt-6 !text-[10px] text-slate sm:flex-row sm:items-center sm:justify-between">
           <div>© {new Date().getFullYear()} {HOTEL.name} · {f.copyright}</div>
           <div className="flex flex-wrap items-center gap-5">
-            <LangSwitch />
             <Link href="/office/login" className="transition hover:text-ink">{f.staffLogin}</Link>
             <a href="https://20north.art" target="_blank" rel="noopener" className="transition hover:text-ink">by 20°N</a>
           </div>

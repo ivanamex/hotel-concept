@@ -3,37 +3,47 @@
 import { clsx } from "clsx";
 import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LANG_NAMES, LANG_SHORT, LOCALES, localePath, parsePublicPath } from "@/i18n/config";
+import { LANG_NAMES, LANG_SHORT, LOCALES, localePath, parsePublicPath, type Lang } from "@/i18n/config";
 import { useLang } from "@/i18n/context";
 
-/** EN · FR · DE · IT — the same page in another language. */
-export function LangSwitch({ className, light, long }: { className?: string; light?: boolean; long?: boolean }) {
-  const lang = useLang();
+function useSwitch() {
   const pathname = usePathname();
   const router = useRouter();
   const { internal } = parsePublicPath(pathname);
+  return (l: Lang) => ({
+    href: localePath(l, internal),
+    go: (e: React.MouseEvent) => {
+      e.preventDefault();
+      document.cookie = `mv-lang=${l}; path=/; max-age=31536000; samesite=lax`;
+      router.push(localePath(l, internal) + window.location.search);
+    },
+  });
+}
+
+/** EN | FR | DE | IT as one segmented control — the same page in another language. */
+export function LangSwitch({ className, light }: { className?: string; light?: boolean }) {
+  const lang = useLang();
+  const sw = useSwitch();
   return (
-    <ul className={clsx("flex items-center gap-3", className)} aria-label="Language">
+    <ul className={clsx("inline-flex rounded-xs ring-1", light ? "ring-white/40" : "ring-ink/20", className)} aria-label="Language">
       {LOCALES.map((l) => {
-        const target = localePath(l, internal);
+        const { href, go } = sw(l);
+        const on = l === lang;
         return (
           <li key={l}>
             <NextLink
-              href={target}
+              href={href}
               hrefLang={l}
               lang={l}
-              aria-current={l === lang ? "true" : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                document.cookie = `mv-lang=${l}; path=/; max-age=31536000; samesite=lax`;
-                router.push(target + window.location.search);
-              }}
+              title={LANG_NAMES[l]}
+              aria-current={on ? "true" : undefined}
+              onClick={go}
               className={clsx(
-                "caps !text-[10px] transition",
-                l === lang ? (light ? "text-white" : "text-ink") : light ? "text-white/60 hover:text-white" : "text-slate hover:text-ink",
+                "caps block px-3 py-1.5 !text-[10px] transition-colors duration-300",
+                on ? (light ? "bg-white text-ink" : "bg-ink text-white") : light ? "text-white/80 hover:bg-white/10 hover:text-white" : "text-ink hover:bg-ink/5",
               )}
             >
-              {long ? LANG_NAMES[l] : LANG_SHORT[l]}
+              {LANG_SHORT[l]}
             </NextLink>
           </li>
         );

@@ -99,6 +99,8 @@ export const it: Dict = {
     },
     copyright: "Losanna · Svizzera",
     staffLogin: "Accesso staff",
+    securePayment: "Pagamento sicuro",
+    bestRate: "La tariffa migliore è qui — meno cara che su Booking.com o Expedia",
   },
 
   ticker: {
@@ -114,6 +116,7 @@ export const it: Dict = {
   },
 
   bookingBar: {
+    eyebrow: "Le vostre date",
     checkIn: "Arrivo",
     checkOut: "Partenza",
     adults: "Adulti",
@@ -708,6 +711,13 @@ export const it: Dict = {
     { name: "Matthias", country: "Germania", date: "agosto 2026", text: "Un piccolo hotel fatto bene. Tutto è a pochi passi e lo staff ha prenotato il nostro tour nel Lavaux in pochi minuti su WhatsApp." },
     { name: "Aline", country: "Svizzera", date: "giugno 2026", text: "Siamo venuti per il Museo Olimpico con i bambini e abbiamo dormito nella camera Familiare. Silenziosa, pulitissima, persone gentilissime." },
   ],
+
+  errorPage: {
+    title: "Questa pagina *non si è caricata.*",
+    text: "Di solito una nuova versione del sito è andata online mentre questa scheda era aperta. Basta ricaricare.",
+    reload: "Ricarica la pagina",
+    retry: "Riprova",
+  },
 
   notFound: {
     title: "Quella pagina è andata *a fare il bagno.*",

@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import { defaultDates } from "@/components/site/booking-bar";
 import { ExtraIcon } from "@/components/site/extra-icon";
 import { Link } from "@/components/site/link";
+import { PaymentMarks } from "@/components/site/payment-marks";
 import { Button, Field, Input, Select, Textarea } from "@/components/ui";
 import { fmt, fmtDateL, guestsLabelL, localizeExtra, localizeRatePlan, localizeRoom, nightsLabel, unitLabel, viewLabel } from "@/i18n";
 import { useHref, useT } from "@/i18n/context";
@@ -417,6 +418,7 @@ export function BookingFlow() {
                   <h3 className="font-display text-xl text-ink">{planId === "non_refundable" ? b.s4.payment : b.s4.guarantee}</h3>
                   <span className="inline-flex items-center gap-1.5 text-xs text-slate"><Lock className="h-3.5 w-3.5" /> {b.s4.secure}</span>
                 </div>
+                <PaymentMarks label={false} size={18} className="mt-3" />
                 <p className="mt-1 text-sm text-slate">
                   {planId === "non_refundable" ? b.s4.payNow : b.s4.payLater}
                 </p>
