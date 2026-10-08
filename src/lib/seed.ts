@@ -14,6 +14,7 @@ import type {
 export const DEMO_TODAY = "2026-10-08";
 
 export const HOTEL: HotelSettings = {
+  seasonOverride: "auto",
   name: "Maison Vidy",
   tagline: "Lausanne, by the lake.",
   address: "Chemin du Lac 12",

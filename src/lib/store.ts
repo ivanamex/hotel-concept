@@ -15,6 +15,7 @@ import type {
   ReservationStatus,
   Room,
   Season,
+  Subscriber,
 } from "./types";
 
 export interface HotelState {
@@ -26,6 +27,7 @@ export interface HotelState {
   ratePlans: RatePlan[];
   seasons: Season[];
   settings: HotelSettings;
+  subscribers: Subscriber[];
   officeUser: string | null;
   lastBookingRef: string | null;
 
@@ -39,12 +41,15 @@ export interface HotelState {
   addInquiry: (i: Omit<Inquiry, "id" | "createdAt" | "status">) => Inquiry;
   updateInquiry: (id: string, patch: Partial<Inquiry> & { status?: InquiryStatus }) => void;
   updateSettings: (patch: Partial<HotelSettings>) => void;
+  addSubscriber: (s: { email: string; name?: string; page: string }) => Subscriber;
   signIn: (email: string, password: string) => boolean;
   signOut: () => void;
   resetDemo: () => void;
 }
 
-const SEED_VERSION = 5;
+const SEED_VERSION = 6;
+export const PROMO_CODE = "VIDY10";
+export const PROMO_RATE = 0.1;
 
 function seedState() {
   return {
@@ -56,6 +61,11 @@ function seedState() {
     ratePlans: RATE_PLANS,
     seasons: SEASONS,
     settings: HOTEL,
+    subscribers: [
+      { id: "sub_1", email: "claire.favre@bluewin.ch", name: "Claire", page: "/", createdAt: "2026-10-06T19:12:00", code: "VIDY10" },
+      { id: "sub_2", email: "m.brunner@gmx.ch", page: "/rooms", createdAt: "2026-10-07T08:40:00", code: "VIDY10" },
+      { id: "sub_3", email: "sophie.laurent@orange.fr", name: "Sophie", page: "/experiences", createdAt: "2026-10-07T21:05:00", code: "VIDY10" },
+    ] as Subscriber[],
     officeUser: null as string | null,
     lastBookingRef: null as string | null,
   };
@@ -134,6 +144,14 @@ export const useHotel = create<HotelState>()(
 
       updateSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
 
+      addSubscriber: (input) => {
+        const existing = get().subscribers.find((x) => x.email.toLowerCase() === input.email.toLowerCase());
+        if (existing) return existing;
+        const sub: Subscriber = { id: uid("sub"), email: input.email.trim(), name: input.name?.trim() || undefined, page: input.page, createdAt: new Date().toISOString().slice(0, 19), code: PROMO_CODE };
+        set((s) => ({ subscribers: [sub, ...s.subscribers] }));
+        return sub;
+      },
+
       signIn: (email, password) => {
         const ok = email.trim().toLowerCase() === DEMO_LOGIN.email && password === DEMO_LOGIN.password;
         if (ok) set({ officeUser: email.trim().toLowerCase() });
@@ -156,6 +174,7 @@ export const useHotel = create<HotelState>()(
         ratePlans: s.ratePlans,
         seasons: s.seasons,
         settings: s.settings,
+        subscribers: s.subscribers,
         officeUser: s.officeUser,
         lastBookingRef: s.lastBookingRef,
       }),

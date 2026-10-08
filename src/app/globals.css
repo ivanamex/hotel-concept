@@ -1,10 +1,15 @@
 @import "tailwindcss";
-@import "@fontsource-variable/bricolage-grotesque";
-@import "@fontsource-variable/figtree";
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/fraunces/opsz-italic.css";
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/hanken-grotesk";
+@import "@fontsource/mrs-saint-delafield";
 
 @theme {
-  --font-display: "Bricolage Grotesque Variable", "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-caps: "Archivo Variable", "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Mrs Saint Delafield", cursive;
 
   --color-sand: #f4efe6;
   --color-paper: #fbf8f2;
@@ -23,29 +28,59 @@
   --color-moss: #3f6b4f;
   --color-moss-soft: #e1ece4;
 
-  --radius-xl: 20px;
-  --radius-2xl: 28px;
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 6px;
+  --radius-2xl: 8px;
+  --radius-3xl: 10px;
 
   --shadow-soft: 0 1px 2px rgba(23, 26, 31, 0.04), 0 8px 24px -12px rgba(23, 26, 31, 0.18);
   --shadow-lift: 0 2px 4px rgba(23, 26, 31, 0.05), 0 20px 40px -20px rgba(23, 26, 31, 0.28);
   --shadow-card: 0 1px 0 rgba(23, 26, 31, 0.03), 0 10px 30px -16px rgba(19, 57, 90, 0.25);
+
+  --spacing-rail: 4rem;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
   background: var(--color-sand);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.font-display em, h1 em, h2 em, h3 em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* small caps labels: nav, buttons, eyebrows */
+.caps {
+  font-family: var(--font-caps);
+  font-stretch: 108%;
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.font-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 ::selection {
@@ -59,11 +94,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .hatched {
-  background-image: repeating-linear-gradient(
-    135deg,
-    rgba(23, 26, 31, 0.08) 0 6px,
-    transparent 6px 12px
-  );
+  background-image: repeating-linear-gradient(135deg, rgba(23, 26, 31, 0.08) 0 6px, transparent 6px 12px);
 }
 
 .scrollbar-thin {
@@ -71,13 +102,86 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   scrollbar-color: var(--color-line-strong) transparent;
 }
 
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ticker */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: ticker 48s linear infinite;
+}
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
 }
 
-.fade-up {
-  animation: fade-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+/* slow drift for stills standing in for video */
+@keyframes drift {
+  0% { transform: scale(1.04) translate3d(0, 0, 0); }
+  100% { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
 }
-.fade-up-2 { animation-delay: 0.12s; }
-.fade-up-3 { animation-delay: 0.24s; }
+.drift {
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+/* script line writing itself */
+@keyframes write {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 -2% 0 0); }
+}
+.write-in {
+  clip-path: inset(0 100% 0 0);
+}
+.write-in.is-visible,
+.is-visible .write-in {
+  animation: write 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* rule link */
+.rule-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.35rem;
+}
+.rule-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform-origin: left;
+  transform: scaleX(0.35);
+  opacity: 0.5;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s;
+}
+.rule-link:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+.rule-link svg {
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.rule-link:hover svg {
+  transform: translateX(4px);
+}
+
+/* ticket button arrow */
+.ticket .arrow {
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.ticket:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* reveal lines (set by motion component; graceful when JS is off) */
+.reveal-line {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track, .drift { animation: none !important; }
+  .write-in { clip-path: none !important; animation: none !important; }
+}

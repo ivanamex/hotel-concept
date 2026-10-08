@@ -55,9 +55,9 @@ export default function ReservationsPage() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, ref, email, room" className={clsx(inputClass, "h-10 pl-9 text-sm")} />
         </div>
-        <div className="flex gap-1 rounded-full bg-white p-1 ring-1 ring-ink/5">
+        <div className="flex gap-1 rounded-xs bg-white p-1 ring-1 ring-ink/5">
           {RANGES.map((r) => (
-            <button key={r.id} type="button" onClick={() => setRange(r.id)} className={clsx("rounded-full px-3 py-1.5 text-xs font-semibold transition", range === r.id ? "bg-ink text-white" : "text-slate hover:text-ink")}>{r.label}</button>
+            <button key={r.id} type="button" onClick={() => setRange(r.id)} className={clsx("rounded-xs px-3 py-1.5 text-xs font-semibold transition", range === r.id ? "bg-ink text-white" : "text-slate hover:text-ink")}>{r.label}</button>
           ))}
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value as ReservationStatus | "all")} className={clsx(inputClass, "h-10 w-auto text-sm")}>

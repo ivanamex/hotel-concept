@@ -97,7 +97,7 @@ export default function OverviewPage() {
                   <p className="text-xs text-slate">{plural(nightsBetween(r.checkIn, r.checkOut), "night")} · {r.adults + r.children} guests{r.arrivalTime ? ` · arrives ${r.arrivalTime}` : ""}{r.notes ? ` · ${r.notes.split("\n")[0]}` : ""}</p>
                 </button>
                 {r.status === "confirmed" || r.status === "pending" ? (
-                  <button type="button" onClick={() => setStatus(r.id, "checked_in")} className="rounded-full bg-lake px-3 py-1.5 text-xs font-semibold text-white hover:bg-lake-deep">Check in</button>
+                  <button type="button" onClick={() => setStatus(r.id, "checked_in")} className="rounded-xs bg-lake px-3 py-1.5 text-xs font-semibold text-white hover:bg-lake-deep">Check in</button>
                 ) : <StatusChip status={r.status} />}
               </li>
             ))}
@@ -113,7 +113,7 @@ export default function OverviewPage() {
                   <p className="text-xs text-slate">{chf(r.total, { decimals: true })} · {r.paid ? "paid" : "to settle at check-out"}</p>
                 </button>
                 {r.status === "checked_in" ? (
-                  <button type="button" onClick={() => setStatus(r.id, "checked_out")} className="rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-white hover:bg-lake">Check out</button>
+                  <button type="button" onClick={() => setStatus(r.id, "checked_out")} className="rounded-xs bg-ink px-3 py-1.5 text-xs font-semibold text-white hover:bg-lake">Check out</button>
                 ) : <StatusChip status={r.status} />}
               </li>
             ))}

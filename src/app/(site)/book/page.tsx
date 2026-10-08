@@ -10,16 +10,16 @@ export const metadata: Metadata = {
 
 export default function BookPage() {
   return (
-    <section className="pb-24 pt-28 sm:pt-32">
+    <section className="pb-24 pt-10 sm:pt-14 lg:pt-20">
       <Container>
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-lake">Book direct</p>
-            <h1 className="mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">Your stay at Maison Vidy</h1>
+            <p className="caps !text-[10px] text-lake">Book direct</p>
+            <h1 className="mt-3 font-display text-4xl text-ink sm:text-5xl">Your stay <em>at Maison Vidy</em></h1>
           </div>
-          <p className="text-sm text-slate">Best rate guaranteed · Free cancellation on flexible plans · Questions? WhatsApp us.</p>
+          <p className="caps !text-[10px] text-slate">Best rate guaranteed · Free cancellation on flexible plans</p>
         </div>
-        <Suspense fallback={<div className="h-64 animate-pulse rounded-2xl bg-white" />}>
+        <Suspense fallback={<div className="h-64 animate-pulse rounded-lg bg-white" />}>
           <BookingFlow />
         </Suspense>
       </Container>

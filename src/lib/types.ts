@@ -83,6 +83,8 @@ export interface Reservation {
   source: ReservationSource;
   total: number;
   cityTax: number;
+  promo?: string;
+  discount?: number;
   paid: boolean;
   createdAt: string; // ISO
   timeline: { at: string; text: string }[];
@@ -105,7 +107,19 @@ export interface Inquiry {
   reply?: string;
 }
 
+export type SeasonMode = "auto" | "winter" | "summer";
+
+export interface Subscriber {
+  id: string;
+  email: string;
+  name?: string;
+  page: string;
+  createdAt: string;
+  code: string;
+}
+
 export interface HotelSettings {
+  seasonOverride: SeasonMode;
   name: string;
   tagline: string;
   address: string;

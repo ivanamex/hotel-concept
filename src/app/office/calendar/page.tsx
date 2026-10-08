@@ -57,15 +57,15 @@ export default function CalendarPage() {
       title="Calendar"
       subtitle={`${fmtDate(start, "short")} – ${fmtDate(addDays(end, -1), "medium")}`}
       actions={
-        <div className="hidden items-center gap-1 rounded-full bg-white p-1 ring-1 ring-ink/5 sm:flex">
-          {[14, 30].map((n) => <button key={n} type="button" onClick={() => setSpan(n as 14 | 30)} className={clsx("rounded-full px-3 py-1 text-xs font-semibold", span === n ? "bg-ink text-white" : "text-slate")}>{n} days</button>)}
+        <div className="hidden items-center gap-1 rounded-xs bg-white p-1 ring-1 ring-ink/5 sm:flex">
+          {[14, 30].map((n) => <button key={n} type="button" onClick={() => setSpan(n as 14 | 30)} className={clsx("rounded-xs px-3 py-1 text-xs font-semibold", span === n ? "bg-ink text-white" : "text-slate")}>{n} days</button>)}
         </div>
       }
     >
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <button type="button" onClick={() => setStart(addDays(start, -span))} className="rounded-full bg-white p-2 ring-1 ring-ink/5 hover:bg-ink/5" aria-label="Earlier"><ChevronLeft className="h-4 w-4" /></button>
-        <button type="button" onClick={() => setStart(addDays(today, -1))} className="rounded-full bg-white px-3 py-1.5 text-sm font-semibold ring-1 ring-ink/5 hover:bg-ink/5">Today</button>
-        <button type="button" onClick={() => setStart(addDays(start, span))} className="rounded-full bg-white p-2 ring-1 ring-ink/5 hover:bg-ink/5" aria-label="Later"><ChevronRight className="h-4 w-4" /></button>
+        <button type="button" onClick={() => setStart(addDays(start, -span))} className="rounded-xs bg-white p-2 ring-1 ring-ink/5 hover:bg-ink/5" aria-label="Earlier"><ChevronLeft className="h-4 w-4" /></button>
+        <button type="button" onClick={() => setStart(addDays(today, -1))} className="rounded-xs bg-white px-3 py-1.5 text-sm font-semibold ring-1 ring-ink/5 hover:bg-ink/5">Today</button>
+        <button type="button" onClick={() => setStart(addDays(start, span))} className="rounded-xs bg-white p-2 ring-1 ring-ink/5 hover:bg-ink/5" aria-label="Later"><ChevronRight className="h-4 w-4" /></button>
         <span className="ml-2 font-display text-lg font-semibold">{monthLabel(start)}</span>
         <div className="ml-auto flex flex-wrap items-center gap-3 text-xs text-slate">
           {(["confirmed", "checked_in", "pending", "checked_out"] as const).map((s) => (

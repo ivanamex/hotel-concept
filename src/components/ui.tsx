@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -6,10 +7,14 @@ import type { ComponentProps, ReactNode } from "react";
 
 export function Container({ className, children, wide }: { className?: string; children: ReactNode; wide?: boolean }) {
   return (
-    <div className={clsx("mx-auto w-full px-5 sm:px-8", wide ? "max-w-[1440px]" : "max-w-[1200px]", className)}>
+    <div className={clsx("mx-auto w-full px-5 sm:px-8 lg:px-12", wide ? "max-w-[1480px]" : "max-w-[1240px]", className)}>
       {children}
     </div>
   );
+}
+
+export function Eyebrow({ children, light, className }: { children: ReactNode; light?: boolean; className?: string }) {
+  return <p className={clsx("caps", light ? "text-sky" : "text-lake", className)}>{children}</p>;
 }
 
 export function SectionHeading({
@@ -19,6 +24,7 @@ export function SectionHeading({
   align = "left",
   className,
   light,
+  size = "md",
 }: {
   eyebrow?: string;
   title: ReactNode;
@@ -26,39 +32,45 @@ export function SectionHeading({
   align?: "left" | "center";
   className?: string;
   light?: boolean;
+  size?: "md" | "lg";
 }) {
   return (
     <div className={clsx("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
-      {eyebrow && (
-        <p className={clsx("mb-3 text-xs font-semibold uppercase tracking-[0.18em]", light ? "text-sky" : "text-lake")}>{eyebrow}</p>
-      )}
-      <h2 className={clsx("font-display text-3xl font-semibold leading-[1.08] sm:text-4xl lg:text-[2.75rem]", light ? "text-white" : "text-ink")}>
+      {eyebrow && <Eyebrow light={light} className="mb-4">{eyebrow}</Eyebrow>}
+      <h2
+        className={clsx(
+          "font-display leading-[1.02]",
+          size === "lg" ? "text-4xl sm:text-5xl lg:text-[3.75rem]" : "text-3xl sm:text-4xl lg:text-[2.9rem]",
+          light ? "text-white" : "text-ink",
+        )}
+      >
         {title}
       </h2>
-      {lead && <p className={clsx("mt-4 text-base leading-relaxed sm:text-lg", light ? "text-sky/90" : "text-slate")}>{lead}</p>}
+      {lead && <p className={clsx("mt-5 text-base leading-relaxed sm:text-lg", light ? "text-sky/90" : "text-slate")}>{lead}</p>}
     </div>
   );
 }
 
-/* ---------- buttons ---------- */
+/* ---------- buttons: square "ticket" ---------- */
 
-type Variant = "primary" | "secondary" | "ghost" | "light" | "clay" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "light" | "outline-light" | "clay" | "danger";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lake/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap";
+  "ticket inline-flex items-center justify-center gap-3 rounded-xs font-caps uppercase tracking-[0.16em] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lake/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap";
 const variants: Record<Variant, string> = {
-  primary: "bg-lake text-white hover:bg-lake-deep shadow-[0_8px_20px_-10px_rgba(27,75,115,0.7)] hover:shadow-[0_10px_24px_-10px_rgba(19,57,90,0.8)] hover:-translate-y-px",
-  secondary: "bg-transparent text-ink ring-1 ring-inset ring-ink/20 hover:ring-ink/50 hover:bg-white/60",
+  primary: "bg-lake text-white hover:bg-lake-deep",
+  secondary: "bg-transparent text-ink ring-1 ring-inset ring-ink/40 hover:bg-ink hover:text-white hover:ring-ink",
   ghost: "bg-transparent text-ink hover:bg-ink/5",
-  light: "bg-white text-ink hover:bg-paper shadow-soft",
+  light: "bg-white text-ink hover:bg-sand",
+  "outline-light": "bg-transparent text-white ring-1 ring-inset ring-white/60 hover:bg-white hover:text-ink",
   clay: "bg-clay text-white hover:bg-[#a84d2f]",
-  danger: "bg-transparent text-[#b3261e] ring-1 ring-inset ring-[#b3261e]/30 hover:bg-[#b3261e]/5",
+  danger: "bg-transparent text-[#b3261e] ring-1 ring-inset ring-[#b3261e]/40 hover:bg-[#b3261e] hover:text-white",
 };
 const sizes: Record<Size, string> = {
-  sm: "h-9 px-4 text-sm",
-  md: "h-11 px-5 text-[15px]",
-  lg: "h-13 px-7 text-base",
+  sm: "h-9 px-4 text-[10.5px]",
+  md: "h-12 px-6 text-[11.5px]",
+  lg: "h-14 px-8 text-[12px]",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", className?: string) {
@@ -69,9 +81,16 @@ export function Button({
   variant = "primary",
   size = "md",
   className,
+  arrow,
+  children,
   ...props
-}: ComponentProps<"button"> & { variant?: Variant; size?: Size }) {
-  return <button className={buttonClass(variant, size, className)} {...props} />;
+}: ComponentProps<"button"> & { variant?: Variant; size?: Size; arrow?: boolean }) {
+  return (
+    <button className={buttonClass(variant, size, className)} {...props}>
+      {children}
+      {arrow && <ArrowRight className="arrow h-3.5 w-3.5" />}
+    </button>
+  );
 }
 
 export function ButtonLink({
@@ -79,14 +98,38 @@ export function ButtonLink({
   size = "md",
   className,
   href,
+  arrow,
+  children,
   ...props
-}: Omit<ComponentProps<typeof Link>, "href"> & { href: string; variant?: Variant; size?: Size }) {
-  return <Link href={href} className={buttonClass(variant, size, className)} {...props} />;
+}: Omit<ComponentProps<typeof Link>, "href"> & { href: string; variant?: Variant; size?: Size; arrow?: boolean }) {
+  return (
+    <Link href={href} className={buttonClass(variant, size, className)} {...props}>
+      {children}
+      {arrow && <ArrowRight className="arrow h-3.5 w-3.5" />}
+    </Link>
+  );
+}
+
+/** Secondary action: text with a rule that draws on hover. */
+export function RuleLink({ href, children, className, light, external }: { href: string; children: ReactNode; className?: string; light?: boolean; external?: boolean }) {
+  const cls = clsx("rule-link caps", light ? "text-white" : "text-ink", className);
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener" className={cls}>
+        {children} <ArrowRight className="h-3.5 w-3.5" />
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={cls}>
+      {children} <ArrowRight className="h-3.5 w-3.5" />
+    </Link>
+  );
 }
 
 /* ---------- small bits ---------- */
 
-export function Badge({ children, tone = "lake", className }: { children: ReactNode; tone?: "lake" | "clay" | "moss" | "ink" | "sand" | "slate"; className?: string }) {
+export function Badge({ children, tone = "lake", className }: { children: ReactNode; tone?: "lake" | "clay" | "moss" | "ink" | "sand" | "slate" | "white"; className?: string }) {
   const tones = {
     lake: "bg-mist text-lake",
     clay: "bg-clay-soft text-clay",
@@ -94,27 +137,28 @@ export function Badge({ children, tone = "lake", className }: { children: ReactN
     ink: "bg-ink text-white",
     sand: "bg-sand text-ink-soft",
     slate: "bg-ink/5 text-slate",
+    white: "bg-white/92 text-ink",
   };
   return (
-    <span className={clsx("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold", tones[tone], className)}>
+    <span className={clsx("caps inline-flex items-center gap-1 rounded-xs px-2 py-1 !text-[10px]", tones[tone], className)}>
       {children}
     </span>
   );
 }
 
 export function Card({ className, children, as: Tag = "div" }: { className?: string; children: ReactNode; as?: "div" | "article" | "section" }) {
-  return <Tag className={clsx("rounded-2xl bg-white shadow-card ring-1 ring-ink/5", className)}>{children}</Tag>;
+  return <Tag className={clsx("rounded-lg bg-white shadow-card ring-1 ring-ink/5", className)}>{children}</Tag>;
 }
 
 /* ---------- form controls ---------- */
 
 export const inputClass =
-  "h-11 w-full rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink placeholder:text-slate/60 transition focus:border-lake focus:outline-none focus:ring-2 focus:ring-lake/15 disabled:bg-sand/60";
+  "h-11 w-full rounded-xs border border-line bg-white px-3.5 text-[15px] text-ink placeholder:text-slate/60 transition focus:border-lake focus:outline-none focus:ring-2 focus:ring-lake/15 disabled:bg-sand/60";
 
 export function Field({ label, hint, error, children, className }: { label: string; hint?: string; error?: string; children: ReactNode; className?: string }) {
   return (
     <label className={clsx("block", className)}>
-      <span className="mb-1.5 block text-sm font-medium text-ink">{label}</span>
+      <span className="caps mb-2 block !text-[10.5px] text-ink-soft">{label}</span>
       {children}
       {error ? <span className="mt-1 block text-xs text-[#b3261e]">{error}</span> : hint ? <span className="mt-1 block text-xs text-slate">{hint}</span> : null}
     </label>

@@ -44,7 +44,7 @@ export default function SettingsPage() {
               <div className="flex flex-wrap gap-2">
                 {["English", "Français", "Deutsch", "Italiano"].map((l) => {
                   const on = form.languages.includes(l);
-                  return <button key={l} type="button" onClick={() => setForm({ ...form, languages: on ? form.languages.filter((x) => x !== l) : [...form.languages, l] })} className={on ? "rounded-full bg-lake px-3 py-1.5 text-xs font-semibold text-white" : "rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft ring-1 ring-line"}>{l}</button>;
+                  return <button key={l} type="button" onClick={() => setForm({ ...form, languages: on ? form.languages.filter((x) => x !== l) : [...form.languages, l] })} className={on ? "rounded-xs bg-lake px-3 py-1.5 text-xs font-semibold text-white" : "rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft ring-1 ring-line"}>{l}</button>;
                 })}
               </div>
               <p className="mt-3 text-xs text-slate">The website currently ships in English; French and German are queued.</p>

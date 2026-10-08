@@ -11,7 +11,7 @@ import { Button, Field, Input, Select, Textarea, inputClass } from "@/components
 import { OFFERS } from "@/lib/content";
 import { addDays, extraCost, isRoomAvailable, nightsBetween, quote, roomFits, todayISO } from "@/lib/engine";
 import { chf, fmtDate, guestsLabel, plural } from "@/lib/format";
-import { useHotel, useHydrated } from "@/lib/store";
+import { PROMO_CODE, PROMO_RATE, useHotel, useHydrated } from "@/lib/store";
 import type { Extra, Guest, RatePlanId, Room } from "@/lib/types";
 
 const STEPS = ["Dates", "Room", "Extras", "Details"];
@@ -48,6 +48,8 @@ export function BookingFlow() {
   const [notes, setNotes] = useState("");
   const [payment, setPayment] = useState<"card" | "hotel">("card");
   const [card, setCard] = useState({ number: "", name: "", expiry: "", cvc: "" });
+  const [promo, setPromo] = useState("");
+  const promoOk = promo.trim().toUpperCase() === PROMO_CODE;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
@@ -58,13 +60,13 @@ export function BookingFlow() {
   const selectedRoom = rooms.find((r) => r.id === roomId) ?? null;
   const plan = ratePlans.find((p) => p.id === planId) ?? ratePlans[0];
   const selectedExtras = extrasAll.filter((e) => extras.includes(e.id));
-  const q = useMemo(
-    () =>
-      selectedRoom && nights > 0
-        ? quote({ room: selectedRoom, checkIn, checkOut, adults, children, plan, extras: selectedExtras.filter((e) => !e.requestOnly), seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax })
-        : null,
-    [selectedRoom, nights, checkIn, checkOut, adults, children, plan, selectedExtras, seasons, settings],
-  );
+  const q = useMemo(() => {
+    if (!selectedRoom || nights <= 0) return null;
+    const base = quote({ room: selectedRoom, checkIn, checkOut, adults, children, plan, extras: selectedExtras.filter((e) => !e.requestOnly), seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax });
+    if (!promoOk) return { ...base, discount: 0 };
+    const discount = Math.round(base.roomTotal * PROMO_RATE);
+    return { ...base, discount, total: base.total - discount };
+  }, [selectedRoom, nights, checkIn, checkOut, adults, children, plan, selectedExtras, seasons, settings, promoOk]);
 
   const results = useMemo(() => {
     if (!hydrated || nights < 1) return { available: [] as Room[], unavailable: [] as Room[], tooSmall: [] as Room[] };
@@ -135,6 +137,8 @@ export function BookingFlow() {
       source: "direct",
       total: q.total,
       cityTax: q.cityTax,
+      promo: promoOk ? PROMO_CODE : undefined,
+      discount: promoOk ? q.discount : undefined,
       paid: planId === "non_refundable",
     });
     await new Promise((res) => setTimeout(res, 700));
@@ -143,8 +147,8 @@ export function BookingFlow() {
 
   /* ---------- summary rail ---------- */
   const Summary = (
-    <div className="rounded-2xl bg-white p-5 shadow-card ring-1 ring-ink/5">
-      <h2 className="font-display text-lg font-semibold text-ink">Your stay</h2>
+    <div className="rounded-lg bg-white p-5 shadow-card ring-1 ring-ink/5">
+      <h2 className="font-display text-xl text-ink">Your stay</h2>
       <dl className="mt-4 space-y-2.5 text-sm">
         <div className="flex justify-between gap-3"><dt className="text-slate">Dates</dt><dd className="text-right font-medium text-ink">{fmtDate(checkIn, "short")} → {fmtDate(checkOut, "short")}{nights > 0 && <span className="block text-xs font-normal text-slate">{plural(nights, "night")}</span>}</dd></div>
         <div className="flex justify-between gap-3"><dt className="text-slate">Guests</dt><dd className="font-medium text-ink">{guestsLabel(adults, children)}</dd></div>
@@ -160,11 +164,12 @@ export function BookingFlow() {
             {selectedExtras.filter((e) => !e.requestOnly).map((e) => (
               <div key={e.id} className="flex justify-between"><dt className="text-slate">{e.short}</dt><dd className="text-ink">{chf(extraCost(e, { nights, adults, children }))}</dd></div>
             ))}
+            {q.discount > 0 && <div className="flex justify-between"><dt className="text-moss">Code {PROMO_CODE}</dt><dd className="text-moss">− {chf(q.discount)}</dd></div>}
             <div className="flex justify-between"><dt className="text-slate">City tax</dt><dd className="text-ink">{chf(q.cityTax, { decimals: true })}</dd></div>
           </dl>
           <div className="mt-4 flex items-baseline justify-between border-t border-line pt-4">
             <span className="font-semibold text-ink">Total</span>
-            <span className="font-display text-2xl font-semibold text-ink">{chf(q.total, { decimals: true })}</span>
+            <span className="font-display text-3xl text-ink">{chf(q.total, { decimals: true })}</span>
           </div>
           <p className="mt-2 text-xs text-slate">{plan.cancellation} {planId === "non_refundable" ? "Charged now." : "Nothing is charged today."}</p>
         </>
@@ -186,13 +191,13 @@ export function BookingFlow() {
                 disabled={state === "todo" || (n === 3 && !selectedRoom)}
                 onClick={() => setStep(n)}
                 className={clsx(
-                  "inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-medium transition",
+                  "caps inline-flex items-center gap-2 rounded-xs px-3 py-2 !text-[10px] transition",
                   state === "current" && "bg-ink text-white",
                   state === "done" && "bg-mist text-lake hover:bg-sky",
                   state === "todo" && "bg-white text-slate ring-1 ring-line",
                 )}
               >
-                <span className={clsx("flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold", state === "current" ? "bg-white/20" : state === "done" ? "bg-lake text-white" : "bg-sand")}>
+                <span className={clsx("flex h-5 w-5 items-center justify-center rounded-xs text-[10px] font-bold", state === "current" ? "bg-white/20" : state === "done" ? "bg-lake text-white" : "bg-sand")}>
                   {state === "done" ? <Check className="h-3 w-3" /> : n}
                 </span>
                 {label}
@@ -207,8 +212,8 @@ export function BookingFlow() {
         <div className="min-w-0">
           {/* STEP 1 */}
           {step === 1 && (
-            <section className="rounded-2xl bg-white p-6 shadow-card ring-1 ring-ink/5 sm:p-8">
-              <h2 className="font-display text-2xl font-semibold text-ink">When are you coming?</h2>
+            <section className="rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5 sm:p-8">
+              <h2 className="font-display text-3xl text-ink">When are you coming?</h2>
               <p className="mt-1 text-sm text-slate">Up to 21 nights online. Longer stays and groups: <a href="/request" className="font-semibold text-lake">send a request</a>.</p>
               <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Field label="Check-in"><Input type="date" value={checkIn} min={todayISO()} onChange={(e) => { setCheckIn(e.target.value); if (e.target.value >= checkOut) setCheckOut(addDays(e.target.value, 1)); }} /></Field>
@@ -218,7 +223,7 @@ export function BookingFlow() {
               </div>
               {dateError && <p className="mt-3 text-sm text-[#b3261e]">{dateError}</p>}
               <div className="mt-6">
-                <Button onClick={goSearch} disabled={!!dateError}>See available rooms <ArrowRight className="h-4 w-4" /></Button>
+                <Button onClick={goSearch} disabled={!!dateError} arrow>See available rooms</Button>
               </div>
             </section>
           )}
@@ -228,57 +233,57 @@ export function BookingFlow() {
             <section>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <h2 className="font-display text-2xl font-semibold text-ink">Choose your room</h2>
+                  <h2 className="font-display text-3xl text-ink">Choose your room</h2>
                   <p className="mt-1 text-sm text-slate">{fmtDate(checkIn, "weekday")} → {fmtDate(checkOut, "weekday")} · {plural(nights, "night")} · {guestsLabel(adults, children)}</p>
                 </div>
                 <button type="button" onClick={() => setStep(1)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-lake hover:text-lake-deep"><ArrowLeft className="h-4 w-4" /> Change dates</button>
               </div>
 
               {!hydrated ? (
-                <div className="mt-6 space-y-4">{[0, 1, 2].map((i) => <div key={i} className="h-48 animate-pulse rounded-2xl bg-white" />)}</div>
+                <div className="mt-6 space-y-4">{[0, 1, 2].map((i) => <div key={i} className="h-48 animate-pulse rounded-lg bg-white" />)}</div>
               ) : results.available.length === 0 ? (
-                <div className="mt-6 rounded-2xl bg-white p-8 text-center ring-1 ring-ink/5">
-                  <p className="font-display text-xl font-semibold text-ink">Nothing free for exactly these dates.</p>
+                <div className="mt-6 rounded-lg bg-white p-8 text-center ring-1 ring-ink/5">
+                  <p className="font-display text-2xl text-ink">Nothing free for exactly these dates.</p>
                   <p className="mt-2 text-slate">Shift by a day or two, or message us — we sometimes have a room that isn’t online.</p>
                   <div className="mt-5 flex flex-wrap justify-center gap-3">
                     <Button variant="secondary" onClick={() => setStep(1)}>Change dates</Button>
-                    <a href="/contact" className="inline-flex h-11 items-center rounded-full bg-ink px-5 text-[15px] font-semibold text-white hover:bg-lake">Contact us</a>
+                    <a href="/contact" className="ticket caps inline-flex h-12 items-center rounded-xs bg-ink px-6 !text-[11px] text-white hover:bg-lake">Contact us</a>
                   </div>
                 </div>
               ) : (
                 <div className="mt-6 space-y-5">
                   {results.available.map((room) => (
-                    <article key={room.id} className={clsx("overflow-hidden rounded-2xl bg-white shadow-card ring-1", room.slug === preRoom ? "ring-lake" : "ring-ink/5")}>
+                    <article key={room.id} className={clsx("overflow-hidden rounded-lg bg-white shadow-card ring-1", room.slug === preRoom ? "ring-lake" : "ring-ink/5")}>
                       <div className="grid md:grid-cols-[260px_1fr]">
                         <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[220px]">
                           <Image src={room.images[0]} alt={room.name} fill sizes="(min-width:768px) 260px, 100vw" className="object-cover" />
-                          {room.slug === preRoom && <span className="absolute left-3 top-3 rounded-full bg-lake px-2.5 py-1 text-xs font-semibold text-white">Your pick</span>}
+                          {room.slug === preRoom && <span className="caps absolute left-3 top-3 rounded-xs bg-lake px-2 py-1 !text-[10px] text-white">Your pick</span>}
                         </div>
                         <div className="p-5 sm:p-6">
                           <div className="flex flex-wrap items-start justify-between gap-2">
                             <div>
-                              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate">{room.category} · {room.view} view · {room.sizeM2} m²</p>
-                              <h3 className="mt-1 font-display text-xl font-semibold text-ink">{room.name}</h3>
+                              <p className="caps !text-[10px] text-slate">{room.category} · {room.view} view · {room.sizeM2} m²</p>
+                              <h3 className="mt-1 font-display text-2xl text-ink">{room.name}</h3>
                               <p className="mt-1 text-sm text-slate">{room.beds} · up to {room.maxGuests} guests</p>
                             </div>
                             <a href={`/rooms/${room.slug}`} target="_blank" rel="noopener" className="text-sm font-semibold text-lake hover:text-lake-deep">Room details ↗</a>
                           </div>
-                          <ul className="mt-4 divide-y divide-line rounded-xl border border-line">
+                          <ul className="mt-4 divide-y divide-line rounded-md border border-line">
                             {ratePlans.map((p) => {
                               const pq = quote({ room, checkIn, checkOut, adults, children, plan: p, extras: [], seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax });
                               const perNight = Math.round((pq.roomTotal + pq.breakfastTotal) / nights);
                               return (
                                 <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
                                   <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-ink">{p.name}</p>
+                                    <p className="text-sm font-medium text-ink">{p.name}</p>
                                     <p className="text-xs text-slate">{p.cancellation}{p.includesBreakfast ? " Breakfast included." : ""}</p>
                                   </div>
                                   <div className="flex items-center gap-4">
                                     <div className="text-right">
-                                      <p className="font-display text-lg font-semibold text-ink">{chf(pq.roomTotal + pq.breakfastTotal)}</p>
+                                      <p className="font-display text-xl text-ink">{chf(pq.roomTotal + pq.breakfastTotal)}</p>
                                       <p className="text-xs text-slate">{chf(perNight)} / night · excl. city tax</p>
                                     </div>
-                                    <button type="button" onClick={() => choose(room, p.id)} className="rounded-full bg-lake px-4 py-2 text-sm font-semibold text-white transition hover:bg-lake-deep">Select</button>
+                                    <button type="button" onClick={() => choose(room, p.id)} className="ticket caps rounded-xs bg-lake px-4 py-2.5 !text-[10px] text-white transition hover:bg-lake-deep">Select</button>
                                   </div>
                                 </li>
                               );
@@ -293,16 +298,16 @@ export function BookingFlow() {
 
               {hydrated && (results.unavailable.length > 0 || results.tooSmall.length > 0) && (
                 <div className="mt-8">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate">Not available for this search</p>
+                  <p className="caps !text-[10px] text-slate">Not available for this search</p>
                   <ul className="mt-3 grid gap-2 sm:grid-cols-2">
                     {results.unavailable.map((r) => (
-                      <li key={r.id} className="flex items-center gap-3 rounded-xl bg-white/60 px-3 py-2 text-sm text-slate ring-1 ring-line">
+                      <li key={r.id} className="flex items-center gap-3 rounded-md bg-white/60 px-3 py-2 text-sm text-slate ring-1 ring-line">
                         <span className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md opacity-60"><Image src={r.images[0]} alt="" fill sizes="56px" className="object-cover" /></span>
                         <span><span className="font-medium text-ink-soft">{r.name}</span> — booked on these dates</span>
                       </li>
                     ))}
                     {results.tooSmall.map((r) => (
-                      <li key={r.id} className="flex items-center gap-3 rounded-xl bg-white/60 px-3 py-2 text-sm text-slate ring-1 ring-line">
+                      <li key={r.id} className="flex items-center gap-3 rounded-md bg-white/60 px-3 py-2 text-sm text-slate ring-1 ring-line">
                         <span className="relative h-10 w-14 shrink-0 overflow-hidden rounded-md opacity-60"><Image src={r.images[0]} alt="" fill sizes="56px" className="object-cover" /></span>
                         <span><span className="font-medium text-ink-soft">{r.name}</span> — up to {r.maxGuests} guest{r.maxGuests > 1 ? "s" : ""}</span>
                       </li>
@@ -318,14 +323,14 @@ export function BookingFlow() {
             <section>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <h2 className="font-display text-2xl font-semibold text-ink">Make it yours</h2>
+                  <h2 className="font-display text-3xl text-ink">Make it yours</h2>
                   <p className="mt-1 text-sm text-slate">Optional. Everything can also be added later at reception.</p>
                 </div>
                 <button type="button" onClick={() => setStep(2)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-lake hover:text-lake-deep"><ArrowLeft className="h-4 w-4" /> Change room</button>
               </div>
 
               {!plan.includesBreakfast && (
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-mist p-4 ring-1 ring-lake/10">
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-mist p-4 ring-1 ring-lake/10">
                   <div className="flex items-start gap-3">
                     <Info className="mt-0.5 h-5 w-5 text-lake" />
                     <div>
@@ -342,13 +347,13 @@ export function BookingFlow() {
                   const on = extras.includes(e.id);
                   return (
                     <li key={e.id}>
-                      <button type="button" onClick={() => toggleExtra(e.id)} aria-pressed={on} className={clsx("flex w-full items-start gap-3 rounded-2xl bg-white p-4 text-left ring-1 transition", on ? "ring-2 ring-lake" : "ring-ink/5 hover:ring-ink/20")}>
-                        <span className={clsx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", on ? "bg-lake text-white" : "bg-mist text-lake")}><ExtraIcon name={e.icon} /></span>
+                      <button type="button" onClick={() => toggleExtra(e.id)} aria-pressed={on} className={clsx("flex w-full items-start gap-3 rounded-lg bg-white p-4 text-left ring-1 transition", on ? "ring-2 ring-lake" : "ring-ink/5 hover:ring-ink/20")}>
+                        <span className={clsx("flex h-10 w-10 shrink-0 items-center justify-center rounded-md", on ? "bg-lake text-white" : "bg-mist text-lake")}><ExtraIcon name={e.icon} /></span>
                         <span className="min-w-0 flex-1">
                           <span className="block text-sm font-semibold text-ink">{e.name}</span>
                           <span className="block text-xs text-slate">{e.requestOnly ? "Free — tell us what you need" : `${chf(e.price)} ${UNIT_LABEL[e.unit]}`}</span>
                         </span>
-                        <span className={clsx("mt-1 flex h-5 w-5 items-center justify-center rounded-full border", on ? "border-lake bg-lake text-white" : "border-line")}>{on && <Check className="h-3 w-3" />}</span>
+                        <span className={clsx("mt-1 flex h-5 w-5 items-center justify-center rounded-xs border", on ? "border-lake bg-lake text-white" : "border-line")}>{on && <Check className="h-3 w-3" />}</span>
                       </button>
                     </li>
                   );
@@ -360,7 +365,7 @@ export function BookingFlow() {
                 </Field>
               )}
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button onClick={() => setStep(4)}>Continue to your details <ArrowRight className="h-4 w-4" /></Button>
+                <Button onClick={() => setStep(4)} arrow>Continue to your details</Button>
                 <Button variant="ghost" onClick={() => { setExtras([]); setStep(4); }}>Skip extras</Button>
               </div>
             </section>
@@ -371,13 +376,13 @@ export function BookingFlow() {
             <form onSubmit={submit} noValidate>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <h2 className="font-display text-2xl font-semibold text-ink">Who’s coming?</h2>
+                  <h2 className="font-display text-3xl text-ink">Who’s coming?</h2>
                   <p className="mt-1 text-sm text-slate">We only ask what we need for your arrival.</p>
                 </div>
                 <button type="button" onClick={() => setStep(3)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-lake hover:text-lake-deep"><ArrowLeft className="h-4 w-4" /> Back to extras</button>
               </div>
 
-              <div className="mt-6 rounded-2xl bg-white p-6 shadow-card ring-1 ring-ink/5">
+              <div className="mt-6 rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="First name" error={errors.firstName}><Input value={guest.firstName} onChange={(e) => setGuest({ ...guest, firstName: e.target.value })} autoComplete="given-name" /></Field>
                   <Field label="Last name" error={errors.lastName}><Input value={guest.lastName} onChange={(e) => setGuest({ ...guest, lastName: e.target.value })} autoComplete="family-name" /></Field>
@@ -391,9 +396,16 @@ export function BookingFlow() {
                 </Field>
               </div>
 
-              <div className="mt-5 rounded-2xl bg-white p-6 shadow-card ring-1 ring-ink/5">
+              <div className="mt-5 flex flex-wrap items-end gap-4 rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
+                <Field label="Promo code" hint={promoOk ? `${PROMO_CODE} applied — 10 % off the room` : "From our newsletter, if you have one"} className="w-full sm:w-64">
+                  <Input value={promo} onChange={(e) => setPromo(e.target.value)} placeholder="VIDY10" className={promoOk ? "border-moss ring-2 ring-moss/20" : undefined} />
+                </Field>
+                {promo && !promoOk && <p className="pb-6 text-xs text-slate">Not a code we know — check the spelling.</p>}
+              </div>
+
+              <div className="mt-5 rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-display text-lg font-semibold text-ink">{planId === "non_refundable" ? "Payment" : "Guarantee"}</h3>
+                  <h3 className="font-display text-xl text-ink">{planId === "non_refundable" ? "Payment" : "Guarantee"}</h3>
                   <span className="inline-flex items-center gap-1.5 text-xs text-slate"><Lock className="h-3.5 w-3.5" /> Secure</span>
                 </div>
                 <p className="mt-1 text-sm text-slate">
@@ -404,7 +416,7 @@ export function BookingFlow() {
                     ["card", "Card", planId === "non_refundable" ? "Charged now" : "Guarantee only"],
                     ["hotel", "Pay at the hotel", "Cash or card at reception"],
                   ] as const).map(([id, label, sub]) => (
-                    <button key={id} type="button" onClick={() => setPayment(id)} disabled={id === "hotel" && planId === "non_refundable"} className={clsx("rounded-xl p-4 text-left ring-1 transition disabled:opacity-40", payment === id ? "ring-2 ring-lake" : "ring-line hover:ring-ink/30")}>
+                    <button key={id} type="button" onClick={() => setPayment(id)} disabled={id === "hotel" && planId === "non_refundable"} className={clsx("rounded-md p-4 text-left ring-1 transition disabled:opacity-40", payment === id ? "ring-2 ring-lake" : "ring-line hover:ring-ink/30")}>
                       <span className="block text-sm font-semibold text-ink">{label}</span>
                       <span className="block text-xs text-slate">{sub}</span>
                     </button>
@@ -418,7 +430,7 @@ export function BookingFlow() {
                     <Field label="Security code" error={errors.cardCvc}><Input inputMode="numeric" placeholder="123" value={card.cvc} onChange={(e) => setCard({ ...card, cvc: e.target.value })} /></Field>
                   </div>
                 )}
-                <p className="mt-4 flex items-start gap-2 rounded-xl bg-sand p-3 text-xs text-slate"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-moss" /> Demo site: no payment is processed and no card data is stored. Live payments are handled by a Swiss payment provider at go-live.</p>
+                <p className="mt-4 flex items-start gap-2 rounded-md bg-sand p-3 text-xs text-slate"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-moss" /> Demo site: no payment is processed and no card data is stored. Live payments are handled by a Swiss payment provider at go-live.</p>
               </div>
 
               <div className="mt-6 flex flex-wrap items-center gap-4">

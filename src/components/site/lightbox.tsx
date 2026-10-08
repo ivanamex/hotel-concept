@@ -34,13 +34,13 @@ export function Lightbox({ images, index, onClose, onIndex }: { images: Lightbox
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/95 p-4" role="dialog" aria-modal="true" aria-label={img.alt} onClick={onClose}>
-      <button type="button" onClick={onClose} className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Close">
+      <button type="button" onClick={onClose} className="absolute right-4 top-4 rounded-xs bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Close">
         <X className="h-5 w-5" />
       </button>
-      <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:left-6" aria-label="Previous">
+      <button type="button" onClick={(e) => { e.stopPropagation(); prev(); }} className="absolute left-3 top-1/2 -translate-y-1/2 rounded-xs bg-white/10 p-2 text-white hover:bg-white/20 sm:left-6" aria-label="Previous">
         <ChevronLeft className="h-6 w-6" />
       </button>
-      <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:right-6" aria-label="Next">
+      <button type="button" onClick={(e) => { e.stopPropagation(); next(); }} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-xs bg-white/10 p-2 text-white hover:bg-white/20 sm:right-6" aria-label="Next">
         <ChevronRight className="h-6 w-6" />
       </button>
       <div className="relative h-full w-full max-w-6xl" onClick={(e) => e.stopPropagation()}>

@@ -73,24 +73,24 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
               key={item.href}
               href={item.href}
               className={clsx(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition",
                 active ? "bg-white/12 text-white" : "text-sky/80 hover:bg-white/8 hover:text-white",
               )}
             >
               <item.icon className="h-4.5 w-4.5" />
               <span className="flex-1">{item.label}</span>
               {item.href === "/office/inbox" && unread > 0 && (
-                <span className="rounded-full bg-clay px-1.5 py-0.5 text-[10px] font-bold text-white">{unread}</span>
+                <span className="rounded-xs bg-clay px-1.5 py-0.5 text-[10px] font-bold text-white">{unread}</span>
               )}
             </Link>
           );
         })}
       </nav>
       <div className="space-y-1 border-t border-white/10 p-3">
-        <Link href="/" target="_blank" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white">
+        <Link href="/" target="_blank" className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white">
           <ExternalLink className="h-4 w-4" /> View website
         </Link>
-        <button type="button" onClick={() => { signOut(); router.push("/office/login"); }} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white">
+        <button type="button" onClick={() => { signOut(); router.push("/office/login"); }} className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white">
           <LogOut className="h-4 w-4" /> Sign out
         </button>
         <p className="truncate px-3 pt-1 text-[11px] text-sky/50">{user}</p>
@@ -106,7 +106,7 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-ink/50" onClick={() => setOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72 bg-lake-deep shadow-lift">
-            <button type="button" onClick={() => setOpen(false)} className="absolute right-3 top-4 rounded-full p-1.5 text-white/70 hover:bg-white/10" aria-label="Close menu"><X className="h-5 w-5" /></button>
+            <button type="button" onClick={() => setOpen(false)} className="absolute right-3 top-4 rounded-xs p-1.5 text-white/70 hover:bg-white/10" aria-label="Close menu"><X className="h-5 w-5" /></button>
             {Sidebar}
           </aside>
         </div>
@@ -121,7 +121,7 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
           </div>
           <span className="hidden text-sm text-slate md:block">{fmtDate(todayISO(), "long")}</span>
           {actions}
-          <button type="button" onClick={() => setNewRes(true)} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-lake px-3.5 text-sm font-semibold text-white hover:bg-lake-deep">
+          <button type="button" onClick={() => setNewRes(true)} className="inline-flex h-9 items-center gap-1.5 rounded-xs bg-lake px-3.5 text-sm font-semibold text-white hover:bg-lake-deep">
             <Plus className="h-4 w-4" /> <span className="hidden sm:inline">New reservation</span>
           </button>
         </header>

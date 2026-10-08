@@ -34,9 +34,9 @@ export function InquiryForm({ type, compact = false, defaultSubject }: { type: I
 
   if (sent) {
     return (
-      <div className="rounded-2xl bg-moss-soft p-6 text-center">
-        <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-moss text-white"><Check className="h-5 w-5" /></span>
-        <p className="mt-3 font-display text-xl font-semibold text-ink">Received — thank you, {form.name.split(" ")[0]}.</p>
+      <div className="rounded-lg bg-moss-soft p-6 text-center">
+        <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xs bg-moss text-white"><Check className="h-5 w-5" /></span>
+        <p className="mt-3 font-display text-xl text-ink">Received — thank you, {form.name.split(" ")[0]}.</p>
         <p className="mt-1 text-sm text-slate">A person at reception reads this, usually within the hour during the day. We reply to {form.email}.</p>
       </div>
     );

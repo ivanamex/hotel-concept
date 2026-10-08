@@ -86,7 +86,7 @@ export function NewReservationModal({ onClose, initial }: { onClose: () => void;
             <div className="flex flex-wrap gap-2">
               {extrasAll.filter((e) => e.active && !e.requestOnly).map((e) => {
                 const on = extras.includes(e.id);
-                return <button key={e.id} type="button" onClick={() => setExtras((xs) => (on ? xs.filter((x) => x !== e.id) : [...xs, e.id]))} className={on ? "rounded-full bg-lake px-3 py-1.5 text-xs font-semibold text-white" : "rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft ring-1 ring-line hover:ring-ink/40"}>{e.short}</button>;
+                return <button key={e.id} type="button" onClick={() => setExtras((xs) => (on ? xs.filter((x) => x !== e.id) : [...xs, e.id]))} className={on ? "rounded-xs bg-lake px-3 py-1.5 text-xs font-semibold text-white" : "rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-ink-soft ring-1 ring-line hover:ring-ink/40"}>{e.short}</button>;
               })}
             </div>
           </div>

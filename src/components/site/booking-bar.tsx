@@ -5,12 +5,10 @@ import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { addDays, todayISO } from "@/lib/engine";
-import { inputClass } from "@/components/ui";
 
 export function defaultDates() {
   const today = todayISO();
   const d = new Date();
-  // next Friday → Sunday
   const daysToFriday = (5 - d.getDay() + 7) % 7 || 7;
   const checkIn = addDays(today, daysToFriday);
   return { checkIn, checkOut: addDays(checkIn, 2) };
@@ -37,17 +35,14 @@ export function BookingBar({ compact = false, roomSlug }: { compact?: boolean; r
     if (v >= checkOut) setCheckOut(addDays(v, 1));
   };
 
-  const field = "flex min-w-0 flex-1 flex-col gap-1";
-  const label = "text-[11px] font-semibold uppercase tracking-[0.14em] text-slate";
-  const control = clsx(inputClass, compact ? "h-10 text-sm" : "h-12");
+  const field = "flex min-w-0 flex-1 flex-col gap-1.5 border-b border-line px-4 py-3 sm:border-b-0 sm:border-r";
+  const label = "caps !text-[9.5px] text-slate";
+  const control = clsx("w-full bg-transparent font-display text-ink focus:outline-none", compact ? "text-base" : "text-lg sm:text-xl");
 
   return (
     <form
       onSubmit={submit}
-      className={clsx(
-        "grid gap-3 rounded-2xl bg-white p-3 shadow-lift ring-1 ring-ink/5 sm:grid-cols-2",
-        compact ? "lg:grid-cols-[1fr_1fr_0.8fr_0.8fr_auto]" : "lg:grid-cols-[1.1fr_1.1fr_0.8fr_0.8fr_auto] lg:p-4",
-      )}
+      className="grid overflow-hidden rounded-xs bg-white shadow-lift ring-1 ring-ink/10 sm:grid-cols-2 lg:grid-cols-[1.1fr_1.1fr_0.7fr_0.7fr_auto]"
       aria-label="Check availability"
     >
       <div className={field}>
@@ -61,27 +56,17 @@ export function BookingBar({ compact = false, roomSlug }: { compact?: boolean; r
       <div className={field}>
         <span className={label}>Adults</span>
         <select value={adults} onChange={(e) => setAdults(Number(e.target.value))} className={control}>
-          {[1, 2, 3, 4].map((n) => (
-            <option key={n} value={n}>{n}</option>
-          ))}
+          {[1, 2, 3, 4].map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
       </div>
-      <div className={field}>
+      <div className={clsx(field, "sm:border-r-0 lg:border-r")}>
         <span className={label}>Children</span>
         <select value={children} onChange={(e) => setChildren(Number(e.target.value))} className={control}>
-          {[0, 1, 2, 3].map((n) => (
-            <option key={n} value={n}>{n}</option>
-          ))}
+          {[0, 1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
       </div>
-      <button
-        type="submit"
-        className={clsx(
-          "inline-flex items-center justify-center gap-2 self-end rounded-xl bg-lake px-5 font-semibold text-white transition hover:bg-lake-deep sm:col-span-2 lg:col-span-1",
-          compact ? "h-10 text-sm" : "h-12",
-        )}
-      >
-        Check availability <ArrowRight className="h-4 w-4" />
+      <button type="submit" className="ticket caps inline-flex items-center justify-center gap-3 bg-lake px-7 py-4 !text-[11px] text-white transition hover:bg-lake-deep sm:col-span-2 lg:col-span-1 lg:py-0">
+        Check availability <ArrowRight className="arrow h-3.5 w-3.5" />
       </button>
     </form>
   );

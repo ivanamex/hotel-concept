@@ -4,7 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- STEP-10 Polish round 1 — building (13 items, see steps/STEP-10.md); videos arrive via the image/video flow handoff; then production
+- Ivana reviews the facelift on https://hotel-concept.vercel.app (desktop + phone), says "ok" or lists round 2
 
 ## Next
 - STEP-11 FR + DE languages (Swiss client; EN is default now)
@@ -23,6 +23,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-07 Back office shell: login, sidebar, overview dashboard
 - STEP-08 Back office modules: reservations, calendar, rooms, rates & extras, guests, inbox, settings
 - STEP-09 QA + deploy — live at https://hotel-concept.vercel.app (auto-deploys from main)
+- STEP-10 Polish round 1 — serif/caps/grotesk type system, ticket buttons, rail + overlay menu, hero carousel with video, ticker, horizontal rooms track, step-inside video, illustrated map block, script accents, VIDY video band, next-page links, email lightbox + VIDY10 code + subscribers in the office, Winter/Summer mode
 
 ## Notes — answers if anyone asks
 - Is the back office the real estate CRM (Riviera Match / WB admin)? No. Written new for hotel objects (rooms × nights calendar, rate plans, extras, city tax); only the dashboard pattern (sidebar, tables, drawers) is shared
@@ -34,7 +35,8 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - Push to main after every step; Ivana checks in the browser and says "ok"
 - Demo only: data lives in the browser (seeded on first load, "Reset demo data" in /office settings)
 - Hotel name, address, phone, email, prices and reviews are concept placeholders — replace before any client use
-- Photos: rooms 1–3, 5, 9 and the house shots are the client's own; the rest are generated concept images, to be replaced by real photography at go-live
+- Photos: rooms 1–3, 5, 9 and the house shots are the client's own; the rest are generated concept images and clips (public/videos), to be replaced by real photography at go-live
+- Promo code VIDY10 (10 % off the room) is the demo newsletter code; the lightbox shows once per browser per 30 days
 - No traces: nothing shipped names a tool, a model or a step; commit attribution off
 - Footer carries "by 20°N" → https://20north.art on every page
 - Fonts self-hosted (fontsource); serif allowed for display on this project (decided 8 Oct), sans for nav, UI and the office; no gold/leather tones; metric; prices in CHF

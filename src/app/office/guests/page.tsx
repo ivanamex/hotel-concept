@@ -51,7 +51,7 @@ export default function GuestsPage() {
             <tbody className="divide-y divide-ink/5">
               {guests.map((g) => (
                 <tr key={g.key} onClick={() => setOpen(g)} className="cursor-pointer hover:bg-[#fafbfc]">
-                  <td className={`${td} font-semibold`}>{g.name}{g.stays.filter((s) => s.status !== "cancelled").length > 1 && <span className="ml-2 rounded-full bg-moss-soft px-2 py-0.5 text-[10px] font-bold uppercase text-moss">Returning</span>}</td>
+                  <td className={`${td} font-semibold`}>{g.name}{g.stays.filter((s) => s.status !== "cancelled").length > 1 && <span className="ml-2 rounded-xs bg-moss-soft px-2 py-0.5 text-[10px] font-bold uppercase text-moss">Returning</span>}</td>
                   <td className={td}>{g.country}</td>
                   <td className={`${td} tabular-nums`}>{g.stays.length}</td>
                   <td className={td}>{g.last ? fmtDate(g.last, "medium") : "—"}</td>
@@ -66,7 +66,7 @@ export default function GuestsPage() {
 
       {open && (
         <Drawer open onClose={() => setOpen(null)} title={<div><p className="text-xs uppercase tracking-[0.12em] text-slate">Guest</p><h2 className="font-display text-lg font-semibold">{open.name}</h2></div>}>
-          <div className="rounded-2xl bg-[#f5f6f8] p-4 text-sm">
+          <div className="rounded-lg bg-[#f5f6f8] p-4 text-sm">
             <p>{open.email}</p><p>{open.phone}</p><p>{open.country}</p>
             <p className="mt-2 text-xs text-slate">{open.stays.length} bookings · {chf(open.spend)} total</p>
           </div>

@@ -38,16 +38,16 @@ export function ReservationDrawer({ id, onClose }: { id: string | null; onClose:
       <div className="flex flex-wrap items-center gap-2">
         <StatusChip status={r.status} />
         <SourceChip source={r.source} />
-        <span className={r.paid ? "rounded-full bg-moss-soft px-2.5 py-1 text-xs font-semibold text-moss" : "rounded-full bg-sand px-2.5 py-1 text-xs font-semibold text-ink-soft"}>{r.paid ? "Paid" : "Unpaid"}</span>
+        <span className={r.paid ? "rounded-xs bg-moss-soft px-2.5 py-1 text-xs font-semibold text-moss" : "rounded-xs bg-sand px-2.5 py-1 text-xs font-semibold text-ink-soft"}>{r.paid ? "Paid" : "Unpaid"}</span>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-3 rounded-2xl bg-[#f5f6f8] p-4 text-sm">
+      <div className="mt-5 grid grid-cols-2 gap-3 rounded-lg bg-[#f5f6f8] p-4 text-sm">
         <div><p className="text-xs text-slate">Room</p><p className="font-semibold">{room.number} · {room.name}</p></div>
         <div><p className="text-xs text-slate">Guests</p><p className="font-semibold">{guestsLabel(r.adults, r.children)}</p></div>
         <div><p className="text-xs text-slate">Check-in</p><p className="font-semibold">{fmtDate(r.checkIn, "weekday")}</p>{r.arrivalTime && <p className="text-xs text-slate">arrives {r.arrivalTime}</p>}</div>
         <div><p className="text-xs text-slate">Check-out</p><p className="font-semibold">{fmtDate(r.checkOut, "weekday")}</p><p className="text-xs text-slate">{plural(nights, "night")}</p></div>
         <div><p className="text-xs text-slate">Rate</p><p className="font-semibold">{plan.name}</p></div>
-        <div><p className="text-xs text-slate">Total incl. city tax</p><p className="font-semibold">{chf(r.total, { decimals: true })}</p><p className="text-xs text-slate">city tax {chf(r.cityTax, { decimals: true })}</p></div>
+        <div><p className="text-xs text-slate">Total incl. city tax</p><p className="font-semibold">{chf(r.total, { decimals: true })}</p><p className="text-xs text-slate">city tax {chf(r.cityTax, { decimals: true })}{r.promo ? ` · code ${r.promo} −${chf(r.discount ?? 0)}` : ""}</p></div>
       </div>
 
       <div className="mt-5 space-y-2 text-sm">

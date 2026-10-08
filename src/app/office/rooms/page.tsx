@@ -52,7 +52,7 @@ export default function RoomsPage() {
                         <input type="number" value={room.basePrice} min={50} step={5} onChange={(e) => updateRoom(room.id, { basePrice: Number(e.target.value) })} className={clsx(inputClass, "h-9 w-24 px-2 text-sm tabular-nums")} aria-label={`Base rate ${room.name}`} />
                       </div>
                     </td>
-                    <td className={td}><span className={clsx("rounded-full px-2.5 py-1 text-xs font-semibold", st.cls)}>{st.label}</span></td>
+                    <td className={td}><span className={clsx("rounded-xs px-2.5 py-1 text-xs font-semibold", st.cls)}>{st.label}</span></td>
                     <td className={td}><Toggle on={room.status === "active"} label={`${room.name} in service`} onChange={(v) => updateRoom(room.id, { status: v ? "active" : "out_of_order", statusNote: v ? undefined : room.statusNote || "Maintenance" })} /></td>
                     <td className={`${td} text-right`}><button type="button" onClick={() => setEdit(room)} className="text-sm font-semibold text-lake hover:text-lake-deep">Edit</button></td>
                   </tr>

@@ -65,7 +65,7 @@ export function LoginForm() {
             <label className="flex items-center gap-2 text-sm text-ink-soft"><input type="checkbox" defaultChecked className="h-4 w-4 rounded border-line accent-lake" /> Keep me signed in on this device</label>
             <Button type="submit" className="w-full" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</Button>
           </div>
-          <div className="mt-6 rounded-xl bg-mist p-3 text-xs text-lake">
+          <div className="mt-6 rounded-md bg-mist p-3 text-xs text-lake">
             <p className="font-semibold">Demo access</p>
             <p className="mt-0.5">{DEMO_LOGIN.email} · password <span className="font-mono">{DEMO_LOGIN.password}</span></p>
           </div>

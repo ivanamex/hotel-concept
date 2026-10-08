@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function OfficeLayout({ children }: LayoutProps<"/office">) {
-  return <div className="min-h-screen bg-[#f5f6f8]">{children}</div>;
+  return <div className="min-h-screen bg-[#f5f6f8] font-sans [--font-display:var(--font-caps)] [&_h1]:font-sans [&_h2]:font-sans [&_h3]:font-sans [&_.font-display]:font-sans [&_h1]:font-semibold [&_h2]:font-semibold [&_h3]:font-semibold [&_.font-display]:font-semibold [&_h1]:tracking-tight [&_h2]:tracking-tight">{children}</div>;
 }

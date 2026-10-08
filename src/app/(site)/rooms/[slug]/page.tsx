@@ -1,5 +1,6 @@
 import { BedDouble, Building2, Check, Eye, Maximize2, Users } from "lucide-react";
 import type { Metadata } from "next";
+import { NextPage } from "@/components/site/bands";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { RoomCard } from "@/components/site/room-card";
@@ -36,9 +37,9 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
 
   return (
     <>
-      <section className="pt-28 sm:pt-32">
+      <section className="pt-10 sm:pt-14 lg:pt-20">
         <Container>
-          <nav className="mb-6 text-sm text-slate" aria-label="Breadcrumb">
+          <nav className="caps mb-6 !text-[10px] text-slate" aria-label="Breadcrumb">
             <Link href="/rooms" className="hover:text-ink">Rooms & suites</Link> <span className="mx-2">/</span> <span className="text-ink">{room.name}</span>
           </nav>
           <RoomGallery images={room.images} name={room.name} />
@@ -52,7 +53,7 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
               <Badge tone={room.view === "Lake" ? "lake" : room.view === "Garden" ? "moss" : "sand"}>{room.view} view</Badge>
               <Badge tone="slate">{room.category} · Room {room.number}</Badge>
             </div>
-            <h1 className="mt-4 font-display text-4xl font-semibold leading-tight text-ink sm:text-5xl">{room.name}</h1>
+            <h1 className="mt-5 font-display text-5xl leading-[1.0] text-ink sm:text-6xl">{room.name}</h1>
             <p className="mt-3 text-lg text-slate">{room.summary}</p>
 
             <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-y border-line py-5 text-sm text-ink-soft">
@@ -63,14 +64,14 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
 
             <p className="mt-8 text-[17px] leading-relaxed text-ink-soft">{room.description}</p>
 
-            <h2 className="mt-10 font-display text-2xl font-semibold text-ink">In the room</h2>
+            <h2 className="mt-12 font-display text-3xl text-ink">In the <em>room</em></h2>
             <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
               {room.features.map((f) => (
                 <li key={f} className="flex items-center gap-2.5 text-[15px] text-ink-soft"><Check className="h-4 w-4 shrink-0 text-moss" /> {f}</li>
               ))}
             </ul>
 
-            <h2 className="mt-10 font-display text-2xl font-semibold text-ink">Good to know</h2>
+            <h2 className="mt-12 font-display text-3xl text-ink">Good <em>to know</em></h2>
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               {[
                 ["Check-in / out", `From ${HOTEL.checkIn} · until ${HOTEL.checkOut}. Late check-out until 14:00 on request (CHF 60).`],
@@ -78,7 +79,7 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
                 ["Children", room.maxGuests > 2 ? "Cot and high chair free of charge. Sofa bed for one child." : "Cot on request for babies up to two years; the room is best for two."],
                 ["House rules", "No smoking. Dogs welcome in garden and courtyard rooms. Quiet from 22:00."],
               ].map(([t, d]) => (
-                <div key={t} className="rounded-xl bg-white p-4 ring-1 ring-ink/5">
+                <div key={t} className="rounded-md bg-white p-4 ring-1 ring-ink/5">
                   <dt className="text-sm font-semibold text-ink">{t}</dt>
                   <dd className="mt-1 text-sm leading-relaxed text-slate">{d}</dd>
                 </div>
@@ -93,7 +94,7 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
 
       <section className="bg-paper py-16 sm:py-20">
         <Container>
-          <h2 className="font-display text-3xl font-semibold text-ink">Other rooms you may like</h2>
+          <h2 className="font-display text-3xl text-ink sm:text-4xl">Other rooms <em>you may like</em></h2>
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {fallbackOthers.map((r) => (
               <RoomCard key={r.id} room={r} />
@@ -101,6 +102,7 @@ export default async function RoomPage({ params }: PageProps<"/rooms/[slug]">) {
           </div>
         </Container>
       </section>
+      <NextPage current="/rooms" />
     </>
   );
 }

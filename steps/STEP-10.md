@@ -1,6 +1,6 @@
 # STEP-10 — Polish round 1 (collecting)
 
-Status: collecting closed 8 Oct 14:14 — Ivana said "done". Building the whole round, then production.
+Status: built and live 8 Oct 2026. All 13 items in; videos (hero lake, swans, terrace, entrance) and the ink map came from the flow handoff. Ivana to review.
 
 Principle (Ivana, 8 Oct): two jobs at once — the functionality a hotel needs (we have it) and a showcase of what 20 North can do. Every item below must serve one of the two; nothing is decoration for its own sake.
 
