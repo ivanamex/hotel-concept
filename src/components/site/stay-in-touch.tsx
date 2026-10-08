@@ -11,17 +11,20 @@ const KEY = "maison-vidy-stay-in-touch";
 const DAYS = 30;
 const EXCLUDED = ["/book", "/office"];
 
+/** Subscribed → quiet for 30 days. Dismissed → quiet for this visit, back next time. */
 function seen(): boolean {
   try {
+    if (sessionStorage.getItem(KEY)) return true;
     const v = localStorage.getItem(KEY);
     return !!v && Date.now() - Number(v) < DAYS * 86_400_000;
   } catch {
     return false;
   }
 }
-function remember() {
+function remember(subscribed = false) {
   try {
-    localStorage.setItem(KEY, String(Date.now()));
+    sessionStorage.setItem(KEY, "1");
+    if (subscribed) localStorage.setItem(KEY, String(Date.now()));
   } catch {}
 }
 
@@ -74,7 +77,7 @@ export function StayInTouch() {
     setError("");
     addSubscriber({ email, name, page: pathname });
     setDone(true);
-    remember();
+    remember(true);
   };
 
   if (!open) return null;
