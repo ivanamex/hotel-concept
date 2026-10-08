@@ -4,8 +4,9 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- Ivana: hard-reload the old tab, click through round 2; download 2–3 aerial stills from the image flow, make two 10 s clips in Gemini, upload here → I place them as hero slide 1 + VIDY band
+- STEP-13 Round 3 — collecting Ivana's comments in steps/STEP-13.md (one document, in order); build one by one on "go"
 - STEP-12 Languages EN · FR · DE · IT — spec written, build on "go"
+- Golden aerial clip (Gemini) still to come → re-cut the hero film with it first
 
 ## Next
 - STEP-13 Supabase backend (rooms, reservations, inquiries, subscribers, auth for /office) — replaces the local demo store
