@@ -44,7 +44,7 @@ export interface HotelState {
   resetDemo: () => void;
 }
 
-const SEED_VERSION = 3;
+const SEED_VERSION = 4;
 
 function seedState() {
   return {

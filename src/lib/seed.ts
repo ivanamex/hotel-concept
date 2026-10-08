@@ -260,7 +260,7 @@ export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
   const start = "2026-09-01";
   let attempts = 0;
   let seq = 0;
-  while (out.length < 44 && attempts < 600) {
+  while (out.length < 300 && attempts < 20000) {
     attempts++;
     const offset = Math.floor(r() * 112); // Sep 1 → Dec 21
     const checkIn = addDays(start, offset);
@@ -288,14 +288,17 @@ export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
       extras: EXTRAS.filter((e) => extras.includes(e.id)),
       seasons: SEASONS, breakfastPrice: HOTEL.breakfastPrice, cityTaxPerPersonNight: HOTEL.cityTax,
     });
-    const [firstName, lastName, country, cc] = NAMES[seq % NAMES.length];
+    const firstName = NAMES[seq % NAMES.length][0];
+    const [, lastName, country, cc] = NAMES[(seq * 11 + 5) % NAMES.length];
     const source = SOURCES[Math.floor(r() * SOURCES.length)];
     let status: ReservationStatus;
     if (r() > 0.93) status = "cancelled";
     else if (checkOut <= today) status = "checked_out";
     else if (checkIn <= today) status = "checked_in";
     else status = source === "booking.com" && r() > 0.7 ? "pending" : "confirmed";
-    const createdAt = `${addDays(checkIn, -Math.floor(r() * 45) - 2)}T${String(8 + Math.floor(r() * 12)).padStart(2, "0")}:${String(Math.floor(r() * 60)).padStart(2, "0")}:00`;
+    const bookedOn = addDays(checkIn, -Math.floor(r() * 60) - 1);
+    const createdDay = bookedOn > today ? addDays(today, -Math.floor(r() * 20)) : bookedOn;
+    const createdAt = `${createdDay}T${String(8 + Math.floor(r() * 12)).padStart(2, "0")}:${String(Math.floor(r() * 60)).padStart(2, "0")}:00`;
     seq++;
     const ref = `MV-2026-${String(seq).padStart(4, "0")}`;
     const timeline = [{ at: createdAt, text: `Booked via ${source === "direct" ? "the website" : source}` }];
