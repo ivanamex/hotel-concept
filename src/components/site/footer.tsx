@@ -7,6 +7,7 @@ import { LangSwitch } from "./lang-switch";
 import { Link } from "./link";
 import { Logo } from "./logo";
 import { PaymentMarks } from "./payment-marks";
+import { SwissCross } from "./swiss";
 
 export function SiteFooter() {
   const t = useT();
@@ -57,7 +58,7 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="caps mt-8 flex flex-col gap-3 border-t border-line pt-6 !text-[10px] text-slate sm:flex-row sm:items-center sm:justify-between">
-          <div>© {new Date().getFullYear()} {HOTEL.name} · {f.copyright}</div>
+          <div className="inline-flex items-center gap-2"><SwissCross className="h-3 w-3" title={t.common.country} /> © {new Date().getFullYear()} {HOTEL.name} · {f.copyright}</div>
           <div className="flex flex-wrap items-center gap-5">
             <Link href="/office/login" className="transition hover:text-ink">{f.staffLogin}</Link>
             <a href="https://20north.art" target="_blank" rel="noopener" className="transition hover:text-ink">by 20°N</a>

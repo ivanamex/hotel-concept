@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useT } from "@/i18n/context";
 import { fmt } from "@/i18n";
 import { liveValues } from "@/lib/season";
+import { SwissCross } from "./swiss";
 
 export function Ticker({ dark = false }: { dark?: boolean }) {
   const t = useT().ticker;
@@ -32,7 +33,7 @@ export function Ticker({ dark = false }: { dark?: boolean }) {
         {items.map((line, i) => (
           <span key={i} className="caps flex items-center !text-[10.5px]">
             <span className="px-6">{line}</span>
-            <span className={`h-1 w-1 rounded-full ${dark ? "bg-sky" : "bg-lake"}`} />
+            {i % 2 ? <SwissCross className="h-2.5 w-2.5" /> : <span className={`h-1 w-1 rounded-full ${dark ? "bg-sky" : "bg-lake"}`} />}
           </span>
         ))}
       </div>

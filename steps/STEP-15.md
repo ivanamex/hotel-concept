@@ -24,5 +24,14 @@ Status: built and live 8 Oct 2026 (go at 17:46).
 9. DONE 18:40 — **Descenders cut** (Ivana 18:09: g, y and long tails clipped in headlines). The line-by-line reveal masks each line and clipped below the baseline; the masks now leave room for descenders and accents.
 10. DONE 18:40 — **Contact / request rows too plain, hover too subtle** (Ivana 18:09): rows became plates — an icon in a soft square (Groups, Long stays, Whole house got their own icons; FAQ rows a + that turns into × when open); on hover the row lifts onto a white plate with a shadow and the icon fills lake blue and tilts.
 
+11. **Two rooms share a photo** (Ivana 18:38): Single Courtyard reuses the Classic Garden image, Attic Courtyard reuses Attic Lake. Ivana sent four hotel photos to recolour; three carry a Trip.com watermark and all four are other hotels' photography — **not sane** for a client pitch even recoloured (watermark, rights, and a grand-hotel scale the ten-room house does not have). Instead: two new rooms generated in the same flow and style as the other concept rooms (oak, cream panelling, blue toile, lake-blue velvet) — a compact single on the courtyard, a cosy attic on the courtyard — 4 variations each; Ivana picks and uploads (storage domain is blocked from the workspace). Then `single-courtyard.jpg` and `attic-courtyard.jpg` replace the duplicates in the seed, the gallery and the dictionaries.
+12. DONE 18:50 — **Swiss motif on the ticker** (Ivana 18:38: "Swiss people put the flag everywhere, it will pop"): every second separator in the running strip is a small Swiss cross (official red, the one red on the site); the footer copyright line starts with the flag. Drawn as a two-shape SVG, no file needed.
+13. **Gallery — more prominent, more creative, an effect inside** (Ivana 18:38, thinking aloud; a showcase moment). Options, pick one or two:
+    (a) **Drifting columns** — the masonry columns scroll at different speeds (parallax), so the wall of photos moves as you scroll; the simplest big upgrade.
+    (b) **Darkroom** — photos sit faintly desaturated and slightly dark; on hover (or as they enter the screen) they "develop" into full colour and sharpen, like a print in a tray. Reads as a signature effect, cheap to run.
+    (c) **Cinema strip** — a pinned full-screen sequence at the top of the gallery: four or five hero photos cross-fade and slowly push in as you scroll, then the masonry wall follows.
+    (d) **Lightbox with motion** — the opened photo does a slow push-in and the caption writes itself in the script font.
+    Recommendation: (a) + (b) together, plus (d) in the lightbox; (c) only if the page should open like a film. Built on "go".
+
 ## Done when
 Every item built or struck through with a reason; Ivana clicks through; "ok".
