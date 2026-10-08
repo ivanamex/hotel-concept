@@ -31,7 +31,7 @@ export default function HomePage() {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/20 to-ink/55" />
-        <Container className="relative flex min-h-[92svh] flex-col justify-end pb-10 pt-32 sm:pb-14">
+        <Container className="relative flex min-h-[92svh] flex-col justify-end pb-24 pt-32 sm:pb-14">
           <div className="max-w-3xl">
             <p className="fade-up mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky">
               Vidy · Lausanne · ten rooms by the lake

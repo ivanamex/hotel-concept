@@ -63,7 +63,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link href="/book" className={clsx(buttonClass(light ? "light" : "primary", "sm"), "hidden sm:inline-flex")}>
+          <Link href="/book" className={clsx(buttonClass(light ? "light" : "primary", "sm"), "max-sm:hidden")}>
             Check availability
           </Link>
           <button

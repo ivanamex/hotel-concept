@@ -12,17 +12,3 @@ export function whatsappUrl(text = "Hello Maison Vidy, I have a question about a
   return `https://wa.me/${HOTEL.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
-export function WhatsAppButton() {
-  return (
-    <a
-      href={whatsappUrl()}
-      target="_blank"
-      rel="noopener"
-      className="group fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-[#25D366] py-3 pl-3.5 pr-4 text-white shadow-lift transition hover:-translate-y-0.5 hover:bg-[#1ebe5b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/50 focus-visible:ring-offset-2"
-      aria-label="Chat with reception on WhatsApp"
-    >
-      <WhatsAppIcon />
-      <span className="text-sm font-semibold">WhatsApp</span>
-    </a>
-  );
-}

@@ -1,6 +1,6 @@
 import { SiteFooter } from "@/components/site/footer";
 import { HeaderSwitch } from "@/components/site/header-switch";
-import { WhatsAppButton } from "@/components/site/whatsapp";
+import { WhatsAppButton } from "@/components/site/whatsapp-button";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
