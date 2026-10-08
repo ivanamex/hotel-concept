@@ -4,7 +4,8 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- (nothing — first draft complete, see Done)
+- STEP-09 deploy: import `ivanamex/hotel-concept` in Vercel (ivanamex's projects), deployment protection off, then paste the live URL into steps/STEP-09.md
+- Replace the 11 placeholder photos (soft gradients) with the picks from the image flow: lake/hero-lake, lake/marina, lake/swans, lake/lakeside-path, around/lavaux, around/old-town, house/terrace-dusk, rooms/room-junior-suite, rooms/room-family, rooms/room-attic, rooms/room-twin (same file names, ≤ 1600 px, JPG)
 
 ## Next
 - STEP-10 FR + DE languages (Swiss client; EN is default now)
@@ -22,7 +23,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-06 Contact (form, map, WhatsApp), reservation request, legal pages, 404, metadata (noindex while demo)
 - STEP-07 Back office shell: login, sidebar, overview dashboard
 - STEP-08 Back office modules: reservations, calendar, rooms, rates & extras, guests, inbox, settings
-- STEP-09 QA (build, every page desktop + mobile) + Vercel deploy
+- STEP-09 QA done (build clean, every page desktop + mobile, booking end-to-end into the office) — deploy pending, see Now
 
 ## Rules
 - One step at a time; nothing is built without its STEP file
