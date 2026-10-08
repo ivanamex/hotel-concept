@@ -1,10 +1,11 @@
 import { PageIntro } from "@/components/site/page-intro";
 import { Container } from "@/components/ui";
+import { Rich, plain } from "@/i18n/rich";
 
 export function LegalPage({ eyebrow, title, lead, sections }: { eyebrow: string; title: string; lead?: string; sections: { h: string; p: string[] }[] }) {
   return (
     <>
-      <PageIntro eyebrow={eyebrow} title={title} lead={lead} />
+      <PageIntro eyebrow={eyebrow} crumb={plain(eyebrow)} title={<Rich text={title} />} lead={lead} />
       <section className="pb-24">
         <Container>
           <div className="max-w-3xl space-y-10 rounded-lg bg-white p-6 ring-1 ring-ink/5 sm:p-10">

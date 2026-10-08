@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "./link";
 
 export function Crumb({ current, light = false }: { current: string; light?: boolean }) {
   return (

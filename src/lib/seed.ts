@@ -18,7 +18,7 @@ export const HOTEL: HotelSettings = {
   name: "Maison Vidy",
   tagline: "Lausanne, by the lake.",
   address: "Chemin du Lac 12",
-  city: "1007 Lausanne, Switzerland",
+  city: "1007 Lausanne",
   phone: "+41 21 555 10 07",
   whatsapp: "529841803527",
   email: "stay@maisonvidy.ch",

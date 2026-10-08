@@ -3,12 +3,15 @@
 import { clsx } from "clsx";
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useT } from "@/i18n/context";
 import { Lightbox } from "./lightbox";
 
 interface Item { src: string; alt: string; cat: string; w: number; h: number }
 const CATS = ["All", "Rooms", "House", "Lake", "Lausanne"];
 
-export function GalleryGrid({ items }: { items: Item[] }) {
+export function GalleryGrid({ items: raw }: { items: Item[] }) {
+  const t = useT();
+  const items = useMemo(() => raw.map((i) => ({ ...i, alt: t.gallery.alts[i.src] ?? i.alt })), [raw, t]);
   const [cat, setCat] = useState("All");
   const [index, setIndex] = useState<number | null>(null);
   const list = useMemo(() => (cat === "All" ? items : items.filter((i) => i.cat === cat)), [items, cat]);
@@ -17,7 +20,7 @@ export function GalleryGrid({ items }: { items: Item[] }) {
     <>
       <div className="flex flex-wrap gap-2">
         {CATS.map((c) => (
-          <button key={c} type="button" onClick={() => setCat(c)} className={clsx("caps rounded-xs px-3.5 py-2 !text-[10px] ring-1 ring-inset transition", cat === c ? "bg-ink text-white ring-ink" : "bg-white text-ink-soft ring-line hover:ring-ink/40")}>{c}</button>
+          <button key={c} type="button" onClick={() => setCat(c)} className={clsx("caps rounded-xs px-3.5 py-2 !text-[10px] ring-1 ring-inset transition", cat === c ? "bg-ink text-white ring-ink" : "bg-white text-ink-soft ring-line hover:ring-ink/40")}>{t.gallery.cats[c] ?? c}</button>
         ))}
       </div>
       <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">

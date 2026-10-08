@@ -1,7 +1,10 @@
 "use client";
 
 import { clsx } from "clsx";
-import { ExtraIcon, UNIT_LABEL } from "@/components/site/extra-icon";
+import { ExtraIcon } from "@/components/site/extra-icon";
+import { en } from "@/i18n/en";
+
+const UNIT_LABEL = en.units;
 import { OfficeShell } from "@/components/office/shell";
 import { Panel, Toggle, td, th } from "@/components/office/ui";
 import { inputClass } from "@/components/ui";

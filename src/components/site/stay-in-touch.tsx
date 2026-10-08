@@ -5,6 +5,10 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button, Input } from "@/components/ui";
+import { fmt } from "@/i18n";
+import { useT } from "@/i18n/context";
+import { Rich } from "@/i18n/rich";
+import { parsePublicPath } from "@/i18n/config";
 import { PROMO_CODE, useHotel } from "@/lib/store";
 
 const KEY = "maison-vidy-stay-in-touch";
@@ -30,6 +34,8 @@ function remember(subscribed = false) {
 
 export function StayInTouch() {
   const pathname = usePathname();
+  const t = useT();
+  const s = t.stayInTouch;
   const addSubscriber = useHotel((s) => s.addSubscriber);
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -39,7 +45,8 @@ export function StayInTouch() {
   const fired = useRef(false);
 
   useEffect(() => {
-    if (EXCLUDED.some((p) => pathname.startsWith(p)) || seen()) return;
+    const internal = parsePublicPath(pathname).internal;
+    if (EXCLUDED.some((p) => internal.startsWith(p)) || seen()) return;
     fired.current = false;
     const show = () => {
       if (fired.current || seen()) return;
@@ -73,7 +80,7 @@ export function StayInTouch() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return setError("Enter a valid email");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return setError(t.common.validEmail);
     setError("");
     addSubscriber({ email, name, page: pathname });
     setDone(true);
@@ -83,35 +90,35 @@ export function StayInTouch() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label="Stay in touch">
+    <div className="fixed inset-0 z-[80] flex items-end justify-center p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={s.label}>
       <div className="absolute inset-0 bg-ink/55 backdrop-blur-[2px]" onClick={close} />
       <div className="relative grid w-full max-w-4xl overflow-hidden rounded-t-lg bg-white shadow-lift sm:rounded-lg md:grid-cols-[1fr_1.1fr]">
-        <button type="button" onClick={close} className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-xs bg-white/90 text-ink transition hover:bg-ink hover:text-white" aria-label="Close">
+        <button type="button" onClick={close} className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-xs bg-white/90 text-ink transition hover:bg-ink hover:text-white" aria-label={t.common.close}>
           <X className="h-5 w-5" />
         </button>
         <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[460px]">
-          <Image src="/images/rooms/room-junior-suite.jpg" alt="Junior Suite with the balcony open to the lake" fill sizes="(min-width:768px) 420px, 100vw" className="object-cover" />
+          <Image src="/images/rooms/room-junior-suite.jpg" alt={t.gallery.alts["/images/rooms/room-junior-suite.jpg"]} fill sizes="(min-width:768px) 420px, 100vw" className="object-cover" />
         </div>
         <div className="p-7 sm:p-10">
           {done ? (
             <div className="flex h-full flex-col justify-center">
               <span className="flex h-11 w-11 items-center justify-center rounded-xs bg-moss text-white"><Check className="h-5 w-5" /></span>
-              <h2 className="mt-5 font-display text-3xl leading-tight text-ink sm:text-4xl">Your code is <em>{PROMO_CODE}</em>.</h2>
-              <p className="mt-3 text-slate">Ten percent off the room on your first direct booking. It is also on its way to {email}. Enter it in the last step of the booking.</p>
-              <div className="mt-6"><Button onClick={close} arrow>Find your dates</Button></div>
+              <h2 className="mt-5 font-display text-3xl leading-tight text-ink sm:text-4xl"><Rich text={fmt(s.doneTitle, { code: PROMO_CODE })} /></h2>
+              <p className="mt-3 text-slate">{fmt(s.doneText, { email })}</p>
+              <div className="mt-6"><Button onClick={close} arrow>{s.doneCta}</Button></div>
             </div>
           ) : (
             <form onSubmit={submit} noValidate className="flex h-full flex-col justify-center">
-              <p className="caps !text-[10px] text-lake">Stay in touch</p>
-              <h2 className="mt-4 font-display text-3xl leading-[1.05] text-ink sm:text-[2.6rem]">Ten percent off your first stay, <em>booked direct.</em></h2>
-              <p className="mt-4 text-sm text-slate">Leave your email and we send the code, plus a note when the terrace opens or the winter offer starts. Two or three emails a year, never more.</p>
+              <p className="caps !text-[10px] text-lake">{s.label}</p>
+              <h2 className="mt-4 font-display text-3xl leading-[1.05] text-ink sm:text-[2.6rem]"><Rich text={s.title} /></h2>
+              <p className="mt-4 text-sm text-slate">{s.text}</p>
               <div className="mt-6 space-y-3">
-                <Input placeholder="First name (optional)" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" />
-                <Input type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+                <Input placeholder={s.firstName} value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" />
+                <Input type="email" placeholder={s.email} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
                 {error && <p className="text-xs text-[#b3261e]">{error}</p>}
-                <Button type="submit" className="w-full" arrow>Send me the code</Button>
+                <Button type="submit" className="w-full" arrow>{s.cta}</Button>
               </div>
-              <button type="button" onClick={close} className="caps mt-4 self-start !text-[10px] text-slate hover:text-ink">No thanks</button>
+              <button type="button" onClick={close} className="caps mt-4 self-start !text-[10px] text-slate hover:text-ink">{s.no}</button>
             </form>
           )}
         </div>

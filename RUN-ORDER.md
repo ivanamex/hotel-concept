@@ -4,7 +4,6 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- STEP-12 Languages EN · FR · DE · IT — building (go 8 Oct 15:25)
 - STEP-14 Round 4 — collecting Ivana's notes from the click-through; item 1 (rooms track) is live, items 2–3 (forms on the background, hover motion everywhere) built on "go"
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
 
@@ -15,6 +14,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-16 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
+- STEP-12 Languages EN · FR · DE · IT — `/fr /de /it`, translated section slugs, dictionaries for every public string, switch in menu + footer, hreflang + sitemap; office stays EN
 - STEP-01 Foundation: Next.js + Tailwind, fonts, tokens, header/footer/WhatsApp, data model + seed (10 rooms, 40 reservations), pricing + availability engine
 - STEP-02 Home page
 - STEP-03 Rooms list + room detail
@@ -47,3 +47,4 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - Fonts self-hosted (fontsource): Cormorant Garamond display (serif allowed on this project, decided 8 Oct), Archivo caps for nav/buttons/labels, Hanken Grotesk body + office, Mrs Saint Delafield script accents; no gold/leather tones; metric; prices in CHF
 - noindex + robots disallow until the client signs
 - Office login (demo): manager@maisonvidy.ch / vidy2026
+- Languages: EN is `/`, FR/DE/IT are `/fr /de /it`; every public string lives in `src/i18n/*.ts` — copy changes go there, never in components

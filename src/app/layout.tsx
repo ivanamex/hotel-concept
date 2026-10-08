@@ -3,10 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hotel-concept.vercel.app"),
-  title: {
-    default: "Maison Vidy · Lakeside boutique hotel in Lausanne",
-    template: "%s · Maison Vidy",
-  },
+  title: "Maison Vidy",
   description:
     "Ten rooms in a lakeside house in Vidy, Lausanne. Book direct for the best rate, breakfast on the terrace, and a concierge one message away.",
   robots: { index: false, follow: false },

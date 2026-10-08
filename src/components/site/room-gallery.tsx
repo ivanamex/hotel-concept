@@ -3,11 +3,13 @@
 import { Expand } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useT } from "@/i18n/context";
 import { Lightbox } from "./lightbox";
 
 export function RoomGallery({ images, name }: { images: string[]; name: string }) {
+  const t = useT();
   const [index, setIndex] = useState<number | null>(null);
-  const items = images.map((src, i) => ({ src, alt: `${name} — photo ${i + 1}` }));
+  const items = images.map((src, i) => ({ src, alt: `${name} — ${t.common.photo} ${i + 1}` }));
   const rest = images.slice(1, 4);
 
   return (
@@ -16,7 +18,7 @@ export function RoomGallery({ images, name }: { images: string[]; name: string }
         <button type="button" onClick={() => setIndex(0)} className="group relative aspect-[4/3] overflow-hidden rounded-lg lg:aspect-auto lg:min-h-[520px]">
           <Image src={images[0]} alt={items[0].alt} fill priority sizes="(min-width:1024px) 66vw, 100vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
           <span className="absolute bottom-4 right-4 caps inline-flex items-center gap-1.5 rounded-xs bg-white/90 px-3 py-1.5 !text-[10px] text-ink">
-            <Expand className="h-3.5 w-3.5" /> {images.length} photos
+            <Expand className="h-3.5 w-3.5" /> {images.length} {t.common.photos}
           </span>
         </button>
         <div className="grid grid-cols-3 gap-3 lg:grid-cols-1">

@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import Link from "next/link";
+import { Link } from "./link";
 
 export function Mark({ className, light }: { className?: string; light?: boolean }) {
   return (

@@ -8,7 +8,7 @@ export function WhatsAppIcon({ className = "h-6 w-6" }: { className?: string }) 
   );
 }
 
-export function whatsappUrl(text = "Hello Maison Vidy, I have a question about a stay.") {
+export function whatsappUrl(text: string) {
   return `https://wa.me/${HOTEL.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
