@@ -4,8 +4,8 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- Ivana clicks through https://hotel-concept.vercel.app once more; then it goes to the client as the concept
-- STEP-12 Languages EN · FR · DE · IT — spec written, build on "go"
+- STEP-12 Languages EN · FR · DE · IT — building (go 8 Oct 15:25)
+- STEP-14 Round 4 — collecting Ivana's notes from the click-through; item 1 (rooms track) is live, items 2–3 (forms on the background, hover motion everywhere) built on "go"
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
 
 ## Next
@@ -24,7 +24,8 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-07 Back office shell: login, sidebar, overview dashboard
 - STEP-08 Back office modules: reservations, calendar, rooms, rates & extras, guests, inbox, settings
 - STEP-09 QA + deploy — live at https://hotel-concept.vercel.app (auto-deploys from main)
-- STEP-13 Round 3 — hero = entrance film played once then held, lake film as page break, Home in the menu + breadcrumbs + HOME on the rail, close × on booking and confirmation
+- STEP-14 item 1 — pinned rooms track is back, with arrows, "Skip the rooms" and a faster pass
+- STEP-13 Round 3 — hero = entrance film looping at native speed, lake film as page break, Home in the menu + breadcrumbs + HOME on the rail, close × on booking and confirmation
 - STEP-11 Round 2 — Cormorant Garamond, motion on every clip, parallax intro photos, closing section + contact modal + WhatsApp line, swans in the VIDY band, rooms track without scroll-hijack, back-to-top, skew protection + chunk-reload guard, hash links
 - STEP-10 Polish round 1 — serif/caps/grotesk type system, ticket buttons, rail + overlay menu, hero carousel with video, ticker, horizontal rooms track, step-inside video, illustrated map block, script accents, VIDY video band, next-page links, email lightbox + VIDY10 code + subscribers in the office, Winter/Summer mode
 

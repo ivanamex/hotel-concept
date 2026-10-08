@@ -1,103 +1,120 @@
 "use client";
 
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { chf } from "@/lib/format";
 import type { Room } from "@/lib/types";
 import { Eyebrow, RuleLink } from "@/components/ui";
+import { prefersReducedMotion, scrollTo } from "./motion";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/** The page scrolls, the rooms slide past. Vertical scroll is shorter than the track, so it passes quickly. */
+const PACE = 0.72;
 
 /**
- * Horizontal room track the visitor controls: drag, trackpad, arrows, or just keep scrolling down.
- * No scroll hijacking — the page never pins.
+ * Desktop: the section pins and the track scrubs sideways with the page scroll —
+ * arrows jump a room at a time, "Skip" drops to the next section.
+ * Below lg: a native swipe track.
  */
 export function RoomsTrack({ rooms }: { rooms: Room[] }) {
+  const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
-  const drag = useRef<{ x: number; left: number; moved: boolean } | null>(null);
-
-  const update = useCallback(() => {
-    const el = track.current;
-    if (!el) return;
-    setAtStart(el.scrollLeft <= 4);
-    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
-  }, []);
+  const bar = useRef<HTMLDivElement>(null);
+  const st = useRef<ScrollTrigger | null>(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const el = track.current;
-    if (!el) return;
-    update();
-    el.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      el.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, [update]);
+    const el = section.current;
+    const tr = track.current;
+    if (!el || !tr || prefersReducedMotion()) return;
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px)", () => {
+      const distance = () => Math.max(0, tr.scrollWidth - window.innerWidth + 48);
+      const tween = gsap.to(tr, {
+        x: () => -distance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: () => `+=${Math.round(distance() * PACE)}`,
+          pin: true,
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            setProgress(self.progress);
+            if (bar.current) bar.current.style.transform = `scaleX(${self.progress})`;
+          },
+        },
+      });
+      st.current = tween.scrollTrigger ?? null;
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+        st.current = null;
+      };
+    });
+    return () => mm.revert();
+  }, []);
 
-  const step = (dir: 1 | -1) => {
-    const el = track.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("article");
-    const w = (card?.offsetWidth ?? 400) + 20;
-    el.scrollBy({ left: dir * w * (window.innerWidth > 1280 ? 2 : 1), behavior: "smooth" });
+  /** Jump one room left or right by scrolling the page the matching amount. */
+  const nudge = (dir: 1 | -1) => {
+    const s = st.current;
+    const tr = track.current;
+    if (!s || !tr) return;
+    const card = tr.querySelector<HTMLElement>("article");
+    const step = (card?.offsetWidth ?? 480) + 20;
+    const distance = tr.scrollWidth - window.innerWidth + 48;
+    const current = s.progress * distance;
+    const next = gsap.utils.clamp(0, distance, Math.round(current / step) * step + dir * step);
+    scrollTo(s.start + (next / distance) * (s.end - s.start));
   };
 
-  // drag to scroll (mouse)
-  const onDown = (e: React.MouseEvent) => {
-    const el = track.current;
-    if (!el || e.button !== 0) return;
-    drag.current = { x: e.clientX, left: el.scrollLeft, moved: false };
-    el.classList.add("is-dragging");
-  };
-  const onMove = (e: React.MouseEvent) => {
-    const el = track.current;
-    if (!el || !drag.current) return;
-    const dx = e.clientX - drag.current.x;
-    if (Math.abs(dx) > 4) drag.current.moved = true;
-    el.scrollLeft = drag.current.left - dx;
-  };
-  const onUp = () => {
-    const el = track.current;
-    if (!el) return;
-    el.classList.remove("is-dragging");
-    const moved = drag.current?.moved;
-    drag.current = null;
-    if (moved) {
-      // swallow the click that follows a drag
-      const stop = (ev: Event) => { ev.preventDefault(); ev.stopPropagation(); el.removeEventListener("click", stop, true); };
-      el.addEventListener("click", stop, true);
-      setTimeout(() => el.removeEventListener("click", stop, true), 50);
-    }
+  /** Drop to whatever comes after the rooms. */
+  const skip = () => {
+    const s = st.current;
+    const el = section.current;
+    if (!s || !el) return;
+    scrollTo(s.end + el.offsetHeight);
   };
 
   return (
-    <section className="relative overflow-hidden bg-paper py-16 lg:py-24">
-      <div className="flex items-end justify-between gap-6 px-5 sm:px-8 lg:px-12">
+    <section ref={section} className="relative overflow-hidden bg-paper">
+      <div className="flex items-end justify-between gap-6 px-5 pt-16 sm:px-8 lg:px-12 lg:pt-14">
         <div className="max-w-xl">
           <Eyebrow className="mb-4">Rooms & suites</Eyebrow>
           <h2 className="font-display text-3xl leading-[1.02] sm:text-4xl lg:text-[2.9rem]">Pick your <em>window.</em></h2>
         </div>
-        <div className="hidden items-center gap-2 sm:flex">
-          <button type="button" onClick={() => step(-1)} disabled={atStart} aria-label="Previous rooms" className="flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 transition hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowLeft className="h-4 w-4" /></button>
-          <button type="button" onClick={() => step(1)} disabled={atEnd} aria-label="Next rooms" className="flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 transition hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowRight className="h-4 w-4" /></button>
+        <div className="hidden items-center gap-5 lg:flex">
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => nudge(-1)} disabled={progress <= 0.001} aria-label="Previous room" className="flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 transition hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowLeft className="h-4 w-4" /></button>
+            <button type="button" onClick={() => nudge(1)} disabled={progress >= 0.999} aria-label="Next room" className="flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 transition hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowRight className="h-4 w-4" /></button>
+          </div>
+          <button type="button" onClick={skip} className="caps inline-flex items-center gap-2 !text-[10px] text-slate transition hover:text-ink">
+            Skip the rooms <ArrowDown className="h-3.5 w-3.5" />
+          </button>
         </div>
+        <p className="caps !text-[10px] text-slate lg:hidden">Swipe</p>
+      </div>
+
+      {/* progress line (desktop) */}
+      <div className="mx-5 mt-6 hidden h-px bg-ink/10 sm:mx-8 lg:mx-12 lg:block">
+        <div ref={bar} className="h-px origin-left bg-ink" style={{ transform: "scaleX(0)" }} />
       </div>
 
       <div
         ref={track}
-        onMouseDown={onDown}
-        onMouseMove={onMove}
-        onMouseUp={onUp}
-        onMouseLeave={onUp}
-        className="hscroll mt-10 flex gap-5 overflow-x-auto px-5 pb-4 sm:px-8 lg:px-12"
+        className="hscroll mt-8 flex gap-5 overflow-x-auto px-5 pb-16 sm:px-8 lg:mt-6 lg:h-[calc(100vh-13.5rem)] lg:items-stretch lg:overflow-visible lg:px-12 lg:pb-10"
       >
         {rooms.map((room, i) => (
-          <article key={room.id} className="group relative flex w-[82vw] shrink-0 flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:w-[52vw] lg:w-[min(34vw,520px)]">
-            <Link href={`/rooms/${room.slug}`} draggable={false} className="relative block aspect-[4/3] overflow-hidden">
-              <Image src={room.images[0]} alt={room.name} fill draggable={false} sizes="(min-width:1024px) 34vw, (min-width:640px) 52vw, 82vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" priority={i < 2} />
+          <article key={room.id} className="group relative flex w-[82vw] shrink-0 flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:w-[52vw] lg:w-[min(36vw,540px)]">
+            <Link href={`/rooms/${room.slug}`} draggable={false} className="relative block aspect-[4/3] overflow-hidden lg:aspect-auto lg:flex-1">
+              <Image src={room.images[0]} alt={room.name} fill draggable={false} sizes="(min-width:1024px) 36vw, (min-width:640px) 52vw, 82vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" priority={i < 2} />
               <span className="caps absolute left-4 top-4 rounded-xs bg-white/92 px-2 py-1 !text-[10px] text-ink">{room.view} view · {room.sizeM2} m²</span>
             </Link>
             <div className="flex items-end justify-between gap-4 p-5 lg:p-6">
@@ -114,14 +131,13 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
             </div>
           </article>
         ))}
-        <div className="flex w-[70vw] shrink-0 items-center justify-center sm:w-[40vw] lg:w-[24vw]">
+        <div className="flex w-[70vw] shrink-0 items-center justify-center sm:w-[40vw] lg:w-[26vw]">
           <div className="text-center">
             <p className="font-display text-3xl text-ink">All ten rooms,<br /><em>one lake.</em></p>
             <RuleLink href="/rooms" className="mt-6">See every room</RuleLink>
           </div>
         </div>
       </div>
-      <p className="caps mt-2 px-5 !text-[10px] text-slate sm:px-8 lg:px-12">Drag, swipe or use the arrows</p>
     </section>
   );
 }

@@ -126,16 +126,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   animation: drift 22s ease-in-out infinite alternate;
 }
 
-/* horizontal room track */
+/* horizontal room track: native swipe below lg, pinned + scrubbed on desktop */
 .hscroll {
-  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  cursor: grab;
 }
 .hscroll::-webkit-scrollbar { display: none; }
-.hscroll.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.hscroll > * { scroll-snap-align: start; }
+@media (max-width: 1023px) {
+  .hscroll { scroll-snap-type: x mandatory; }
+  .hscroll > * { scroll-snap-align: start; }
+}
+@media (min-width: 1024px) {
+  .hscroll { will-change: transform; }
+}
 
 /* script line writing itself */
 @keyframes write {
