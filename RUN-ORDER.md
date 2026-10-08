@@ -37,6 +37,6 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - Photos: rooms 1–3, 5, 9 and the house shots are the client's own; the rest are generated concept images, to be replaced by real photography at go-live
 - No traces: nothing shipped names a tool, a model or a step; commit attribution off
 - Footer carries "by 20°N" → https://20north.art on every page
-- Sans-serif only (Bricolage Grotesque + Figtree, self-hosted); no gold/leather tones; metric; prices in CHF
+- Fonts self-hosted (fontsource); serif allowed for display on this project (decided 8 Oct), sans for nav, UI and the office; no gold/leather tones; metric; prices in CHF
 - noindex + robots disallow until the client signs
 - Office login (demo): manager@maisonvidy.ch / vidy2026

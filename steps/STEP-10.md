@@ -4,11 +4,12 @@ Status: collecting. Ivana adds items and inspo here; build starts when she says 
 
 ## Items so far (8 Oct)
 
-1. **Fonts** — Bricolage Grotesque + Figtree are the Árbol pair; both go. Pick one of:
-   - A (recommended) **Archivo** (variable width) for display + nav, **Hanken Grotesk** for body. Archivo semi-expanded in caps for the navbar reads like Swiss signage; headlines at regular width, weight 600, tight tracking; Hanken is a calm Swiss-style grotesk for text.
-   - B **Hanken Grotesk** alone, 500 headlines / 400 body — strictest, risk of plain.
-   - C **Instrument Sans** display + Hanken Grotesk body — softer, more editorial.
-   All Google fonts, self-hosted via fontsource. Nothing else on our sites uses these.
+1. **Fonts** — Bricolage Grotesque + Figtree are the Árbol pair; both go. Serif is allowed on this project (Ivana, 8 Oct: a good serif adds elegance for a Swiss hotel; the no-serif rule was for the modern sites). Direction: serif for headlines and big numbers, a grotesk in caps for navbar/buttons/labels, a grotesk for body and the back office.
+   - A (recommended) **Fraunces** display (variable, optical size, italic for accents like *by the lake*) + **Archivo** caps for nav/buttons + **Hanken Grotesk** body.
+   - B **Bodoni Moda** display — sharper didone, closest to the Lasala look; needs generous sizes, thin at small sizes.
+   - C **Cormorant Garamond** display — classic grand-hotel, use weight 500–600 only.
+   - Skip Instrument Serif and Playfair: on every third landing page right now.
+   All Google fonts, self-hosted via fontsource; back office stays all-sans.
 2. **Navbar** — all caps, small size (12–13 px), tracked (+0.14 em), weight 500; thin 1 px rule under the header when solid; stricter spacing; active item marked by a short underline, not a pill background.
 3. **Buttons** — no pills anywhere (site + office). Options:
    - 1 (recommended, primary) **Square "ticket" button**: 0–2 px radius, all-caps tracked label, 1 px border or solid fill, arrow slides in from the right on hover.
