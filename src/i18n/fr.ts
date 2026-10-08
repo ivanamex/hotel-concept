@@ -561,6 +561,8 @@ export const fr: Dict = {
       "/images/lake/hero-lake.jpg": "Le Léman depuis la terrasse à l’heure dorée",
       "/images/lake/aerial-dusk.jpg": "Le jardin éclairé à l’heure bleue, vu du ciel",
       "/images/rooms/classic-lake.jpg": "Chambre Classique Lac",
+      "/images/rooms/single-courtyard.jpg": "Chambre Single Courtyard",
+      "/images/rooms/attic-courtyard.jpg": "Chambre Attic Courtyard",
       "/images/house/lounge.jpg": "Le salon",
       "/images/around/old-town.jpg": "La vieille ville de Lausanne le soir",
       "/images/rooms/duplex-suite.jpg": "La Suite Duplex et sa fenêtre ronde",

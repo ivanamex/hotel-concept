@@ -2,12 +2,79 @@
 
 import { clsx } from "clsx";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useT } from "@/i18n/context";
 import { Lightbox } from "./lightbox";
+import { Parallax, prefersReducedMotion } from "./motion";
 
 interface Item { src: string; alt: string; cat: string; w: number; h: number }
 const CATS = ["All", "Rooms", "House", "Lake", "Lausanne"];
+const SPEEDS = [-0.14, 0.1, -0.07];
+
+/** Balance items into N columns by height (shortest column takes the next item). */
+function columns<T extends { w: number; h: number }>(items: T[], n: number): { item: T; index: number }[][] {
+  const cols: { item: T; index: number }[][] = Array.from({ length: n }, () => []);
+  const heights = Array(n).fill(0);
+  items.forEach((item, index) => {
+    const c = heights.indexOf(Math.min(...heights));
+    cols[c].push({ item, index });
+    heights[c] += item.h / item.w;
+  });
+  return cols;
+}
+
+function useColumnCount() {
+  const [n, setN] = useState(3);
+  useEffect(() => {
+    const mq2 = window.matchMedia("(min-width: 640px)");
+    const mq3 = window.matchMedia("(min-width: 1024px)");
+    const update = () => setN(mq3.matches ? 3 : mq2.matches ? 2 : 1);
+    update();
+    mq2.addEventListener("change", update);
+    mq3.addEventListener("change", update);
+    return () => {
+      mq2.removeEventListener("change", update);
+      mq3.removeEventListener("change", update);
+    };
+  }, []);
+  return n;
+}
+
+/** Darkroom: a print sits faint until it enters the screen, then develops into colour. */
+function Print({ item, index, onOpen, delay }: { item: Item; index: number; onOpen: (i: number) => void; delay: number }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (prefersReducedMotion()) {
+      el.classList.add("is-developed");
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          el.classList.add("is-developed");
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={() => onOpen(index)}
+      className="print group lift relative block w-full overflow-hidden rounded-lg bg-ink/5"
+      style={{ aspectRatio: `${item.w} / ${item.h}`, transitionDelay: `${delay}ms` }}
+    >
+      <Image src={item.src} alt={item.alt} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.04]" />
+      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/70 to-transparent p-4 text-left text-sm text-white opacity-0 transition duration-500 group-hover:opacity-100">{item.alt}</span>
+    </button>
+  );
+}
 
 export function GalleryGrid({ items: raw }: { items: Item[] }) {
   const t = useT();
@@ -15,6 +82,8 @@ export function GalleryGrid({ items: raw }: { items: Item[] }) {
   const [cat, setCat] = useState("All");
   const [index, setIndex] = useState<number | null>(null);
   const list = useMemo(() => (cat === "All" ? items : items.filter((i) => i.cat === cat)), [items, cat]);
+  const n = useColumnCount();
+  const cols = useMemo(() => columns(list, n), [list, n]);
 
   return (
     <>
@@ -23,12 +92,13 @@ export function GalleryGrid({ items: raw }: { items: Item[] }) {
           <button key={c} type="button" onClick={() => setCat(c)} className={clsx("rise caps rounded-xs px-3.5 py-2 !text-[10px] ring-1 ring-inset", cat === c ? "bg-ink text-white ring-ink" : "bg-white text-ink-soft ring-line hover:ring-ink/40")}>{t.gallery.cats[c] ?? c}</button>
         ))}
       </div>
-      <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
-        {list.map((it, i) => (
-          <button key={it.src + i} type="button" onClick={() => setIndex(i)} className="group lift relative mb-4 block w-full overflow-hidden rounded-lg" style={{ aspectRatio: `${it.w} / ${it.h}` }}>
-            <Image src={it.src} alt={it.alt} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" />
-            <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/70 to-transparent p-4 text-left text-sm text-white opacity-0 transition group-hover:opacity-100">{it.alt}</span>
-          </button>
+      <div key={`${cat}-${n}`} className={clsx("mt-8 grid gap-4 pb-16", n === 1 ? "grid-cols-1" : n === 2 ? "grid-cols-2" : "grid-cols-3")}>
+        {cols.map((col, c) => (
+          <Parallax key={c} speed={n === 1 ? 0 : SPEEDS[c % SPEEDS.length]} className="flex flex-col gap-4">
+            {col.map(({ item, index: i }, r) => (
+              <Print key={item.src + i} item={item} index={i} onOpen={setIndex} delay={(r % 3) * 120 + c * 80} />
+            ))}
+          </Parallax>
         ))}
       </div>
       <Lightbox images={list} index={index} onClose={() => setIndex(null)} onIndex={setIndex} />

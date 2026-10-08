@@ -128,7 +128,7 @@ export const ROOMS: Room[] = [
     summary: "A proper single room for the solo traveller, not a cupboard.",
     description: "Facing the inner courtyard, this is the quietest room in the house. A wide single bed, a desk, good light and a compact bathroom with a rain shower. Ideal for a work trip or a solo weekend by the lake.",
     features: [F.courtyard, F.wifi, F.ac, F.nespresso, F.desk, F.rain, F.safe, F.tv, F.soundproof],
-    images: ["/images/rooms/classic-garden.jpg", "/images/house/bathroom.jpg"],
+    images: ["/images/rooms/single-courtyard.jpg", "/images/house/bathroom.jpg"],
     status: "active",
   },
   {
@@ -200,7 +200,7 @@ export const ROOMS: Room[] = [
     summary: "Small, quiet and full of character — the best value in the house.",
     description: "A cosy attic room on the courtyard side with a queen bed, a reading chair and a skylight that fills it with light. Rain shower. The quietest option for light sleepers.",
     features: [F.courtyard, F.wifi, F.ac, F.nespresso, F.rain, F.safe, F.tv, F.soundproof],
-    images: ["/images/rooms/room-attic.jpg", "/images/house/bathroom.jpg"],
+    images: ["/images/rooms/attic-courtyard.jpg", "/images/house/bathroom.jpg"],
     status: "active",
   },
 ];

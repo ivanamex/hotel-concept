@@ -561,6 +561,8 @@ export const de: Dict = {
       "/images/lake/hero-lake.jpg": "Der Genfersee von der Terrasse zur goldenen Stunde",
       "/images/lake/aerial-dusk.jpg": "Der beleuchtete Garten zur blauen Stunde, aus der Luft",
       "/images/rooms/classic-lake.jpg": "Classic-Zimmer mit Seeblick",
+      "/images/rooms/single-courtyard.jpg": "Single-Zimmer zum Innenhof",
+      "/images/rooms/attic-courtyard.jpg": "Dachzimmer zum Innenhof",
       "/images/house/lounge.jpg": "Der Salon",
       "/images/around/old-town.jpg": "Die Altstadt von Lausanne am Abend",
       "/images/rooms/duplex-suite.jpg": "Duplex-Suite mit dem Rundfenster",

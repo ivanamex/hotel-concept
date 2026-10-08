@@ -561,6 +561,8 @@ export const it: Dict = {
       "/images/lake/hero-lake.jpg": "Il Lago Lemano dalla terrazza nell’ora d’oro",
       "/images/lake/aerial-dusk.jpg": "Il giardino illuminato all’ora blu, dall’alto",
       "/images/rooms/classic-lake.jpg": "Camera Classic Lago",
+      "/images/rooms/single-courtyard.jpg": "Camera Singola Cortile",
+      "/images/rooms/attic-courtyard.jpg": "Camera Mansarda Cortile",
       "/images/house/lounge.jpg": "Il salotto",
       "/images/around/old-town.jpg": "Il centro storico di Losanna di sera",
       "/images/rooms/duplex-suite.jpg": "La Suite Duplex con la finestra rotonda",

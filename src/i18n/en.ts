@@ -560,6 +560,8 @@ export const en = {
       "/images/lake/hero-lake.jpg": "Lake Geneva from the terrace at golden hour",
       "/images/lake/aerial-dusk.jpg": "The garden lit at blue hour, from the air",
       "/images/rooms/classic-lake.jpg": "Classic Lake room",
+      "/images/rooms/single-courtyard.jpg": "Single Courtyard room",
+      "/images/rooms/attic-courtyard.jpg": "Attic Courtyard room",
       "/images/house/lounge.jpg": "The salon",
       "/images/around/old-town.jpg": "Lausanne old town in the evening",
       "/images/rooms/duplex-suite.jpg": "Duplex Suite with the round window",

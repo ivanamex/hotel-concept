@@ -47,6 +47,7 @@ Principle (Ivana, 8 Oct): two jobs at once — the functionality a hotel needs (
 - jagerhof.net — serif + italic headline, signature script line, sentence CTAs → item 10
 - vivre.agency — footer: video masked inside the giant wordmark letters → item 9
 - vivre.agency/cavo-tagoo-mykonos — case study, not the hotel site: content "to make people want to be there", every image chosen "to obsess"; result they claim: guests stopped arriving mainly through OTAs. Take: photography/video-first, cinematic, zero stock feel; and the "less OTA, more direct" story is the line for the client pitch
+- rosahotels.dgrees.studio (Ivana, 8 Oct 18:53) — scroll-driven mask reveal: a small circle on a photo grows with the scroll until the picture fills the screen (the shape could be anything — a window, the house mark). Parked, not built; candidates: the gallery opening, the "Step inside" moment on the home page, or the offers page hero. Technique: clip-path circle() / inset() scrubbed by ScrollTrigger on a pinned section.
 - lasalaplazahotel.com — promo-code lightbox: small caps eyebrow, big headline with the offer, validity line, short paragraph, one CTA with arrow; room photo with a person in it on the left
 
 ## Done when
