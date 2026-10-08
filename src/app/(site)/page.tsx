@@ -19,7 +19,7 @@ export default function HomePage() {
         <Container className="flex min-h-[92svh] flex-col justify-end pb-28 pt-24 sm:pb-16">
           <div className="max-w-3xl">
             <Eyebrow light className="mb-5">Vidy · Lausanne · ten rooms by the lake</Eyebrow>
-            <Reveal as="h1" delay={1.4} className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
+            <Reveal as="h1" className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
               Lausanne,<br /><em>by the lake.</em>
             </Reveal>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
