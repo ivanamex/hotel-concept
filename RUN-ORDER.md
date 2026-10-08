@@ -14,7 +14,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-19 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
-- STEP-15 Round 5 — EN|FR|DE|IT segmented control (menu, footer, rail code), payment marks in footer + payment step (Stripe, Visa, Mastercard, Twint), channels panel in the office, discreet back-to-top above WhatsApp, eyebrow on the booking bar, stale-tab auto-reload
+- STEP-15 Round 5 — EN|FR|DE|IT control (menu, footer, rail popover), payment marks in footer + payment step (Stripe, Visa, Mastercard, Twint), channels panel in the office, discreet back-to-top, eyebrow on the booking bar, stale-tab auto-reload, **navigation crash fixed** (pinned track spacer — the real cause of every "page couldn't load"), home carousels (around, offers), descender room in headlines, plates with icons on contact/request/FAQ
 - STEP-12 Languages EN · FR · DE · IT — `/fr /de /it`, translated section slugs, dictionaries for every public string, switch in menu + footer, hreflang + sitemap; office stays EN
 - STEP-01 Foundation: Next.js + Tailwind, fonts, tokens, header/footer/WhatsApp, data model + seed (10 rooms, 40 reservations), pricing + availability engine
 - STEP-02 Home page

@@ -20,5 +20,9 @@ Status: built and live 8 Oct 2026 (go at 17:46).
 
 7. DONE 18:25 — **"Something went wrong" when leaving the home page** (Ivana 18:09, screenshot on /rooms). Found the real cause of every "page couldn't load" since round 1: the pinned rooms track wraps its section in a spacer element; when you navigate away, React removes the section from where it put it, finds the spacer instead and crashes (`removeChild … not a child`). It was never deployment skew — the un-pinned track in round 2 had only hidden it. Fix: the pin is undone before React removes the section (layout-effect cleanup). Verified by clicking every page from the home menu on the production build.
 
+8. DONE 18:40 — **"Around the house" and offers as carousels** (Ivana 18:09): both strips on the home page now slide left/right — all eight places and all three offers — with ← → arrows, drag on desktop, swipe on phones, snapping to the tiles; "All experiences" / "All offers" stay next to the arrows as the way to the full page.
+9. DONE 18:40 — **Descenders cut** (Ivana 18:09: g, y and long tails clipped in headlines). The line-by-line reveal masks each line and clipped below the baseline; the masks now leave room for descenders and accents.
+10. DONE 18:40 — **Contact / request rows too plain, hover too subtle** (Ivana 18:09): rows became plates — an icon in a soft square (Groups, Long stays, Whole house got their own icons; FAQ rows a + that turns into × when open); on hover the row lifts onto a white plate with a shadow and the icon fills lake blue and tilts.
+
 ## Done when
 Every item built or struck through with a reason; Ivana clicks through; "ok".

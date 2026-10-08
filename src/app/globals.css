@@ -140,6 +140,56 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .hscroll { will-change: transform; }
 }
 
+/* carousels (around the house, offers) */
+.carousel {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  /* room for the lift on hover */
+  margin-top: -0.5rem;
+  padding-top: 1rem;
+  margin-bottom: -0.75rem;
+  padding-bottom: 1.25rem;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.carousel.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+.carousel img { -webkit-user-drag: none; user-select: none; }
+
+/* reveal masks: leave room for descenders (g, y, p) and accents */
+.reveal-line-mask {
+  padding-bottom: 0.22em;
+  margin-bottom: -0.22em;
+  padding-top: 0.08em;
+  margin-top: -0.08em;
+}
+
+/* rows with depth (contact, request, FAQ) */
+.row-plate {
+  position: relative;
+  border-radius: var(--radius-lg);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.35s, box-shadow 0.45s;
+}
+.row-plate .plate-icon {
+  transition: background-color 0.35s, color 0.35s, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 2px rgba(23, 26, 31, 0.06);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .row-plate:hover {
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    transform: translateX(6px);
+  }
+  .row-plate:hover .plate-icon {
+    background: var(--color-lake);
+    color: #fff;
+    transform: translateY(-2px) rotate(-4deg);
+    box-shadow: 0 6px 14px -6px rgba(27, 75, 115, 0.6);
+  }
+}
+
 /* script line writing itself */
 @keyframes write {
   from { clip-path: inset(0 100% 0 0); }

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Closing, FilmBreak, KnockoutBand, LocationBlock, NextPage } from "@/components/site/bands";
 import { BookingBar } from "@/components/site/booking-bar";
+import { Carousel } from "@/components/site/carousel";
 import { HeroFilm } from "@/components/site/hero-film";
 import { Link } from "@/components/site/link";
 import { FadeIn, Parallax, Reveal } from "@/components/site/motion";
@@ -97,27 +98,25 @@ export default async function HomePage({ params }: LangParams) {
       {/* AROUND */}
       <section className="py-20 sm:py-28 lg:py-36">
         <Container>
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeading eyebrow={h.around.eyebrow} title={<Rich text={h.around.title} />} lead={h.around.lead} />
-            <RuleLink href="/experiences" className="self-start sm:self-end">{h.around.all}</RuleLink>
-          </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {AROUND.slice(0, 4).map((a, i) => {
+          <Carousel
+            heading={<SectionHeading eyebrow={h.around.eyebrow} title={<Rich text={h.around.title} />} lead={h.around.lead} />}
+            link={<RuleLink href="/experiences">{h.around.all}</RuleLink>}
+            itemClass="w-[78vw] sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-3.75rem)/4)]"
+          >
+            {AROUND.map((a) => {
               const c = t.experiences.attractions[a.slug] ?? a;
               return (
-                <FadeIn key={a.slug} delay={i * 0.08}>
-                  <Link href={`/experiences#${a.slug}`} className="group lift relative block aspect-[3/4] overflow-hidden rounded-lg">
-                    <Image src={a.image} alt={c.name} fill sizes="(min-width:1024px) 300px, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-5">
-                      <Badge tone="white" className="mb-3">{c.distance}</Badge>
-                      <h3 className="font-display text-2xl leading-tight text-white">{c.name}</h3>
-                    </div>
-                  </Link>
-                </FadeIn>
+                <Link key={a.slug} href={`/experiences#${a.slug}`} className="group lift relative block aspect-[3/4] overflow-hidden rounded-lg">
+                  <Image src={a.image} alt={c.name} fill draggable={false} sizes="(min-width:1024px) 300px, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <Badge tone="white" className="mb-3">{c.distance}</Badge>
+                    <h3 className="font-display text-2xl leading-tight text-white">{c.name}</h3>
+                  </div>
+                </Link>
               );
             })}
-          </div>
+          </Carousel>
         </Container>
       </section>
 
@@ -173,17 +172,17 @@ export default async function HomePage({ params }: LangParams) {
       {/* OFFERS */}
       <section className="bg-paper py-20 sm:py-28">
         <Container>
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeading eyebrow={h.offers.eyebrow} title={<Rich text={h.offers.title} />} />
-            <RuleLink href="/offers">{h.offers.all}</RuleLink>
-          </div>
-          <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            {OFFERS.slice(0, 2).map((o) => {
+          <Carousel
+            heading={<SectionHeading eyebrow={h.offers.eyebrow} title={<Rich text={h.offers.title} />} />}
+            link={<RuleLink href="/offers">{h.offers.all}</RuleLink>}
+            itemClass="w-[86vw] sm:w-[70vw] lg:w-[calc((100%-1.25rem)/2)]"
+          >
+            {OFFERS.map((o) => {
               const c = t.offers.list[o.slug] ?? o;
               return (
-                <Link key={o.slug} href={`/offers#${o.slug}`} className="group lift grid overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:grid-cols-[220px_1fr]">
-                  <div className="relative aspect-[4/3] sm:aspect-auto">
-                    <Image src={o.image} alt={plain(c.name)} fill sizes="(min-width:640px) 220px, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-105" />
+                <Link key={o.slug} href={`/offers#${o.slug}`} className="group lift grid h-full overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:grid-cols-[220px_1fr]">
+                  <div className="relative aspect-[4/3] overflow-hidden sm:aspect-auto">
+                    <Image src={o.image} alt={plain(c.name)} fill draggable={false} sizes="(min-width:640px) 220px, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-105" />
                   </div>
                   <div className="p-6 sm:p-7">
                     <Badge tone="clay">{c.tag}</Badge>
@@ -194,7 +193,7 @@ export default async function HomePage({ params }: LangParams) {
                 </Link>
               );
             })}
-          </div>
+          </Carousel>
         </Container>
       </section>
 

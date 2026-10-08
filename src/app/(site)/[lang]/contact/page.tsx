@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Phone, Plus } from "lucide-react";
 import type { Metadata } from "next";
 import { LocationBlock, NextPage } from "@/components/site/bands";
 import { InquiryForm } from "@/components/site/inquiry-form";
@@ -26,7 +26,7 @@ export default async function ContactPage({ params }: LangParams) {
       <PageIntro eyebrow={c.eyebrow} title={<Rich text={c.title} />} lead={c.lead} crumb={t.nav.items.contact.label} />
       <section className="pb-20 sm:pb-28">
         <Container className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-          <div className="divide-y divide-line border-y border-line lg:self-start">
+          <div className="-mx-4 divide-y divide-line border-y border-line lg:self-start">
             {[
               { icon: Phone, t: c.phone, d: HOTEL.phone, href: `tel:${HOTEL.phone.replace(/\s/g, "")}` },
               { icon: MessageCircle, t: c.whatsapp, d: c.whatsappText, href: whatsappUrl(t.common.whatsappGreeting) },
@@ -34,8 +34,8 @@ export default async function ContactPage({ params }: LangParams) {
               { icon: MapPin, t: c.address, d: `${HOTEL.address}, ${HOTEL.city}, ${t.common.country}` },
               { icon: Clock, t: c.reception, d: c.receptionHours },
             ].map((x) => (
-              <div key={x.t} className="row-slide-item flex items-start gap-4 py-5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><x.icon className="h-5 w-5" /></span>
+              <div key={x.t} className="row-plate flex items-start gap-4 py-5">
+                <span className="plate-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><x.icon className="h-5 w-5" /></span>
                 <div>
                   <p className="caps !text-[10px] text-slate">{x.t}</p>
                   {x.href ? <a href={x.href} target={x.href.startsWith("http") ? "_blank" : undefined} rel="noopener" className="mt-0.5 block font-semibold text-ink hover:text-lake">{x.d}</a> : <p className="mt-0.5 font-semibold text-ink">{x.d}</p>}
@@ -51,11 +51,11 @@ export default async function ContactPage({ params }: LangParams) {
             </div>
             <div className="mt-10">
               <h2 className="font-display text-3xl text-ink"><Rich text={c.faqTitle} /></h2>
-              <dl className="mt-4 divide-y divide-line border-y border-line">
+              <dl className="-mx-4 mt-4 divide-y divide-line border-y border-line">
                 {c.faq.map((f) => (
-                  <details key={f.q} className="group row-slide py-5">
-                    <summary className="cursor-pointer list-none font-semibold text-ink marker:hidden hover:text-lake">{f.q}</summary>
-                    <p className="mt-2 text-sm leading-relaxed text-slate">{f.a}</p>
+                  <details key={f.q} className="group row-plate py-5">
+                    <summary className="flex cursor-pointer list-none items-center gap-4 font-semibold text-ink marker:hidden"><span className="plate-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><Plus className="h-4 w-4 transition duration-300 group-open:rotate-45" /></span>{f.q}</summary>
+                    <p className="mt-3 pl-13 text-sm leading-relaxed text-slate">{f.a}</p>
                   </details>
                 ))}
               </dl>
