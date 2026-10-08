@@ -4,7 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- STEP-10 Polish round 1 — collecting Ivana's items + inspo in steps/STEP-10.md; build starts when she says "done", then push to production
+- STEP-10 Polish round 1 — building (13 items, see steps/STEP-10.md); videos arrive via the image/video flow handoff; then production
 
 ## Next
 - STEP-11 FR + DE languages (Swiss client; EN is default now)

@@ -1,6 +1,6 @@
 # STEP-10 — Polish round 1 (collecting)
 
-Status: collecting. Ivana adds items and inspo here; build starts when she says "done". Then push to production.
+Status: collecting closed 8 Oct 14:14 — Ivana said "done". Building the whole round, then production.
 
 Principle (Ivana, 8 Oct): two jobs at once — the functionality a hotel needs (we have it) and a showcase of what 20 North can do. Every item below must serve one of the two; nothing is decoration for its own sake.
 
@@ -28,7 +28,17 @@ Principle (Ivana, 8 Oct): two jobs at once — the functionality a hotel needs (
 10. **Handwritten script accent** (inspo: jagerhof.net — "Come stay *with us,*" in serif regular + italic, then "at Jägerhof." in a signature script; three plain-sentence CTAs under it). Ours: a script font as the third voice, used sparingly — (a) the closing section: "Come stay with us, — *by the lake.*" with the script line writing itself on scroll (SVG stroke animation, the showcase bit); (b) a hosts' signature under the house intro ("— the family at Maison Vidy", or real names when the client signs); (c) "See you soon" on the confirmation page. Candidates (Google): Mrs Saint Delafield, Monsieur La Doulaise, Allison, Ms Madi — pick one that reads as a real hand, not a wedding invite. The three-line sentence CTAs ("Book a room. Find your way. Write to us.") are worth copying for the closing section too.
 11. **Horizontal-scroll section + scroll feel** (inspo: tandjungsarihotel.com/bungalows, built by Fleava). What makes it feel the way it does, from the page: a slim fixed side rail with the menu toggle instead of a top bar, one full-screen panel per bungalow, scrolling that turns vertical into horizontal with a "Keep scroll" nudge, a "Next page" link closing each page, large images with short warm copy, and smooth inertial scrolling under all of it. The code is not readable from here (page text only); the stack this agency uses on its sites is Lenis-style smooth scroll + GSAP ScrollTrigger pinning for the horizontal track + split-text reveals. Ours, at least one section: the **Rooms** block on the home becomes a pinned horizontal track — each room a full-height panel (photo, name, m², from-price, Book), vertical scroll drives it, a small "keep scrolling" hint with an arrow; smooth scroll site-wide; headlines reveal line by line on first view; "Next page →" link at the end of each public page (Home → Rooms → Experiences → Dining → Contact). Falls back to a normal vertical list on mobile and with reduced-motion. Cost: GSAP + Lenis (~40 kB), worth it for the showcase.
 12. **Side rail menu — Ivana to decide.** Option A: keep the all-caps top bar (item 2). Option B (showcase): desktop gets a slim fixed left rail — "MENU" toggle at the top, wordmark running vertically, "Book" at the bottom — and the menu opens as a full-screen overlay with big serif links and a photo per section; mobile keeps the hamburger. B is the more memorable; the risk is one extra click to reach the pages, which we offset by keeping Book always visible in the rail and all links in the footer. My pick: B.
-13. (Ivana to add more)
+13. **Seasons** (benchmark: badruttspalace.com/en/winter — the big video hero is what sells the class; we need to be better). A Winter / Summer mode: picked by date (Nov–Mar winter) with a small switch in the menu; it changes the hero slide/video set, the ticker lines, the order of offers and the closing photo. Copy stays, imagery and accents shift. Cheap to build on top of the carousel; reads as "the hotel breathes with the year".
+
+## Decisions taken to build (Ivana gave autopilot)
+- Fonts: Fraunces (display) · Archivo caps (nav, buttons, labels) · Hanken Grotesk (body, office) · Mrs Saint Delafield (script accents)
+- Buttons: square ticket button primary, rule link secondary; office gets the same at small size; badges square-cornered
+- Navigation: option B — left rail + full-screen overlay menu on desktop, hamburger on mobile, Book always visible
+- Hero: carousel with Ken-Burns crossfade on existing stills now; video clips added when they arrive (generated in parallel, Ivana downloads from the flow and uploads)
+- Map: drawn as SVG now (no download needed); an AI-generated ink map is queued as an alternative for Ivana to pick
+- Script "writing itself": clip-path reveal (true stroke animation needs the font as paths — later if wanted)
+- VIDY band: still image with slow drift inside the letters until the video arrives, then video
+- Horizontal rooms track: GSAP ScrollTrigger + Lenis, vertical list on mobile and reduced-motion
 
 ## Inspo
 - hotelaurelia.online — booking as its own page with a date picker that marks available / limited / sold-out days (we could colour the calendar in /book the same way)
