@@ -16,5 +16,7 @@ Status: built and live 8 Oct 2026 (go at 17:46).
 
 5. DONE 18:05 — **"This page couldn't load" on the first click after a deploy** (Ivana 17:50: first click fails, reload fixes it). Cause: her tab was loaded with the previous build; every push during the click-through replaces the chunks, and the old tab asks for files that no longer exist. Vercel's skew protection is not available on this team. Build: error boundaries on the public site and the office recognise a stale tab (chunk/module/RSC fetch failures) and reload the page by themselves, at most once every 30 s; the window-level guard uses the same rule. Second line of defence: a proper error page with a Reload button in all four languages.
 
+6. DONE 18:15 — **Rail language code opened the whole menu** (Ivana 18:06: "put a little arrow next to EN so they know it opens, and it must open a language dropdown, not the menu"). Build: "EN ⌄" on the desktop rail opens a small popover beside the rail with the four languages (full name + code, current one in ink); closes on choice, outside click or Escape; the overlay menu is untouched.
+
 ## Done when
 Every item built or struck through with a reason; Ivana clicks through; "ok".

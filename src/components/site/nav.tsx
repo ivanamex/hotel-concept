@@ -5,12 +5,11 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useHref, useLang, useT } from "@/i18n/context";
-import { LANG_SHORT } from "@/i18n/config";
+import { useHref, useT } from "@/i18n/context";
 import { HOTEL } from "@/lib/seed";
 import { resolveSeason } from "@/lib/season";
 import { useHotel, useHydrated } from "@/lib/store";
-import { LangSwitch } from "./lang-switch";
+import { LangMenu, LangSwitch } from "./lang-switch";
 import { Link } from "./link";
 import { Mark } from "./logo";
 import { scrollTo } from "./motion";
@@ -29,7 +28,6 @@ export const NAV = [
 export function SiteNav() {
   const pathname = usePathname();
   const t = useT();
-  const lang = useLang();
   const href = useHref();
   const home = href("/");
   const [open, setOpen] = useState(false);
@@ -60,9 +58,7 @@ export function SiteNav() {
             <Menu className="h-5 w-5" />
             <span className="caps !text-[9px]">{t.nav.menu}</span>
           </button>
-          <button type="button" onClick={() => setOpen(true)} className="caps mt-3 block w-full py-1 !text-[9px] text-slate transition hover:text-ink" aria-label={t.common.language} title={t.common.language}>
-            {LANG_SHORT[lang]}
-          </button>
+          <LangMenu className="mt-3 flex justify-center" label={t.common.language} />
         </div>
         <Link href="/" onClick={(e) => { if (pathname === home) { e.preventDefault(); scrollTo(0); } }} className="flex flex-col items-center gap-4" aria-label={t.nav.homeLabel}>
           <Mark className="h-7 w-7" />
