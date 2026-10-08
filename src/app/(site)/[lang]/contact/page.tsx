@@ -26,7 +26,7 @@ export default async function ContactPage({ params }: LangParams) {
       <PageIntro eyebrow={c.eyebrow} title={<Rich text={c.title} />} lead={c.lead} crumb={t.nav.items.contact.label} />
       <section className="pb-20 sm:pb-28">
         <Container className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-          <div className="space-y-4">
+          <div className="divide-y divide-line border-y border-line lg:self-start">
             {[
               { icon: Phone, t: c.phone, d: HOTEL.phone, href: `tel:${HOTEL.phone.replace(/\s/g, "")}` },
               { icon: MessageCircle, t: c.whatsapp, d: c.whatsappText, href: whatsappUrl(t.common.whatsappGreeting) },
@@ -34,7 +34,7 @@ export default async function ContactPage({ params }: LangParams) {
               { icon: MapPin, t: c.address, d: `${HOTEL.address}, ${HOTEL.city}, ${t.common.country}` },
               { icon: Clock, t: c.reception, d: c.receptionHours },
             ].map((x) => (
-              <div key={x.t} className="flex items-start gap-4 rounded-lg bg-white p-5 ring-1 ring-ink/5">
+              <div key={x.t} className="row-slide-item flex items-start gap-4 py-5">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><x.icon className="h-5 w-5" /></span>
                 <div>
                   <p className="caps !text-[10px] text-slate">{x.t}</p>
@@ -44,17 +44,17 @@ export default async function ContactPage({ params }: LangParams) {
             ))}
           </div>
           <div>
-            <div className="rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5 sm:p-8">
+            <div>
               <h2 className="font-display text-3xl text-ink"><Rich text={c.writeTitle} /></h2>
               <p className="mt-1 mb-6 text-sm text-slate">{c.writeLead} <Link href="/request" className="font-semibold text-lake">{c.writeLeadLink}</Link>.</p>
               <InquiryForm type="contact" />
             </div>
             <div className="mt-10">
               <h2 className="font-display text-3xl text-ink"><Rich text={c.faqTitle} /></h2>
-              <dl className="mt-4 divide-y divide-line rounded-lg bg-white ring-1 ring-ink/5">
+              <dl className="mt-4 divide-y divide-line border-y border-line">
                 {c.faq.map((f) => (
-                  <details key={f.q} className="group p-5">
-                    <summary className="cursor-pointer list-none font-semibold text-ink marker:hidden">{f.q}</summary>
+                  <details key={f.q} className="group row-slide py-5">
+                    <summary className="cursor-pointer list-none font-semibold text-ink marker:hidden hover:text-lake">{f.q}</summary>
                     <p className="mt-2 text-sm leading-relaxed text-slate">{f.a}</p>
                   </details>
                 ))}

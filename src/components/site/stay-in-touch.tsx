@@ -108,11 +108,11 @@ export function StayInTouch() {
               <div className="mt-6"><Button onClick={close} arrow>{s.doneCta}</Button></div>
             </div>
           ) : (
-            <form onSubmit={submit} noValidate className="flex h-full flex-col justify-center">
+            <form onSubmit={submit} noValidate className="form-lines flex h-full flex-col justify-center">
               <p className="caps !text-[10px] text-lake">{s.label}</p>
               <h2 className="mt-4 font-display text-3xl leading-[1.05] text-ink sm:text-[2.6rem]"><Rich text={s.title} /></h2>
               <p className="mt-4 text-sm text-slate">{s.text}</p>
-              <div className="mt-6 space-y-3">
+              <div className="mt-6 space-y-4">
                 <Input placeholder={s.firstName} value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" />
                 <Input type="email" placeholder={s.email} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
                 {error && <p className="text-xs text-[#b3261e]">{error}</p>}

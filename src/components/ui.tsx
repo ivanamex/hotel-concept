@@ -57,15 +57,15 @@ type Variant = "primary" | "secondary" | "ghost" | "light" | "outline-light" | "
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "ticket inline-flex items-center justify-center gap-3 rounded-xs font-caps uppercase tracking-[0.16em] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lake/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap";
+  "ticket sweep inline-flex items-center justify-center gap-3 rounded-xs font-caps uppercase tracking-[0.16em] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lake/40 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap";
 const variants: Record<Variant, string> = {
-  primary: "bg-lake text-white hover:bg-lake-deep",
-  secondary: "bg-transparent text-ink ring-1 ring-inset ring-ink/40 hover:bg-ink hover:text-white hover:ring-ink",
-  ghost: "bg-transparent text-ink hover:bg-ink/5",
-  light: "bg-white text-ink hover:bg-sand",
-  "outline-light": "bg-transparent text-white ring-1 ring-inset ring-white/60 hover:bg-white hover:text-ink",
-  clay: "bg-clay text-white hover:bg-[#a84d2f]",
-  danger: "bg-transparent text-[#b3261e] ring-1 ring-inset ring-[#b3261e]/40 hover:bg-[#b3261e] hover:text-white",
+  primary: "bg-lake text-white [--sweep:var(--color-lake-deep)]",
+  secondary: "bg-transparent text-ink ring-1 ring-inset ring-ink/40 hover:text-white hover:ring-ink [--sweep:var(--color-ink)]",
+  ghost: "bg-transparent text-ink [--sweep:rgba(23,26,31,0.06)]",
+  light: "bg-white text-ink [--sweep:var(--color-sand)]",
+  "outline-light": "bg-transparent text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]",
+  clay: "bg-clay text-white [--sweep:#a84d2f]",
+  danger: "bg-transparent text-[#b3261e] ring-1 ring-inset ring-[#b3261e]/40 hover:text-white [--sweep:#b3261e]",
 };
 const sizes: Record<Size, string> = {
   sm: "h-9 px-4 text-[10.5px]",
@@ -157,7 +157,7 @@ export const inputClass =
 
 export function Field({ label, hint, error, children, className }: { label: string; hint?: string; error?: string; children: ReactNode; className?: string }) {
   return (
-    <label className={clsx("block", className)}>
+    <label className={clsx("block", error && "is-error", className)}>
       <span className="caps mb-2 block !text-[10.5px] text-ink-soft">{label}</span>
       {children}
       {error ? <span className="mt-1 block text-xs text-[#b3261e]">{error}</span> : hint ? <span className="mt-1 block text-xs text-slate">{hint}</span> : null}
@@ -171,7 +171,7 @@ export function Input({ className, ...props }: ComponentProps<"input">) {
 
 export function Select({ className, children, ...props }: ComponentProps<"select">) {
   return (
-    <select className={clsx(inputClass, "appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%235b6470%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>')] bg-[length:16px] bg-[right_12px_center] bg-no-repeat pr-9", className)} {...props}>
+    <select className={clsx(inputClass, "select-chevron", className)} {...props}>
       {children}
     </select>
   );

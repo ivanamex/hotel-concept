@@ -4,7 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- STEP-14 Round 4 — collecting Ivana's notes from the click-through; item 1 (rooms track) is live, items 2–3 (forms on the background, hover motion everywhere) built on "go"
+- Ivana clicks through round 4 (forms as lines, hover motion) and the four languages; FR proofread
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
 
 ## Next
@@ -24,7 +24,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-07 Back office shell: login, sidebar, overview dashboard
 - STEP-08 Back office modules: reservations, calendar, rooms, rates & extras, guests, inbox, settings
 - STEP-09 QA + deploy — live at https://hotel-concept.vercel.app (auto-deploys from main)
-- STEP-14 items 1 + 4 — pinned rooms track is back (arrows, "Skip the rooms", faster pass); stay-in-touch lightbox returns every visit until subscribed
+- STEP-14 Round 4 — pinned rooms track back (arrows, "Skip the rooms", faster pass); lightbox returns every visit until subscribed; forms as lines on the background (contact, request, booking, lightbox, office login); hover motion on every card, tile, row and button (lift, slide, sweep fill)
 - STEP-13 Round 3 — hero = entrance film looping at native speed, lake film as page break, Home in the menu + breadcrumbs + HOME on the rail, close × on booking and confirmation
 - STEP-11 Round 2 — Cormorant Garamond, motion on every clip, parallax intro photos, closing section + contact modal + WhatsApp line, swans in the VIDY band, rooms track without scroll-hijack, back-to-top, skew protection + chunk-reload guard, hash links
 - STEP-10 Polish round 1 — serif/caps/grotesk type system, ticket buttons, rail + overlay menu, hero carousel with video, ticker, horizontal rooms track, step-inside video, illustrated map block, script accents, VIDY video band, next-page links, email lightbox + VIDY10 code + subscribers in the office, Winter/Summer mode
@@ -43,6 +43,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - Promo code VIDY10 (10 % off the room) is the demo newsletter code; the lightbox comes back every visit until someone subscribes (then quiet for 30 days)
 - Every screen that takes over (booking, modals, menu, lightbox) has a visible close and a way back — functionality before looks
 - No traces: nothing shipped names a tool, a model or a step; commit attribution off
+- Forms sit on the background as lines (`form-lines`); every clickable thing moves on desktop hover (`lift` `slide` `rise` `sweep`) — new components follow this
 - Footer carries "by 20°N" → https://20north.art on every page
 - Fonts self-hosted (fontsource): Cormorant Garamond display (serif allowed on this project, decided 8 Oct), Archivo caps for nav/buttons/labels, Hanken Grotesk body + office, Mrs Saint Delafield script accents; no gold/leather tones; metric; prices in CHF
 - noindex + robots disallow until the client signs

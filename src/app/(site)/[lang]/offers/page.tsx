@@ -27,9 +27,9 @@ export default async function OffersPage({ params }: LangParams) {
           {OFFERS.map((base, i) => {
             const c = o.list[base.slug] ?? base;
             return (
-              <article key={base.slug} id={base.slug} className="scroll-mt-28 grid overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5 lg:grid-cols-2">
-                <div className={`relative aspect-[4/3] lg:aspect-auto ${i % 2 ? "lg:order-2" : ""}`}>
-                  <Image src={base.image} alt={c.name} fill sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" />
+              <article key={base.slug} id={base.slug} className="group lift-sm scroll-mt-28 grid overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5 lg:grid-cols-2">
+                <div className={`relative aspect-[4/3] overflow-hidden lg:aspect-auto ${i % 2 ? "lg:order-2" : ""}`}>
+                  <Image src={base.image} alt={c.name} fill sizes="(min-width:1024px) 50vw, 100vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.04]" />
                 </div>
                 <div className="p-7 sm:p-10">
                   <Badge tone="clay">{c.tag}</Badge>

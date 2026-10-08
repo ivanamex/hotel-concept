@@ -27,8 +27,8 @@ export default async function DiningPage({ params }: LangParams) {
 
       <section className="py-20 sm:py-28">
         <Container className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
-            <Image src="/images/house/breakfast-balcony.jpg" alt={d.breakfast.alt} fill sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" />
+          <div className="group lift relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
+            <Image src="/images/house/breakfast-balcony.jpg" alt={d.breakfast.alt} fill sizes="(min-width:1024px) 50vw, 100vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.04]" />
           </div>
           <div>
             <SectionHeading eyebrow={d.breakfast.eyebrow} title={<Rich text={d.breakfast.title} />} />
@@ -49,13 +49,13 @@ export default async function DiningPage({ params }: LangParams) {
           <div className="lg:col-span-1">
             <SectionHeading eyebrow={d.terrace.eyebrow} title={<Rich text={d.terrace.title} />} lead={d.terrace.lead} />
           </div>
-          <div className="relative aspect-[16/10] overflow-hidden rounded-lg shadow-card lg:col-span-2">
-            <Image src="/images/house/restaurant.jpg" alt={d.terrace.alt} fill sizes="(min-width:1024px) 66vw, 100vw" className="object-cover" />
+          <div className="group lift relative aspect-[16/10] overflow-hidden rounded-lg shadow-card lg:col-span-2">
+            <Image src="/images/house/restaurant.jpg" alt={d.terrace.alt} fill sizes="(min-width:1024px) 66vw, 100vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.04]" />
           </div>
         </Container>
         <Container className="mt-12 grid gap-6 md:grid-cols-3">
           {d.terrace.cards.map(([h, p]) => (
-            <div key={h} className="rounded-lg bg-white p-6 ring-1 ring-ink/5">
+            <div key={h} className="lift-sm rounded-lg bg-white p-6 ring-1 ring-ink/5">
               <h3 className="font-display text-xl text-ink">{h}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate">{p}</p>
             </div>
@@ -68,7 +68,7 @@ export default async function DiningPage({ params }: LangParams) {
           <SectionHeading eyebrow={d.picks.eyebrow} title={<Rich text={d.picks.title} />} />
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {d.picks.list.map((r) => (
-              <div key={r.name} className="rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
+              <div key={r.name} className="lift-sm rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
                 <p className="caps !text-[10px] text-lake">{r.kind}</p>
                 <h3 className="mt-2 font-display text-xl text-ink">{r.name}</h3>
                 <p className="mt-1 text-sm text-slate">{r.walk}</p>
@@ -86,7 +86,7 @@ export default async function DiningPage({ params }: LangParams) {
             {EXTRAS.map((base) => {
               const e = localizeExtra(base, t);
               return (
-                <li key={e.id} className="flex items-start gap-4 rounded-lg bg-white/5 p-5 ring-1 ring-white/10">
+                <li key={e.id} className="rise flex items-start gap-4 rounded-lg bg-white/5 p-5 ring-1 ring-white/10 hover:bg-white/10">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white/10 text-sky"><ExtraIcon name={e.icon} /></span>
                   <div>
                     <p className="font-semibold">{e.name}</p>
@@ -96,7 +96,7 @@ export default async function DiningPage({ params }: LangParams) {
               );
             })}
             {d.services.more.map(([h, p]) => (
-              <li key={h} className="flex items-start gap-4 rounded-lg bg-white/5 p-5 ring-1 ring-white/10">
+              <li key={h} className="rise flex items-start gap-4 rounded-lg bg-white/5 p-5 ring-1 ring-white/10 hover:bg-white/10">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white/10 text-sky"><ExtraIcon name="concierge" /></span>
                 <div><p className="font-semibold">{h}</p><p className="mt-0.5 text-sm text-sky/80">{p}</p></div>
               </li>

@@ -68,7 +68,7 @@ export function BookingBar({ compact = false, roomSlug }: { compact?: boolean; r
           {[0, 1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
       </div>
-      <button type="submit" className="ticket caps inline-flex items-center justify-center gap-3 bg-lake px-7 py-4 !text-[11px] text-white transition hover:bg-lake-deep sm:col-span-2 lg:col-span-1 lg:py-0">
+      <button type="submit" className="ticket sweep caps inline-flex items-center justify-center gap-3 bg-lake px-7 py-4 !text-[11px] text-white [--sweep:var(--color-lake-deep)] sm:col-span-2 lg:col-span-1 lg:py-0">
         {t.cta} <ArrowRight className="arrow h-3.5 w-3.5" />
       </button>
     </form>

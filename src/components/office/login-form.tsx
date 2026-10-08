@@ -50,7 +50,7 @@ export function LoginForm() {
         </div>
       </div>
       <div className="flex items-center justify-center p-6 sm:p-12">
-        <form onSubmit={submit} className="w-full max-w-sm">
+        <form onSubmit={submit} className="form-lines w-full max-w-sm">
           <Link href="/" className="mb-8 inline-flex items-center gap-2 lg:hidden"><Mark /><span className="font-display text-lg font-semibold">Maison Vidy</span></Link>
           <h2 className="font-display text-2xl font-semibold text-ink">Sign in</h2>
           <p className="mt-1 text-sm text-slate">Staff access to the back office.</p>

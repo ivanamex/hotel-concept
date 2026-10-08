@@ -16,7 +16,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener"
       className={clsx(
-        "group fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-xs bg-[#25D366] p-3.5 text-white shadow-lift transition hover:bg-[#1ebe5b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/50 focus-visible:ring-offset-2 sm:py-3 sm:pl-3.5 sm:pr-4",
+        "group rise fixed bottom-5 right-5 z-40 flex items-center gap-2.5 rounded-xs bg-[#25D366] p-3.5 text-white shadow-lift hover:bg-[#1ebe5b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/50 focus-visible:ring-offset-2 sm:py-3 sm:pl-3.5 sm:pr-4",
         booking && "max-lg:hidden",
       )}
       aria-label={t.common.whatsappLabel}

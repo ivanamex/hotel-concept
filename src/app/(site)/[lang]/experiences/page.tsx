@@ -32,9 +32,9 @@ export default async function ExperiencesPage({ params }: LangParams) {
             {AROUND.map((a) => {
               const c = x.attractions[a.slug] ?? a;
               return (
-                <article key={a.slug} id={a.slug} className="scroll-mt-28 overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">
-                  <div className="relative aspect-[16/9]">
-                    <Image src={a.image} alt={c.name} fill sizes="(min-width:768px) 50vw, 100vw" className="object-cover" />
+                <article key={a.slug} id={a.slug} className="group lift scroll-mt-28 overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">
+                  <div className="relative aspect-[16/9] overflow-hidden">
+                    <Image src={a.image} alt={c.name} fill sizes="(min-width:768px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" />
                     <div className="absolute left-4 top-4 flex gap-2"><Badge tone="sand" className="bg-white/90">{c.kind}</Badge></div>
                   </div>
                   <div className="p-6">
@@ -57,9 +57,9 @@ export default async function ExperiencesPage({ params }: LangParams) {
             {WITH_US.map((w) => {
               const c = x.activities[w.id] ?? w;
               return (
-                <article key={w.id} className="flex flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">
-                  <div className="relative aspect-[4/3]">
-                    <Image src={w.image} alt={c.name} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover" />
+                <article key={w.id} className="group lift flex flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image src={w.image} alt={c.name} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" />
                   </div>
                   <div className="flex flex-1 flex-col p-5">
                     <h3 className="font-display text-xl text-ink">{c.name}</h3>
@@ -83,7 +83,7 @@ export default async function ExperiencesPage({ params }: LangParams) {
       <section id="concierge" className="scroll-mt-20 py-20 sm:py-28">
         <Container className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
           <SectionHeading eyebrow={x.concierge.eyebrow} title={<Rich text={x.concierge.title} />} lead={x.concierge.lead} />
-          <div className="rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5 sm:p-8">
+          <div className="border-t border-line pt-8 lg:border-t-0 lg:pt-0">
             <InquiryForm type="concierge" />
           </div>
         </Container>

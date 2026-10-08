@@ -216,17 +216,17 @@ export function BookingFlow() {
         <div className="min-w-0">
           {/* STEP 1 */}
           {step === 1 && (
-            <section className="rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5 sm:p-8">
+            <section className="form-lines">
               <h2 className="font-display text-3xl text-ink">{b.s1.title}</h2>
               <p className="mt-1 text-sm text-slate">{b.s1.lead} <Link href="/request" className="font-semibold text-lake">{b.s1.leadLink}</Link>.</p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <Field label={t.bookingBar.checkIn}><Input type="date" value={checkIn} min={todayISO()} onChange={(e) => { setCheckIn(e.target.value); if (e.target.value >= checkOut) setCheckOut(addDays(e.target.value, 1)); }} /></Field>
                 <Field label={t.bookingBar.checkOut}><Input type="date" value={checkOut} min={addDays(checkIn, 1)} onChange={(e) => setCheckOut(e.target.value)} /></Field>
                 <Field label={t.bookingBar.adults}><Select value={adults} onChange={(e) => setAdults(Number(e.target.value))}>{[1, 2, 3, 4].map((n) => <option key={n} value={n}>{n}</option>)}</Select></Field>
                 <Field label={t.bookingBar.children} hint={b.s1.under12}><Select value={children} onChange={(e) => setChildren(Number(e.target.value))}>{[0, 1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}</Select></Field>
               </div>
               {dateError && <p className="mt-3 text-sm text-[#b3261e]">{dateError}</p>}
-              <div className="mt-6">
+              <div className="mt-8">
                 <Button onClick={goSearch} disabled={!!dateError} arrow>{b.s1.cta}</Button>
               </div>
             </section>
@@ -251,7 +251,7 @@ export function BookingFlow() {
                   <p className="mt-2 text-slate">{b.s2.noneText}</p>
                   <div className="mt-5 flex flex-wrap justify-center gap-3">
                     <Button variant="secondary" onClick={() => setStep(1)}>{b.s2.changeDates}</Button>
-                    <Link href="/contact" className="ticket caps inline-flex h-12 items-center rounded-xs bg-ink px-6 !text-[11px] text-white hover:bg-lake">{b.s2.contact}</Link>
+                    <Link href="/contact" className="ticket sweep caps inline-flex h-12 items-center rounded-xs bg-ink px-6 !text-[11px] text-white [--sweep:var(--color-lake)]">{b.s2.contact}</Link>
                   </div>
                 </div>
               ) : (
@@ -259,7 +259,7 @@ export function BookingFlow() {
                   {results.available.map((base) => {
                     const room = localizeRoom(base, t);
                     return (
-                    <article key={room.id} className={clsx("overflow-hidden rounded-lg bg-white shadow-card ring-1", room.slug === preRoom ? "ring-lake" : "ring-ink/5")}>
+                    <article key={room.id} className={clsx("lift-sm overflow-hidden rounded-lg bg-white shadow-card ring-1", room.slug === preRoom ? "ring-lake" : "ring-ink/5")}>
                       <div className="grid md:grid-cols-[260px_1fr]">
                         <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[220px]">
                           <Image src={room.images[0]} alt={room.name} fill sizes="(min-width:768px) 260px, 100vw" className="object-cover" />
@@ -280,7 +280,7 @@ export function BookingFlow() {
                               const pq = quote({ room: base, checkIn, checkOut, adults, children, plan: pb, extras: [], seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax });
                               const perNight = Math.round((pq.roomTotal + pq.breakfastTotal) / nights);
                               return (
-                                <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                                <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition-colors duration-300 hover:bg-mist/60">
                                   <div className="min-w-0">
                                     <p className="text-sm font-medium text-ink">{p.name}</p>
                                     <p className="text-xs text-slate">{p.cancellation}{p.includesBreakfast ? ` ${b.s2.breakfastIncluded}` : ""}</p>
@@ -290,7 +290,7 @@ export function BookingFlow() {
                                       <p className="font-display text-xl text-ink">{chf(pq.roomTotal + pq.breakfastTotal)}</p>
                                       <p className="text-xs text-slate">{fmt(b.s2.perNightExcl, { p: chf(perNight) })}</p>
                                     </div>
-                                    <button type="button" onClick={() => choose(base, p.id)} className="ticket caps rounded-xs bg-lake px-4 py-2.5 !text-[10px] text-white transition hover:bg-lake-deep">{b.s2.select}</button>
+                                    <button type="button" onClick={() => choose(base, p.id)} className="ticket sweep caps rounded-xs bg-lake px-4 py-2.5 !text-[10px] text-white [--sweep:var(--color-lake-deep)]">{b.s2.select}</button>
                                   </div>
                                 </li>
                               );
@@ -356,7 +356,7 @@ export function BookingFlow() {
                   const on = extras.includes(e.id);
                   return (
                     <li key={e.id}>
-                      <button type="button" onClick={() => toggleExtra(e.id)} aria-pressed={on} className={clsx("flex w-full items-start gap-3 rounded-lg bg-white p-4 text-left ring-1 transition", on ? "ring-2 ring-lake" : "ring-ink/5 hover:ring-ink/20")}>
+                      <button type="button" onClick={() => toggleExtra(e.id)} aria-pressed={on} className={clsx("lift-sm flex w-full items-start gap-3 rounded-lg bg-white p-4 text-left ring-1", on ? "ring-2 ring-lake" : "ring-ink/5 hover:ring-ink/20")}>
                         <span className={clsx("flex h-10 w-10 shrink-0 items-center justify-center rounded-md", on ? "bg-lake text-white" : "bg-mist text-lake")}><ExtraIcon name={e.icon} /></span>
                         <span className="min-w-0 flex-1">
                           <span className="block text-sm font-semibold text-ink">{e.name}</span>
@@ -369,7 +369,7 @@ export function BookingFlow() {
                 })}
               </ul>
               {extras.includes("concierge") && (
-                <Field label={b.s3.conciergeLabel} className="mt-4">
+                <Field label={b.s3.conciergeLabel} className="form-lines mt-6">
                   <Textarea value={conciergeNote} onChange={(e) => setConciergeNote(e.target.value)} placeholder={b.s3.conciergePlaceholder} />
                 </Field>
               )}
@@ -382,7 +382,7 @@ export function BookingFlow() {
 
           {/* STEP 4 */}
           {step === 4 && selectedRoom && q && (
-            <form onSubmit={submit} noValidate>
+            <form onSubmit={submit} noValidate className="form-lines">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <h2 className="font-display text-3xl text-ink">{b.s4.title}</h2>
@@ -391,8 +391,8 @@ export function BookingFlow() {
                 <button type="button" onClick={() => setStep(3)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-lake hover:text-lake-deep"><ArrowLeft className="h-4 w-4" /> {b.s4.back}</button>
               </div>
 
-              <div className="mt-6 rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
-                <div className="grid gap-4 sm:grid-cols-2">
+              <div className="mt-8">
+                <div className="grid gap-6 sm:grid-cols-2">
                   <Field label={b.s4.firstName} error={errors.firstName}><Input value={guest.firstName} onChange={(e) => setGuest({ ...guest, firstName: e.target.value })} autoComplete="given-name" /></Field>
                   <Field label={b.s4.lastName} error={errors.lastName}><Input value={guest.lastName} onChange={(e) => setGuest({ ...guest, lastName: e.target.value })} autoComplete="family-name" /></Field>
                   <Field label={b.s4.email} error={errors.email} hint={b.s4.emailHint}><Input type="email" value={guest.email} onChange={(e) => setGuest({ ...guest, email: e.target.value })} autoComplete="email" /></Field>
@@ -400,19 +400,19 @@ export function BookingFlow() {
                   <Field label={b.s4.country}><Select value={guest.country} onChange={(e) => setGuest({ ...guest, country: e.target.value })}>{b.s4.countries.map((c) => <option key={c}>{c}</option>)}</Select></Field>
                   <Field label={b.s4.arrival}><Select value={arrivalTime} onChange={(e) => setArrivalTime(e.target.value)}>{b.s4.arrivalOptions.map((o) => <option key={o}>{o}</option>)}</Select></Field>
                 </div>
-                <Field label={b.s4.notes} className="mt-4" hint={b.s4.notesHint}>
+                <Field label={b.s4.notes} className="mt-6" hint={b.s4.notesHint}>
                   <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="min-h-24" />
                 </Field>
               </div>
 
-              <div className="mt-5 flex flex-wrap items-end gap-4 rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
+              <div className="mt-10 flex flex-wrap items-end gap-4 border-t border-line pt-8">
                 <Field label={b.s4.promo} hint={promoOk ? fmt(b.s4.promoApplied, { code: PROMO_CODE }) : b.s4.promoHint} className="w-full sm:w-64">
                   <Input value={promo} onChange={(e) => setPromo(e.target.value)} placeholder="VIDY10" className={promoOk ? "border-moss ring-2 ring-moss/20" : undefined} />
                 </Field>
                 {promo && !promoOk && <p className="pb-6 text-xs text-slate">{b.s4.promoUnknown}</p>}
               </div>
 
-              <div className="mt-5 rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5">
+              <div className="mt-10 border-t border-line pt-8">
                 <div className="flex items-center justify-between">
                   <h3 className="font-display text-xl text-ink">{planId === "non_refundable" ? b.s4.payment : b.s4.guarantee}</h3>
                   <span className="inline-flex items-center gap-1.5 text-xs text-slate"><Lock className="h-3.5 w-3.5" /> {b.s4.secure}</span>
@@ -425,24 +425,24 @@ export function BookingFlow() {
                     ["card", b.s4.card, planId === "non_refundable" ? b.s4.cardChargedNow : b.s4.cardGuarantee],
                     ["hotel", b.s4.atHotel, b.s4.atHotelSub],
                   ] as const).map(([id, label, sub]) => (
-                    <button key={id} type="button" onClick={() => setPayment(id)} disabled={id === "hotel" && planId === "non_refundable"} className={clsx("rounded-md p-4 text-left ring-1 transition disabled:opacity-40", payment === id ? "ring-2 ring-lake" : "ring-line hover:ring-ink/30")}>
+                    <button key={id} type="button" onClick={() => setPayment(id)} disabled={id === "hotel" && planId === "non_refundable"} className={clsx("lift-sm rounded-md bg-white p-4 text-left ring-1 disabled:opacity-40", payment === id ? "ring-2 ring-lake" : "ring-ink/5 hover:ring-ink/30")}>
                       <span className="block text-sm font-semibold text-ink">{label}</span>
                       <span className="block text-xs text-slate">{sub}</span>
                     </button>
                   ))}
                 </div>
                 {payment === "card" && (
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div className="mt-6 grid gap-6 sm:grid-cols-2">
                     <Field label={b.s4.cardNumber} error={errors.cardNumber} className="sm:col-span-2"><Input inputMode="numeric" placeholder="4242 4242 4242 4242" value={card.number} onChange={(e) => setCard({ ...card, number: e.target.value })} /></Field>
                     <Field label={b.s4.cardName} error={errors.cardName} className="sm:col-span-2"><Input value={card.name} onChange={(e) => setCard({ ...card, name: e.target.value })} /></Field>
                     <Field label={b.s4.expiry} error={errors.cardExpiry}><Input placeholder="MM / YY" value={card.expiry} onChange={(e) => setCard({ ...card, expiry: e.target.value })} /></Field>
                     <Field label={b.s4.cvc} error={errors.cardCvc}><Input inputMode="numeric" placeholder="123" value={card.cvc} onChange={(e) => setCard({ ...card, cvc: e.target.value })} /></Field>
                   </div>
                 )}
-                <p className="mt-4 flex items-start gap-2 rounded-md bg-sand p-3 text-xs text-slate"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-moss" /> {b.s4.demo}</p>
+                <p className="mt-6 flex items-start gap-2 rounded-md bg-white/70 p-3 text-xs text-slate"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-moss" /> {b.s4.demo}</p>
               </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-4">
+              <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-8">
                 <Button type="submit" size="lg" disabled={submitting}>{submitting ? b.s4.confirming : fmt(b.s4.confirm, { total: chf(q.total, { decimals: true }) })}</Button>
                 <p className="text-xs text-slate">{b.s4.terms} <Link href="/terms" className="underline">{b.s4.termsLink}</Link>. {plan.cancellation}</p>
               </div>

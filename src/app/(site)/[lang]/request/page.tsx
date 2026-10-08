@@ -21,15 +21,15 @@ export default async function RequestPage({ params }: LangParams) {
       <PageIntro eyebrow={r.eyebrow} title={<Rich text={r.title} />} lead={r.lead} crumb={t.footer.links.groups} />
       <section className="pb-20 sm:pb-28">
         <Container className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
-          <div className="space-y-5 text-[15px] leading-relaxed text-ink-soft">
+          <div className="divide-y divide-line border-y border-line text-[15px] leading-relaxed text-ink-soft lg:self-start">
             {r.cards.map(([h, p]) => (
-              <div key={h} className="rounded-lg bg-white p-6 ring-1 ring-ink/5">
+              <div key={h} className="row-slide-item py-6">
                 <h2 className="font-display text-xl text-ink">{h}</h2>
                 <p className="mt-2 text-slate">{p}</p>
               </div>
             ))}
           </div>
-          <div className="rounded-lg bg-white p-6 shadow-card ring-1 ring-ink/5 sm:p-8">
+          <div className="border-t border-line pt-8 lg:border-t-0 lg:pt-0">
             <InquiryForm type="group" />
           </div>
         </Container>

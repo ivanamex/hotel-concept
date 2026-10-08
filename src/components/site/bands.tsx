@@ -40,7 +40,7 @@ export function Closing() {
   const t = useT();
   const c = t.home.closing;
   const [contact, setContact] = useState(false);
-  const lineCls = "group inline-flex items-center gap-3 font-display text-3xl text-ink transition hover:text-lake sm:text-4xl";
+  const lineCls = "group slide inline-flex items-center gap-3 font-display text-3xl text-ink hover:text-lake sm:text-4xl";
   const arrow = <ArrowRight className="h-5 w-5 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100" />;
   return (
     <section className="relative flex min-h-[88svh] items-center overflow-hidden bg-sand py-24 sm:py-32">
@@ -101,16 +101,16 @@ export function LocationBlock({ compact = false }: { compact?: boolean }) {
         <p className="caps !text-[10px] text-sky">{l.eyebrow}</p>
         <h2 className="mt-4 font-display text-4xl sm:text-5xl">{HOTEL.name}</h2>
         <p className="mt-4 text-sky/90">{HOTEL.address}<br />{HOTEL.city}</p>
-        <a href={maps} target="_blank" rel="noopener" className="ticket caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 transition hover:bg-white hover:text-ink">{l.maps} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
+        <a href={maps} target="_blank" rel="noopener" className="ticket sweep caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]">{l.maps} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
         <div className="mt-8 space-y-1 text-sky/90">
           <a href={`mailto:${HOTEL.email}`} className="block hover:text-white">{HOTEL.email}</a>
           <a href={`tel:${HOTEL.phone.replace(/\s/g, "")}`} className="block hover:text-white">T. {HOTEL.phone}</a>
         </div>
-        <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className="ticket caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 transition hover:bg-white hover:text-ink">{l.whatsapp} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
+        <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className="ticket sweep caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]">{l.whatsapp} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
         {!compact && (
           <ul className="mt-10 flex items-center gap-5 text-sky/80">
             {l.socials.map((s) => (
-              <li key={s}><a href="#" className="caps !text-[10px] hover:text-white">{s}</a></li>
+              <li key={s}><a href="#" className="rise caps inline-block !text-[10px] hover:text-white">{s}</a></li>
             ))}
           </ul>
         )}
@@ -143,7 +143,7 @@ export function NextPage({ current }: { current: string }) {
             <p className="caps !text-[10px] text-slate">{t.common.nextPage}</p>
             <p className="mt-2 font-display text-3xl text-ink transition group-hover:italic sm:text-4xl lg:text-5xl">{t.nav.items[next.key].label}</p>
           </div>
-          <span className="flex h-12 w-12 items-center justify-center rounded-xs bg-ink text-white transition group-hover:bg-lake sm:h-14 sm:w-14"><ArrowRight className="h-5 w-5 transition group-hover:translate-x-0.5" /></span>
+          <span className="flex h-12 w-12 items-center justify-center rounded-xs bg-ink text-white transition duration-500 group-hover:-translate-y-1 group-hover:bg-lake sm:h-14 sm:w-14"><ArrowRight className="h-5 w-5 transition duration-500 group-hover:translate-x-1" /></span>
         </Link>
       </Container>
     </section>

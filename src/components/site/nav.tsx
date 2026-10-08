@@ -53,7 +53,7 @@ export function SiteNav() {
     <>
       {/* desktop rail */}
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-rail flex-col items-center justify-between border-r border-line bg-sand lg:flex">
-        <button type="button" onClick={() => setOpen(true)} className="flex h-20 w-full flex-col items-center justify-center gap-1.5 border-b border-line text-ink transition hover:bg-ink hover:text-white" aria-label={t.nav.openMenu}>
+        <button type="button" onClick={() => setOpen(true)} className="flex h-20 w-full flex-col items-center justify-center gap-1.5 border-b border-line text-ink transition duration-300 hover:bg-ink hover:text-white" aria-label={t.nav.openMenu}>
           <Menu className="h-5 w-5" />
           <span className="caps !text-[9px]">{t.nav.menu}</span>
         </button>
@@ -62,7 +62,7 @@ export function SiteNav() {
           <span className="caps !text-[9px] text-slate">{t.nav.home}</span>
           <span className="caps rotate-180 !text-[10px] text-ink [writing-mode:vertical-rl]">{t.nav.rail}</span>
         </Link>
-        <Link href="/book" className="flex h-36 w-full items-center justify-center bg-lake text-white transition hover:bg-lake-deep">
+        <Link href="/book" className="flex h-36 w-full items-center justify-center bg-lake text-white transition duration-300 hover:bg-lake-deep">
           <span className="caps rotate-180 !text-[10.5px] [writing-mode:vertical-rl]">{t.nav.bookRail}</span>
         </Link>
       </aside>
@@ -74,7 +74,7 @@ export function SiteNav() {
           <span className="font-display text-2xl text-ink">Maison Vidy</span>
         </Link>
         <div className="flex items-center gap-2">
-          <Link href="/book" className="caps rounded-xs bg-lake px-3 py-2 !text-[10px] text-white">{t.common.book}</Link>
+          <Link href="/book" className="sweep caps rounded-xs bg-lake px-3 py-2 !text-[10px] text-white [--sweep:var(--color-lake-deep)]">{t.common.book}</Link>
           <button type="button" onClick={() => setOpen(true)} className="flex h-10 w-10 items-center justify-center text-ink" aria-label={t.nav.openMenu}>
             <Menu className="h-5 w-5" />
           </button>
@@ -114,7 +114,7 @@ export function SiteNav() {
                       onMouseEnter={() => setHover(i)}
                       onFocus={() => setHover(i)}
                       className={clsx(
-                        "group flex items-baseline gap-5 py-3 transition sm:py-3.5",
+                        "group slide flex items-baseline gap-5 py-3 sm:py-3.5",
                         open && "animate-[fade-up_0.6s_both]",
                       )}
                       style={{ animationDelay: `${120 + i * 50}ms` }}

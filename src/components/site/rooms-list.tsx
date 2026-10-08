@@ -26,7 +26,7 @@ export function RoomsList({ rooms }: { rooms: Room[] }) {
 
   const chip = (active: boolean) =>
     clsx(
-      "caps rounded-xs px-3.5 py-2 !text-[10px] transition ring-1 ring-inset",
+      "rise caps rounded-xs px-3.5 py-2 !text-[10px] ring-1 ring-inset",
       active ? "bg-ink text-white ring-ink" : "bg-white text-ink-soft ring-line hover:ring-ink/40",
     );
 

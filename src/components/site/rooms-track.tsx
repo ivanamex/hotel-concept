@@ -97,11 +97,11 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
         </div>
         <div className="hidden items-center gap-5 lg:flex">
           <div className="flex items-center gap-2">
-            <button type="button" onClick={() => nudge(-1)} disabled={progress <= 0.001} aria-label={r.prev} className="flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 transition hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowLeft className="h-4 w-4" /></button>
-            <button type="button" onClick={() => nudge(1)} disabled={progress >= 0.999} aria-label={r.next} className="flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 transition hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowRight className="h-4 w-4" /></button>
+            <button type="button" onClick={() => nudge(-1)} disabled={progress <= 0.001} aria-label={r.prev} className="rise flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowLeft className="h-4 w-4" /></button>
+            <button type="button" onClick={() => nudge(1)} disabled={progress >= 0.999} aria-label={r.next} className="rise flex h-11 w-11 items-center justify-center rounded-xs bg-white ring-1 ring-ink/10 hover:bg-ink hover:text-white disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-ink"><ArrowRight className="h-4 w-4" /></button>
           </div>
-          <button type="button" onClick={skip} className="caps inline-flex items-center gap-2 !text-[10px] text-slate transition hover:text-ink">
-            {r.skip} <ArrowDown className="h-3.5 w-3.5" />
+          <button type="button" onClick={skip} className="group caps inline-flex items-center gap-2 !text-[10px] text-slate transition hover:text-ink">
+            {r.skip} <ArrowDown className="h-3.5 w-3.5 transition duration-500 group-hover:translate-y-1" />
           </button>
         </div>
         <p className="caps !text-[10px] text-slate lg:hidden">{r.swipe}</p>
@@ -119,7 +119,7 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
         {rooms.map((base, i) => {
           const room = localizeRoom(base, t);
           return (
-          <article key={room.id} className="group relative flex w-[82vw] shrink-0 flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:w-[52vw] lg:w-[min(36vw,540px)]">
+          <article key={room.id} className="group lift relative flex w-[82vw] shrink-0 flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:w-[52vw] lg:w-[min(36vw,540px)]">
             <Link href={`/rooms/${room.slug}`} draggable={false} className="relative block aspect-[4/3] overflow-hidden lg:aspect-auto lg:flex-1">
               <Image src={room.images[0]} alt={room.name} fill draggable={false} sizes="(min-width:1024px) 36vw, (min-width:640px) 52vw, 82vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" priority={i < 2} />
               <span className="caps absolute left-4 top-4 rounded-xs bg-white/92 px-2 py-1 !text-[10px] text-ink">{viewLabel(room.view, t)} · {room.sizeM2} m²</span>

@@ -89,7 +89,7 @@ export function RoomPriceCard({ room: staticRoom }: { room: Room }) {
           quotes.map(({ plan: base, q }) => {
             const plan = localizeRatePlan(base, t);
             return (
-            <div key={plan.id} className="flex items-center justify-between rounded-md border border-line px-3.5 py-2.5">
+            <div key={plan.id} className="rise flex items-center justify-between rounded-md border border-line px-3.5 py-2.5 hover:border-ink/30 hover:bg-white">
               <div>
                 <p className="text-sm font-medium text-ink">{plan.short}</p>
                 <p className="text-xs text-slate">{plan.id === "non_refundable" ? p.nonRefundable : p.freeUntil}</p>
@@ -105,11 +105,11 @@ export function RoomPriceCard({ room: staticRoom }: { room: Room }) {
       </div>
 
       {hydrated && available && fits ? (
-        <Link href={`/book?${params.toString()}`} className="ticket caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-lake !text-[11px] text-white transition hover:bg-lake-deep">
+        <Link href={`/book?${params.toString()}`} className="ticket sweep caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-lake !text-[11px] text-white [--sweep:var(--color-lake-deep)]">
           {p.bookThis} <ArrowRight className="arrow h-3.5 w-3.5" />
         </Link>
       ) : (
-        <Link href={`/book?in=${checkIn}&out=${checkOut}&adults=${adults}&children=${children}`} className="ticket caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-ink !text-[11px] text-white transition hover:bg-lake">
+        <Link href={`/book?in=${checkIn}&out=${checkOut}&adults=${adults}&children=${children}`} className="ticket sweep caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-ink !text-[11px] text-white [--sweep:var(--color-lake)]">
           {p.seeAvailable} <ArrowRight className="arrow h-3.5 w-3.5" />
         </Link>
       )}

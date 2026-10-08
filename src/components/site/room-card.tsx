@@ -13,7 +13,7 @@ export function RoomCard({ room: base, priority = false }: { room: Room; priorit
   const t = useT();
   const room = localizeRoom(base, t);
   return (
-    <article className="group flex flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 transition duration-300 hover:shadow-lift">
+    <article className="group lift flex flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5">
       <Link href={`/rooms/${room.slug}`} className="relative block aspect-[4/3] overflow-hidden">
         <Image src={room.images[0]} alt={room.name} fill priority={priority} sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" />
         <div className="absolute left-3 top-3"><Badge tone="white">{viewLabel(room.view, t)} · {room.sizeM2} m²</Badge></div>
@@ -37,7 +37,7 @@ export function RoomCard({ room: base, priority = false }: { room: Room; priorit
         </ul>
         <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
           <Link href={`/rooms/${room.slug}`} className="rule-link caps !text-[10px] text-ink">{t.rooms.viewRoom} <ArrowRight className="h-3 w-3" /></Link>
-          <Link href={`/book?room=${room.slug}`} className="ticket caps inline-flex items-center gap-2 rounded-xs bg-ink px-4 py-2.5 !text-[10px] text-white transition hover:bg-lake">{t.common.book} <ArrowRight className="arrow h-3 w-3" /></Link>
+          <Link href={`/book?room=${room.slug}`} className="ticket sweep caps inline-flex items-center gap-2 rounded-xs bg-ink px-4 py-2.5 !text-[10px] text-white [--sweep:var(--color-lake)]">{t.common.book} <ArrowRight className="arrow h-3 w-3" /></Link>
         </div>
       </div>
     </article>

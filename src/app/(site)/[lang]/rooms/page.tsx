@@ -23,7 +23,7 @@ export default async function RoomsPage({ params }: LangParams) {
       <section className="pb-24">
         <Container>
           <RoomsList rooms={ROOMS} />
-          <div className="mt-16 rounded-lg bg-lake-deep p-8 text-white sm:p-10 lg:flex lg:items-center lg:justify-between">
+          <div className="lift-sm mt-16 rounded-lg bg-lake-deep p-8 text-white sm:p-10 lg:flex lg:items-center lg:justify-between">
             <div>
               <h2 className="font-display text-2xl"><Rich text={t.rooms.groupTitle} /></h2>
               <p className="mt-2 max-w-xl text-sky/85">{t.rooms.groupText}</p>

@@ -42,7 +42,7 @@ export function InquiryForm({ type, compact = false, defaultSubject }: { type: I
   }
 
   return (
-    <form onSubmit={submit} noValidate className="grid gap-4 sm:grid-cols-2">
+    <form onSubmit={submit} noValidate className="form-lines grid gap-5 sm:grid-cols-2">
       <Field label={f.name} error={err.name}><Input value={form.name} onChange={set("name")} autoComplete="name" /></Field>
       <Field label={f.email} error={err.email}><Input type="email" value={form.email} onChange={set("email")} autoComplete="email" /></Field>
       {!compact && <Field label={f.phone} hint={t.common.optional}><Input type="tel" value={form.phone} onChange={set("phone")} autoComplete="tel" /></Field>}

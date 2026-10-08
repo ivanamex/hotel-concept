@@ -74,12 +74,12 @@ export default async function HomePage({ params }: LangParams) {
           </div>
           <div className="relative grid grid-cols-5 gap-4">
             <Parallax speed={-0.25} className="col-span-3">
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
+              <div className="group lift relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
                 <Image src="/images/house/lounge.jpg" alt={h.house.salonAlt} fill sizes="(min-width:1024px) 360px, 60vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.05]" />
               </div>
             </Parallax>
             <Parallax speed={0.35} className="col-span-2 mt-16">
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
+              <div className="group lift relative aspect-[4/5] overflow-hidden rounded-lg shadow-card">
                 <Image src="/images/house/breakfast-balcony.jpg" alt={h.house.balconyAlt} fill sizes="(min-width:1024px) 240px, 40vw" className="object-cover transition duration-[1400ms] group-hover:scale-[1.05]" />
               </div>
             </Parallax>
@@ -105,7 +105,7 @@ export default async function HomePage({ params }: LangParams) {
               const c = t.experiences.attractions[a.slug] ?? a;
               return (
                 <FadeIn key={a.slug} delay={i * 0.08}>
-                  <Link href={`/experiences#${a.slug}`} className="group relative block aspect-[3/4] overflow-hidden rounded-lg">
+                  <Link href={`/experiences#${a.slug}`} className="group lift relative block aspect-[3/4] overflow-hidden rounded-lg">
                     <Image src={a.image} alt={c.name} fill sizes="(min-width:1024px) 300px, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-105" />
                     <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 p-5">
@@ -156,7 +156,7 @@ export default async function HomePage({ params }: LangParams) {
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {t.reviews.map((r, i) => (
               <FadeIn key={r.name} delay={i * 0.1}>
-                <figure className="flex h-full flex-col rounded-lg bg-white p-7 ring-1 ring-ink/5">
+                <figure className="lift-sm flex h-full flex-col rounded-lg bg-white p-7 ring-1 ring-ink/5">
                   <Quote className="h-6 w-6 text-sky" />
                   <blockquote className="mt-4 flex-1 font-display text-xl leading-snug text-ink">{r.text}</blockquote>
                   <figcaption className="caps mt-6 border-t border-line pt-4 !text-[10px]">
@@ -180,7 +180,7 @@ export default async function HomePage({ params }: LangParams) {
             {OFFERS.slice(0, 2).map((o) => {
               const c = t.offers.list[o.slug] ?? o;
               return (
-                <Link key={o.slug} href={`/offers#${o.slug}`} className="group grid overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 transition hover:shadow-lift sm:grid-cols-[220px_1fr]">
+                <Link key={o.slug} href={`/offers#${o.slug}`} className="group lift grid overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:grid-cols-[220px_1fr]">
                   <div className="relative aspect-[4/3] sm:aspect-auto">
                     <Image src={o.image} alt={plain(c.name)} fill sizes="(min-width:640px) 220px, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-105" />
                   </div>

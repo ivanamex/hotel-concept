@@ -87,7 +87,7 @@ export default async function RoomPage({ params }: LangSlugParams) {
                 [d.childrenTitle, room.maxGuests > 2 ? d.childrenBig : d.childrenSmall],
                 [d.rules, d.rulesText],
               ].map(([k, v]) => (
-                <div key={k} className="rounded-md bg-white p-4 ring-1 ring-ink/5">
+                <div key={k} className="lift-sm rounded-md bg-white p-4 ring-1 ring-ink/5">
                   <dt className="text-sm font-semibold text-ink">{k}</dt>
                   <dd className="mt-1 text-sm leading-relaxed text-slate">{v}</dd>
                 </div>
