@@ -27,6 +27,7 @@ Status: collecting. Ivana adds items and inspo here; build starts when she says 
 ## Inspo
 - hotelaurelia.online — booking as its own page with a date picker that marks available / limited / sold-out days (we could colour the calendar in /book the same way)
 - thepopuphotel.com — "Join our community" lightbox: photo left, headline + one line + email + full-width button right; close X top-right
+- vivre.agency/cavo-tagoo-mykonos — case study, not the hotel site: content "to make people want to be there", every image chosen "to obsess"; result they claim: guests stopped arriving mainly through OTAs. Take: photography/video-first, cinematic, zero stock feel; and the "less OTA, more direct" story is the line for the client pitch
 - lasalaplazahotel.com — promo-code lightbox: small caps eyebrow, big headline with the offer, validity line, short paragraph, one CTA with arrow; room photo with a person in it on the left
 
 ## Done when
