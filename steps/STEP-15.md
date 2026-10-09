@@ -37,5 +37,7 @@ Status: built and live 8 Oct 2026 (go at 17:46).
 
 15. DONE 19:40 — **Back to the section you left** (Ivana 19:18: going to another page and back should land where you were). Every page remembers its scroll position; browser back/forward (and the booking × when you came from inside the site) returns to it, even through the pinned rooms track. A fresh link still opens pages at the top.
 
+16. DONE 9 Oct 07:30 — **Script tails cut** (Ivana 07:17: "at Maison Vidy." — the y of Vidy clipped). Same family of bug as the headlines: the script line writes itself in with a clip that stopped at the line box, and the script font's tails reach far above and below it. The writing clip now leaves 0.4 em above and 0.6 em below (and a little to the left for the lead-in stroke); applies to the closing line and the gallery lightbox caption.
+
 ## Done when
 Every item built or struck through with a reason; Ivana clicks through; "ok".
