@@ -201,8 +201,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.35s, box-shadow 0.45s;
 }
 .row-plate .plate-icon {
-  transition: background-color 0.35s, color 0.35s, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 2px rgba(23, 26, 31, 0.06);
+  transition: color 0.35s, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.45s;
+  filter: drop-shadow(0 2px 2px rgba(23, 26, 31, 0.22)) drop-shadow(0 6px 10px rgba(27, 75, 115, 0.12));
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .row-plate:hover {
@@ -211,10 +211,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transform: translateX(6px);
   }
   .row-plate:hover .plate-icon {
-    background: var(--color-lake);
-    color: #fff;
-    transform: translateY(-2px) rotate(-4deg);
-    box-shadow: 0 6px 14px -6px rgba(27, 75, 115, 0.6);
+    color: var(--color-lake-deep);
+    transform: translateY(-3px) rotate(-6deg) scale(1.08);
+    filter: drop-shadow(0 6px 4px rgba(23, 26, 31, 0.22)) drop-shadow(0 14px 18px rgba(27, 75, 115, 0.22));
   }
 }
 
@@ -386,9 +385,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .sweep::before { transition: none; }
 }
 
-/* reveal lines (set by motion component; graceful when JS is off) */
+/* reveal lines: the mask wrapper does the clipping (with room for descenders); the line itself must not clip */
 .reveal-line {
-  overflow: hidden;
+  overflow: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {

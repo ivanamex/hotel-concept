@@ -27,7 +27,7 @@ export default async function RequestPage({ params }: LangParams) {
               const Icon = [Users, CalendarRange, Home][i] ?? Users;
               return (
                 <div key={h} className="row-plate flex items-start gap-5 py-6">
-                  <span className="plate-icon mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><Icon className="h-5 w-5" /></span>
+                  <span className="plate-icon mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center text-lake"><Icon className="h-6 w-6" strokeWidth={1.6} /></span>
                   <div>
                     <h2 className="font-display text-xl text-ink">{h}</h2>
                     <p className="mt-2 text-slate">{p}</p>

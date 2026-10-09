@@ -35,7 +35,7 @@ export default async function ContactPage({ params }: LangParams) {
               { icon: Clock, t: c.reception, d: c.receptionHours },
             ].map((x) => (
               <div key={x.t} className="row-plate flex items-start gap-4 py-5">
-                <span className="plate-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><x.icon className="h-5 w-5" /></span>
+                <span className="plate-icon flex h-11 w-11 shrink-0 items-center justify-center text-lake"><x.icon className="h-6 w-6" strokeWidth={1.6} /></span>
                 <div>
                   <p className="caps !text-[10px] text-slate">{x.t}</p>
                   {x.href ? <a href={x.href} target={x.href.startsWith("http") ? "_blank" : undefined} rel="noopener" className="mt-0.5 block font-semibold text-ink hover:text-lake">{x.d}</a> : <p className="mt-0.5 font-semibold text-ink">{x.d}</p>}
@@ -54,7 +54,7 @@ export default async function ContactPage({ params }: LangParams) {
               <dl className="-mx-4 mt-4 divide-y divide-line border-y border-line">
                 {c.faq.map((f) => (
                   <details key={f.q} className="group row-plate py-5">
-                    <summary className="flex cursor-pointer list-none items-center gap-4 font-semibold text-ink marker:hidden"><span className="plate-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-mist text-lake"><Plus className="h-4 w-4 transition duration-300 group-open:rotate-45" /></span>{f.q}</summary>
+                    <summary className="flex cursor-pointer list-none items-center gap-4 font-semibold text-ink marker:hidden"><span className="plate-icon flex h-9 w-9 shrink-0 items-center justify-center text-lake"><Plus className="h-5 w-5 transition duration-300 group-open:rotate-45" strokeWidth={1.6} /></span>{f.q}</summary>
                     <p className="mt-3 pl-13 text-sm leading-relaxed text-slate">{f.a}</p>
                   </details>
                 ))}
