@@ -15,9 +15,9 @@ interface Item { src: string; alt: string; cat: string; w: number; h: number }
 const CATS = ["All", "Rooms", "House", "Lake", "Lausanne"];
 /** Each column starts a little lower or higher and drifts a fixed number of pixels while the wall scrolls past. */
 const DRIFT: [number, number][] = [
-  [40, -60],
-  [120, 20],
-  [0, -110],
+  [60, -240],
+  [240, -20],
+  [0, -320],
 ];
 
 /** A column that drifts by a fixed amount (px) over the scroll of its parent grid. */
@@ -27,7 +27,7 @@ function Drift({ from, to, children, className }: { from: number; to: number; ch
     const el = ref.current;
     if (!el || prefersReducedMotion() || from === to) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo(el, { y: from }, { y: to, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top 90%", end: "bottom 10%", scrub: 0.6 } });
+      gsap.fromTo(el, { y: from }, { y: to, ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top 85%", end: "bottom 15%", scrub: 0.8 } });
     });
     return () => ctx.revert();
   }, [from, to]);
@@ -119,7 +119,7 @@ export function GalleryGrid({ items: raw }: { items: Item[] }) {
           <button key={c} type="button" onClick={() => setCat(c)} className={clsx("rise caps rounded-xs px-3.5 py-2 !text-[10px] ring-1 ring-inset", cat === c ? "bg-ink text-white ring-ink" : "bg-white text-ink-soft ring-line hover:ring-ink/40")}>{t.gallery.cats[c] ?? c}</button>
         ))}
       </div>
-      <div key={`${cat}-${n}`} className={clsx("mt-12 grid gap-4 pb-24", n === 1 ? "grid-cols-1" : n === 2 ? "grid-cols-2" : "grid-cols-3")}>
+      <div key={`${cat}-${n}`} className={clsx("mt-12 grid gap-4 pb-32", n === 1 ? "grid-cols-1" : n === 2 ? "grid-cols-2" : "grid-cols-3")}>
         {cols.map((col, c) => (
           <Drift key={c} from={n === 1 ? 0 : DRIFT[c % DRIFT.length][0]} to={n === 1 ? 0 : DRIFT[c % DRIFT.length][1]} className="flex flex-col gap-4">
             {col.map(({ item, index: i }, r) => (
