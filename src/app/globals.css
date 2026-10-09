@@ -185,11 +185,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* reveal masks: leave room for descenders (g, y, p) and accents */
+/* the mask must not change layout (padding + negative margins collapse unpredictably), so it clips with a
+   clip-path that reaches a little outside its own box — enough for descenders, accents and italic overhang */
 .reveal-line-mask {
-  padding-bottom: 0.3em;
-  margin-bottom: -0.3em;
-  padding-top: 0.08em;
-  margin-top: -0.08em;
+  overflow: visible !important;
+  clip-path: inset(-0.14em -0.08em -0.16em -0.08em);
 }
 
 /* rows with depth (contact, request, FAQ) */

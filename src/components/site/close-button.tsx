@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useHref, useT } from "@/i18n/context";
+import { canGoBack } from "./motion";
 
 /** Leaves a take-over screen: back to where the visitor came from, or home when they landed here directly. */
 export function CloseButton({ label, className = "" }: { label?: string; className?: string }) {
@@ -11,8 +12,7 @@ export function CloseButton({ label, className = "" }: { label?: string; classNa
   const t = useT();
   const text = label ?? t.common.close;
   const leave = () => {
-    const sameOrigin = typeof document !== "undefined" && document.referrer && new URL(document.referrer).origin === window.location.origin;
-    if (window.history.length > 1 && sameOrigin) router.back();
+    if (canGoBack()) router.back();
     else router.push(href("/"));
   };
   return (
