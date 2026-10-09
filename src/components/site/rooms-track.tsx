@@ -123,15 +123,16 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
           return (
           <article key={room.id} className="group lift relative flex w-[82vw] shrink-0 flex-col overflow-hidden rounded-lg bg-white ring-1 ring-ink/5 sm:w-[52vw] lg:w-[min(36vw,540px)]">
             <Link href={`/rooms/${room.slug}`} draggable={false} className="relative block aspect-[4/3] overflow-hidden lg:aspect-auto lg:flex-1">
-              <Image src={room.images[0]} alt={room.name} fill draggable={false} sizes="(min-width:1024px) 36vw, (min-width:640px) 52vw, 82vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" priority={i < 2} />
+              {/* eager on purpose: lazy images inside the pinned, transformed track can stay blank in some browsers */}
+              <Image src={room.images[0]} alt={room.name} fill draggable={false} loading="eager" sizes="(min-width:1024px) 36vw, (min-width:640px) 52vw, 82vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" priority={i < 2} />
               <span className="caps absolute left-4 top-4 rounded-xs bg-white/92 px-2 py-1 !text-[10px] text-ink">{viewLabel(room.view, t)} · {room.sizeM2} m²</span>
             </Link>
             <div className="flex items-end justify-between gap-4 p-5 lg:p-6">
-              <div>
+              <Link href={`/rooms/${room.slug}`} draggable={false} className="block">
                 <p className="caps !text-[10px] text-slate">{String(room.number).padStart(2, "0")} · {room.category}</p>
-                <h3 className="mt-1.5 font-display text-2xl leading-tight text-ink">{room.name}</h3>
+                <h3 className="mt-1.5 font-display text-2xl leading-tight text-ink transition-colors duration-300 group-hover:text-lake">{room.name}</h3>
                 <p className="mt-1 text-sm text-slate">{room.beds.split("+")[0].trim()} · {t.common.upTo} {room.maxGuests}</p>
-              </div>
+              </Link>
               <div className="text-right">
                 <p className="caps !text-[10px] text-slate">{t.common.from}</p>
                 <p className="font-display text-2xl text-ink">{chf(room.basePrice * 0.85)}</p>

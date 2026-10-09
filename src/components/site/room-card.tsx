@@ -20,10 +20,10 @@ export function RoomCard({ room: base, priority = false }: { room: Room; priorit
       </Link>
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-3">
-          <div>
+          <Link href={`/rooms/${room.slug}`} className="block">
             <p className="caps !text-[10px] text-slate">{String(room.number).padStart(2, "0")} · {room.category}</p>
-            <h3 className="mt-1.5 font-display text-2xl leading-tight text-ink">{room.name}</h3>
-          </div>
+            <h3 className="mt-1.5 font-display text-2xl leading-tight text-ink transition-colors duration-300 group-hover:text-lake">{room.name}</h3>
+          </Link>
           <div className="text-right">
             <p className="caps !text-[10px] text-slate">{t.common.from}</p>
             <p className="font-display text-xl text-ink">{chf(room.basePrice * 0.85)}</p>
