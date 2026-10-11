@@ -13,6 +13,7 @@ export function isLang(x: string | undefined | null): x is Lang {
 export const SECTION_SLUGS: Record<string, Record<Lang, string>> = {
   rooms: { en: "rooms", fr: "chambres", de: "zimmer", it: "camere" },
   cabanes: { en: "cabanes", fr: "cabanes", de: "huetten", it: "cabanes" },
+  maison: { en: "maison", fr: "maison", de: "haus", it: "casa" },
   book: { en: "book", fr: "reserver", de: "buchen", it: "prenota" },
   confirmed: { en: "confirmed", fr: "confirme", de: "bestaetigt", it: "confermata" },
   experiences: { en: "experiences", fr: "experiences", de: "erlebnisse", it: "esperienze" },
