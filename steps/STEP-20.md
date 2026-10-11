@@ -1,6 +1,6 @@
 # STEP-20 — Office shell v2: the template we replicate
 
-Status: spec written 11 Oct 2026, waiting for "go".
+Status: go 11 Oct 2026 (23:44) · built and pushed 11 Oct (13a6d25) · waiting for Ivana's click-through and the cabin photos.
 
 Ivana (10 Oct 23:25): the dashboard has to be "really nicely organised — everything easy to reach from the side panel, the important things visible on the main screen". Once built, this shell is replicated for every property client (a Mexico property is already in view). References she sent: ResNexus, Cloudbeds MX, WebRezPro landing pages; Houzez CRM and Bridge packages.
 
@@ -18,6 +18,8 @@ Sanity: **Sane.** Fixing the shell once, as a template, before a second client i
 - **From Houzez CRM (real estate → hospitality):** enquiries have a *type*, a *source*, a *status* and a *next action with a date*; deals live in groups *active / won / lost*; every contact carries *notes* and an *activity timeline*. Transfer: the inbox becomes a request pipeline, guests get notes + timeline.
 
 ## Build
+
+DONE 11 Oct — all sections below are live. Verified on the production build: login → Today (all locations and each property), every page, the search palette, the collapsed rail, calendar move / refuse / extend with Undo, board drag New → Offer sent, Today panels reordered and reset; the public site and its booking engine still show Maison Vidy's rooms only. Open: Ivana picks the five cabin photos from the image flow (two variations each) and uploads them as `public/images/cabins/{site,hetre,chene,sapin,meleze}.jpg` — until then the cabin rows show a grey "photo" tile. Housekeeping state (to clean · clean · inspected) lives on the Units page and in the Today tiles, as planned.
 
 ### 1. Sidebar — nine destinations in two groups + bottom
 
