@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Mark } from "@/components/site/logo";
 import { attentionItems } from "@/lib/attention";
 import { todayISO } from "@/lib/engine";
@@ -66,6 +66,8 @@ const GROUPS: NavGroup[] = [
 ];
 
 const RAIL_KEY = "mv-office-rail";
+/** Where the rail was scrolled to — survives page changes, since every office page mounts its own shell. */
+let railScroll = 0;
 
 type Quick = "reservation" | "request" | "ooo" | "note" | null;
 
@@ -91,6 +93,20 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
   useEffect(() => {
     try { setCollapsed(localStorage.getItem(RAIL_KEY) === "collapsed"); } catch {}
   }, []);
+  const railRef = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    const el = railRef.current;
+    if (!el) return;
+    el.scrollTop = railScroll;
+    const active = el.querySelector<HTMLElement>('[aria-current="page"]');
+    if (active) {
+      const top = active.offsetTop;
+      const bottom = top + active.offsetHeight;
+      if (top < el.scrollTop || bottom > el.scrollTop + el.clientHeight) el.scrollTop = Math.max(0, top - el.clientHeight / 2);
+    }
+    // the rail only exists once the store has hydrated and the user is known, so those are deps too
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, collapsed, hydrated, user]);
   const toggleRail = () => {
     setCollapsed((c) => {
       try { localStorage.setItem(RAIL_KEY, c ? "open" : "collapsed"); } catch {}
@@ -122,9 +138,9 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
   const brand = scope.allProperties[0];
   const badgeFor = (b?: NavItem["badge"]) => (b === "inbox" ? unread : b === "attention" ? attention.length : 0);
 
-  const Sidebar = ({ compact }: { compact: boolean }) => (
-    <div className="flex h-full flex-col">
-      <div className={clsx("flex items-center gap-2.5 py-5", compact ? "justify-center px-2" : "px-5")}>
+  const sidebar = (compact: boolean) => (
+    <div className="flex min-h-full flex-col">
+      <div className={clsx("flex items-center gap-2.5 py-4", compact ? "justify-center px-2" : "px-5")}>
         <Mark light />
         {!compact && (
           <div className="min-w-0">
@@ -142,7 +158,7 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
         </button>
       </div>
 
-      <nav className="mt-3 flex-1 space-y-4 overflow-y-auto px-3" aria-label="Office">
+      <nav className="mt-3 flex-1 space-y-3 px-3" aria-label="Office">
         {GROUPS.map((g) => (
           <div key={g.label}>
             {!compact && <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky/50">{g.label}</p>}
@@ -159,7 +175,7 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
                       title={compact ? label : undefined}
                       aria-current={active ? "page" : undefined}
                       className={clsx(
-                        "relative flex items-center gap-3 rounded-md py-2.5 text-sm font-medium transition",
+                        "relative flex items-center gap-3 rounded-md py-2 text-sm font-medium transition",
                         compact ? "justify-center px-0" : "px-3",
                         active ? "bg-white text-lake-deep shadow-sm" : "text-sky/80 hover:bg-white/8 hover:text-white",
                       )}
@@ -178,19 +194,19 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
         ))}
       </nav>
 
-      <div className={clsx("space-y-0.5 border-t border-white/10 py-3", compact ? "px-2" : "px-3")}>
-        <Link href="/office/settings" title="Settings" className={clsx("flex items-center gap-3 rounded-md py-2 text-sm transition", compact ? "justify-center" : "px-3", pathname.startsWith("/office/settings") ? "bg-white text-lake-deep" : "text-sky/80 hover:bg-white/8 hover:text-white")}>
+      <div className={clsx("space-y-0 border-t border-white/10 py-2", compact ? "px-2" : "px-3")}>
+        <Link href="/office/settings" title="Settings" className={clsx("flex items-center gap-3 rounded-md py-1.5 text-sm transition", compact ? "justify-center" : "px-3", pathname.startsWith("/office/settings") ? "bg-white text-lake-deep" : "text-sky/80 hover:bg-white/8 hover:text-white")}>
           <Settings className="h-4 w-4 shrink-0" />{!compact && "Settings"}
         </Link>
-        <Link href="/" target="_blank" title="View website" className={clsx("flex items-center gap-3 rounded-md py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white", compact ? "justify-center" : "px-3")}>
+        <Link href="/" target="_blank" title="View website" className={clsx("flex items-center gap-3 rounded-md py-1.5 text-sm text-sky/80 hover:bg-white/8 hover:text-white", compact ? "justify-center" : "px-3")}>
           <ExternalLink className="h-4 w-4 shrink-0" />{!compact && "View website"}
         </Link>
         <HelpPopover compact={compact} />
-        <button type="button" onClick={() => { signOut(); router.push("/office/login"); }} title="Sign out" className={clsx("flex w-full items-center gap-3 rounded-md py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white", compact ? "justify-center" : "px-3")}>
+        <button type="button" onClick={() => { signOut(); router.push("/office/login"); }} title="Sign out" className={clsx("flex w-full items-center gap-3 rounded-md py-1.5 text-sm text-sky/80 hover:bg-white/8 hover:text-white", compact ? "justify-center" : "px-3")}>
           <LogOut className="h-4 w-4 shrink-0" />{!compact && "Sign out"}
         </button>
         {!compact && <p className="truncate px-3 pt-1 text-[11px] text-sky/50">{user}</p>}
-        <button type="button" onClick={toggleRail} className={clsx("mt-1 hidden w-full items-center gap-3 rounded-md py-2 text-xs text-sky/50 hover:bg-white/8 hover:text-white lg:flex", compact ? "justify-center" : "px-3")} title={compact ? "Expand the menu" : "Collapse the menu"}>
+        <button type="button" onClick={toggleRail} className={clsx("hidden w-full items-center gap-3 rounded-md py-1.5 text-xs text-sky/50 hover:bg-white/8 hover:text-white lg:flex", compact ? "justify-center" : "px-3")} title={compact ? "Expand the menu" : "Collapse the menu"}>
           {compact ? <ChevronsRight className="h-4 w-4" /> : <><ChevronsLeft className="h-4 w-4" /> Collapse</>}
         </button>
       </div>
@@ -199,14 +215,14 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
 
   return (
     <div className={clsx("min-h-screen bg-[#f5f6f8] text-ink lg:grid", collapsed ? "lg:grid-cols-[72px_1fr]" : "lg:grid-cols-[248px_1fr]")}>
-      <aside className="hidden bg-lake-deep lg:block lg:sticky lg:top-0 lg:h-screen"><Sidebar compact={collapsed} /></aside>
+      <aside ref={railRef} onScroll={(e) => { railScroll = e.currentTarget.scrollTop; }} className="scrollbar-thin hidden bg-lake-deep lg:block lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto">{sidebar(collapsed)}</aside>
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-ink/50" onClick={() => setOpen(false)} />
           <aside className="absolute inset-y-0 left-0 w-72 bg-lake-deep shadow-lift">
             <button type="button" onClick={() => setOpen(false)} className="absolute right-3 top-4 rounded-xs p-1.5 text-white/70 hover:bg-white/10" aria-label="Close menu"><X className="h-5 w-5" /></button>
-            <Sidebar compact={false} />
+            {sidebar(false)}
           </aside>
         </div>
       )}
@@ -374,7 +390,7 @@ function HelpPopover({ compact }: { compact: boolean }) {
   useOutside(ref, () => setOpen(false), open);
   return (
     <div ref={ref} className="relative">
-      <button type="button" onClick={() => setOpen((o) => !o)} title="Help" className={clsx("flex w-full items-center gap-3 rounded-md py-2 text-sm text-sky/80 hover:bg-white/8 hover:text-white", compact ? "justify-center" : "px-3")}>
+      <button type="button" onClick={() => setOpen((o) => !o)} title="Help" className={clsx("flex w-full items-center gap-3 rounded-md py-1.5 text-sm text-sky/80 hover:bg-white/8 hover:text-white", compact ? "justify-center" : "px-3")}>
         <LifeBuoy className="h-4 w-4 shrink-0" />{!compact && "Help"}
       </button>
       {open && (
