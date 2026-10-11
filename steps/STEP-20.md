@@ -1,0 +1,92 @@
+# STEP-20 — Office shell v2: the template we replicate
+
+Status: spec written 11 Oct 2026, waiting for "go".
+
+Ivana (10 Oct 23:25): the dashboard has to be "really nicely organised — everything easy to reach from the side panel, the important things visible on the main screen". Once built, this shell is replicated for every property client (a Mexico property is already in view). References she sent: ResNexus, Cloudbeds MX, WebRezPro landing pages; Houzez CRM and Bridge packages.
+
+Sanity: **Sane.** Fixing the shell once, as a template, before a second client is the right order. One change to the premise: the shell is the product, the modules are configuration — so this step is as much about the per-property config (currency, taxes, unit vocabulary, languages, property switcher) as about the look. Build on the demo store now; STEP-16 swaps the store, not the screens.
+
+## What the research says (sources at the end)
+
+- **The home screen is "today", not "analytics".** Every PMS worth copying (Mews, Cloudbeds, Prostay, WebRezPro) opens on arrivals · departures · in-house · things that need action, with the action buttons right there. Month KPIs come second. Our overview already does this; it needs ordering and a "needs attention" list.
+- **Every number is a link.** Mews' coloured donuts and Prostay's tiles open the list behind the figure. No decorative charts.
+- **Seven to eight top-level items, daily ones first, long tail at the bottom; group with section labels past that.** Settings, integrations, help at the bottom, account/property switcher separate from page links.
+- **A global search (⌘K) that reaches reservations, guests, rooms, pages and actions** keeps the rail lean (Cloudbeds "universal search", Guesty search bar, Mews Alt+T / Alt+N).
+- **"+ New" is one button with a menu** — reservation, block/out of order, guest, task (Guesty quick add, Prostay "Create new": reservation, tentative, blocked dates, out of service).
+- **Collapsible icon rail, choice remembered; active state unmistakable; mobile = drawer.**
+- **Don't copy the breadth.** Cloudbeds/Guesty have 10–11 groups and dozens of pages because they serve hostels to hotel groups. A 10-room house with 30 screens is a liability in a pitch. Nine destinations, grouped.
+- **From Houzez CRM (real estate → hospitality):** enquiries have a *type*, a *source*, a *status* and a *next action with a date*; deals live in groups *active / won / lost*; every contact carries *notes* and an *activity timeline*. Transfer: the inbox becomes a request pipeline, guests get notes + timeline.
+
+## Build
+
+### 1. Sidebar — nine destinations in two groups + bottom
+
+```
+[Property switcher]  Maison Vidy ▾        ← active property, separate from page links (one property in the demo; the control exists)
+[Search ⌘K]
+
+DAILY
+  Today          (badge: needs-attention count)
+  Calendar       (tape chart — rooms × nights, drag to move/extend, click to open)
+  Reservations
+  Guests
+  Inbox          (badge: new)
+
+MANAGE
+  Rooms          (label follows property vocabulary: Rooms / Units / Villas)
+  Rates & extras (rate plans, extras, restrictions, promo codes)
+  Channels       (NEW page — booking engine, OTA connections via Channex, sync log; moves out of Settings)
+  Reports        (NEW page)
+
+────
+  Settings       (property, taxes & invoicing, users & roles, notifications, demo data)
+  View website · Help · Sign out · signed-in user
+```
+
+- Collapses to an icon rail (tooltips), remembered per browser. Active item: filled; hover: tint, visibly different.
+- Mobile: drawer from the ☰, closes on route change, tap outside, swipe or ×.
+- Keyboard: `⌘K` search · `N` new reservation · `T` calendar (ignored while typing in a field).
+
+### 2. Header (every office page)
+
+Page title + one-line context (today's date · occupancy) · search field (visible, not only the shortcut) · **+ New ▾** (Reservation · Block dates / Out of order · Guest · Task) · notifications bell (needs-attention items) · user.
+
+### 3. Today (overview) — the template layout
+
+Row 1 — **Today strip**, six clickable tiles → each opens the filtered list: Arrivals (n · x still to arrive) · Departures (n · x still to check out) · In house (n of N · occupancy %) · Rooms to clean (n) · New messages (n) · Booked today (n · value).
+
+Row 2 — left ⅔ **Today's guests**: tabs Arrivals · Departures · Stayovers, each with Today / Tomorrow; rows carry the actions (Check in / Check out / Assign room / balance due flag / note). Right ⅓ **Needs attention**: one list, each row a link — unpaid balance arriving today · request unanswered > 24 h · room out of order · overbooking · incomplete guest profile (no email / no ID at check-in) · channel sync error. Shows only what applies; "All clear" when empty.
+
+Row 3 — **Next 14 nights**: occupancy bars + revenue line in one chart; under it the month: Occupancy MTD · Revenue MTD · ADR · RevPAR · booked direct %, each with the comparison to last month. Right: **Channels** compact (live / last sync / errors) → Channels page.
+
+Row 4 — **Latest bookings** table (as now) → Reservations.
+
+Rules: every figure links to the list behind it; empty states say what to do next; no chart that does not answer a question the manager asks daily.
+
+### 4. New pages
+
+- **Channels**: booking engine status (direct), each OTA (Booking.com, Expedia, Airbnb, Google) with connected / paused, last sync, rates & availability pushed, bookings received, errors; "via Channex" (STEP-18 wires it). Logos when Ivana sends files; typeset until then.
+- **Reports** — five, not seventy-five, each with a date range and CSV export: Occupancy & revenue by day · Bookings by source (direct vs each OTA, commission) · ADR / RevPAR by month · Taxes to remit (city tax CH per person-night / lodging tax % elsewhere) · Arrivals & departures sheet (printable, for the desk).
+
+### 5. Inbox → request pipeline (Houzez transfer)
+
+Tabs New · Replied · Offer sent · Won · Lost (active / won / lost groups). Each request: type (stay · group · event · long stay · question), source (site form, WhatsApp, email, phone, OTA message), status, **next action + due date**, notes, activity timeline (received, read, replied, offer sent, converted). "Convert to reservation" pre-fills the new-reservation form. Guests get the same notes + timeline on their profile.
+
+### 6. Per-property configuration — the replication lever
+
+One `property` record drives the shell: name · mark · unit vocabulary (room / unit / villa / apartment) · currency and number format · locale(s) · tax model (per-person-night fixed amount, % of room, or none — one line per tax) · invoice type (receipt · invoice · CFDI for Mexico, later) · check-in/out times · channels · payment methods shown (cards, Twint, OXXO/SPEI later). Switching property re-skins the office; the demo ships one property (Maison Vidy) with the switcher present and a second entry greyed "Add property".
+
+### 7. Not in this step (on purpose)
+
+Housekeeping as its own module (room status clean / dirty / inspected / out of order lives in Rooms and in the Today strip) · owner statements (only if the Mexico property is multi-owner) · POS/F&B · revenue-management automation · a mobile app. Each becomes a step when a client asks.
+
+## Sources
+
+- Cloudbeds — [Get to know your new Dashboard](https://myfrontdesk.cloudbeds.com/hc/en-us/articles/16873372577435-Get-to-know-your-new-Dashboard) and the [Mexico PMS page](https://www.cloudbeds.com/es/paid-lp/pms-mx/)
+- Mews — [Your dashboard](https://help.mews.com/s/article/your-dashboard)
+- Prostay — [Reading the dashboard, card by card](https://www.prostay.com/help/property-management-system/dashboard-overview/)
+- Guesty — [Navigating the Guesty dashboard](https://help.guesty.com/hc/en-gb/articles/11877241350685-Navigating-the-Guesty-dashboard)
+- WebRezPro — [Cloud software](https://webrezpro.com/cloud-software/)
+- ResNexus — [landing page](https://landing.g2digitalmarkets.com/resnexus-gdm-lp?category=Hospitality-Property-Management)
+- SaaS UI — [Sidebar navigation UX patterns](https://www.saasui.design/blog/saas-sidebar-navigation-ux-patterns)
+- Houzez 4.4.2 CRM plugin (Ivana's package): enquiries · leads · deals (active / won / lost) · notes · activities
