@@ -4,7 +4,7 @@ import { useState } from "react";
 import { OfficeShell } from "@/components/office/shell";
 import { Panel, PropertyChip } from "@/components/office/ui";
 import { Button, Field, Input, Select } from "@/components/ui";
-import { useHotel } from "@/lib/store";
+import { useHotel, useOfficeScope } from "@/lib/store";
 import type { Property, Tax, TaxKind } from "@/lib/types";
 
 const TAX_KINDS: Record<TaxKind, string> = { per_person_night: "fixed amount per person per night", per_night: "fixed amount per night", percent: "% of the room price" };
@@ -12,8 +12,11 @@ const PAY = ["Visa", "Mastercard", "Amex", "Twint", "OXXO", "SPEI", "PayPal", "C
 
 export default function SettingsPage() {
   const settings = useHotel((s) => s.settings);
-  const properties = useHotel((s) => s.properties);
+  const scope = useOfficeScope();
+  const setProperty = useHotel((s) => s.setOfficeProperty);
   const update = useHotel((s) => s.updateSettings);
+  // the property card follows the switcher in the rail; "All locations" shows the first one, and the select here changes the switcher too
+  const editing = scope.property ?? scope.allProperties[0];
   const reset = useHotel((s) => s.resetDemo);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState(settings);
@@ -70,7 +73,20 @@ export default function SettingsPage() {
         </div>
 
         <div className="space-y-6">
-          {properties.map((p) => <PropertyCard key={p.id} property={p} />)}
+          <PropertyCard
+            key={editing.id}
+            property={editing}
+            picker={
+              scope.allProperties.length > 1 ? (
+                <label className="flex items-center gap-2 text-xs text-slate">
+                  Property
+                  <Select value={editing.id} onChange={(e) => setProperty(e.target.value)} className="!h-8 !w-auto !text-sm">
+                    {scope.allProperties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                  </Select>
+                </label>
+              ) : undefined
+            }
+          />
           <Panel title="Add a property">
             <div className="px-5 py-4 text-sm text-ink-soft">
               <p>A third location gets its own card here: name, units and their vocabulary, currency, taxes, check-in times, payment methods, channels. Everything else — Today, calendar, reservations, reports — follows automatically.</p>
@@ -84,7 +100,7 @@ export default function SettingsPage() {
   );
 }
 
-function PropertyCard({ property }: { property: Property }) {
+function PropertyCard({ property, picker }: { property: Property; picker?: React.ReactNode }) {
   const update = useHotel((s) => s.updateProperty);
   const [f, setF] = useState(property);
   const [saved, setSaved] = useState(false);
@@ -93,7 +109,7 @@ function PropertyCard({ property }: { property: Property }) {
   const setTax = (i: number, patch: Partial<Tax>) => setF({ ...f, taxes: f.taxes.map((t, idx) => (idx === i ? { ...t, ...patch } : t)) });
 
   return (
-    <Panel title={property.name} action={<PropertyChip id={property.id} />}>
+    <Panel title={property.name} action={<div className="flex items-center gap-3">{picker}<PropertyChip id={property.id} /></div>}>
       <div className="grid gap-4 px-5 py-5 sm:grid-cols-2">
         <Field label="Name"><Input value={f.name} onChange={set("name")} /></Field>
         <Field label="Kind" hint="shown under the name"><Input value={f.kind} onChange={set("kind")} /></Field>
