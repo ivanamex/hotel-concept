@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
 import { LOCALES, alternates, localePath } from "@/i18n/config";
 import { ROOMS } from "@/lib/seed";
+import { EXPERIENCES } from "@/lib/experiences";
 
 const BASE = "https://hotel-concept.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["/", "/rooms", "/book", "/experiences", "/dining", "/offers", "/gallery", "/contact", "/request", "/terms", "/privacy", "/imprint", ...ROOMS.map((r) => `/rooms/${r.slug}`)];
+  const pages = ["/", "/rooms", "/book", "/experiences", "/dining", "/offers", "/gallery", "/contact", "/request", "/terms", "/privacy", "/imprint", ...ROOMS.map((r) => `/rooms/${r.slug}`), ...EXPERIENCES.map((e) => `/experiences/${e.slug}`)];
   return pages.flatMap((internal) =>
     LOCALES.map((lang) => ({
       url: BASE + localePath(lang, internal),

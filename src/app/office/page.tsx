@@ -24,6 +24,7 @@ const ORDER_KEY = "mv-today-order";
 export default function TodayPage() {
   const scope = useOfficeScope();
   const setStatus = useHotel((s) => s.setReservationStatus);
+  const xpBookings = useHotel((s) => s.experienceBookings);
   const [open, setOpen] = useState<string | null>(null);
   const today = todayISO();
 
@@ -72,7 +73,7 @@ export default function TodayPage() {
       {/* today strips — one per property when looking at all of them */}
       <div className="space-y-4">
         {scope.properties.map((p) => (
-          <TodayStrip key={p.id} property={p} showName={scope.all && scope.allProperties.length > 1} today={today} rooms={scope.allRooms} live={live.filter((r) => r.propertyId === p.id)} inquiries={scope.inquiries.filter((i) => i.propertyId === p.id || (!i.propertyId && p.id === scope.allProperties[0].id))} />
+          <TodayStrip key={p.id} property={p} showName={scope.all && scope.allProperties.length > 1} today={today} rooms={scope.allRooms} live={live.filter((r) => r.propertyId === p.id)} inquiries={scope.inquiries.filter((i) => i.propertyId === p.id || (!i.propertyId && p.id === scope.allProperties[0].id))} xpToday={xpBookings.filter((b) => b.propertyId === p.id && b.status !== "cancelled" && b.createdAt.slice(0, 10) === today)} />
         ))}
       </div>
 
@@ -124,7 +125,7 @@ function SortablePanel({ id, title, action, className, children, onMove, first, 
 
 /* ---------- today strip ---------- */
 
-function TodayStrip({ property, showName, today, rooms, live, inquiries }: { property: Property; showName: boolean; today: string; rooms: Room[]; live: Reservation[]; inquiries: ReturnType<typeof useOfficeScope>["inquiries"] }) {
+function TodayStrip({ property, showName, today, rooms, live, inquiries, xpToday }: { property: Property; showName: boolean; today: string; rooms: Room[]; live: Reservation[]; inquiries: ReturnType<typeof useOfficeScope>["inquiries"]; xpToday: { total: number }[] }) {
   const own = rooms.filter((r) => r.propertyId === property.id);
   const units = sellableUnits(own).filter((r) => r.status === "active");
   const arrivals = live.filter((r) => r.checkIn === today);
@@ -133,7 +134,7 @@ function TodayStrip({ property, showName, today, rooms, live, inquiries }: { pro
   const toClean = own.filter((r) => r.kind !== "whole" && r.housekeeping === "dirty").length;
   const newMsgs = inquiries.filter((i) => i.status === "new").length;
   const bookedToday = live.filter((r) => r.createdAt.slice(0, 10) === today);
-  const bookedValue = bookedToday.reduce((s, r) => s + r.total, 0);
+  const bookedValue = bookedToday.reduce((s, r) => s + r.total, 0) + xpToday.reduce((s, b) => s + b.total, 0);
   const q = (view: string) => `/office/reservations?view=${view}&property=${property.id}`;
 
   const tiles = [
@@ -142,7 +143,7 @@ function TodayStrip({ property, showName, today, rooms, live, inquiries }: { pro
     { label: "In house", value: `${occupied}/${units.length}`, hint: `${units.length ? Math.round((occupied / units.length) * 100) : 0} % occupied`, href: q("inhouse"), tone: "moss" },
     { label: "To clean", value: toClean, hint: toClean ? `${property.unitLabel.many} to turn around` : "all done", href: `/office/rooms?property=${property.id}&hk=dirty`, tone: toClean ? "clay" : "ink" },
     { label: "New messages", value: newMsgs, hint: newMsgs ? "unanswered" : "inbox zero", href: `/office/inbox?property=${property.id}`, tone: newMsgs ? "clay" : "ink" },
-    { label: "Booked today", value: bookedToday.length, hint: bookedToday.length ? money(bookedValue, property.currency) : "nothing yet", href: q("bookedtoday"), tone: "ink" },
+    { label: "Booked today", value: bookedToday.length + xpToday.length, hint: bookedToday.length + xpToday.length ? `${money(bookedValue, property.currency)}${xpToday.length ? ` · ${xpToday.length} experience${xpToday.length === 1 ? "" : "s"}` : ""}` : "nothing yet", href: q("bookedtoday"), tone: "ink" },
   ] as const;
 
   return (

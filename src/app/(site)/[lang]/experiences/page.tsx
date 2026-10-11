@@ -1,4 +1,4 @@
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, Clock, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { NextPage } from "@/components/site/bands";
@@ -9,7 +9,10 @@ import { Badge, Container, SectionHeading } from "@/components/ui";
 import { getDict } from "@/i18n";
 import { pageMeta, type LangParams } from "@/i18n/meta";
 import { Rich } from "@/i18n/rich";
-import { AROUND, WITH_US } from "@/lib/content";
+import { AROUND } from "@/lib/content";
+import { EXPERIENCES } from "@/lib/experiences";
+import { chf } from "@/lib/format";
+import { fmt } from "@/i18n";
 
 export async function generateMetadata({ params }: LangParams): Promise<Metadata> {
   const { lang } = await params;
@@ -25,7 +28,37 @@ export default async function ExperiencesPage({ params }: LangParams) {
     <>
       <PhotoHero image="/images/around/lavaux.jpg" alt={x.heroAlt} eyebrow={x.eyebrow} title={<Rich text={x.title} />} lead={x.lead} crumb={t.nav.items.experiences.label} />
 
-      <section className="py-20 sm:py-28">
+      {/* BOOKABLE — six experiences with a date on them */}
+      <section id="book" className="scroll-mt-20 py-20 sm:py-28">
+        <Container>
+          <SectionHeading eyebrow={x.book.eyebrow} title={<Rich text={x.book.title} />} lead={x.book.lead} />
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {EXPERIENCES.map((e, i) => {
+              const c = x.catalog[e.slug];
+              return (
+                <Link key={e.slug} href={`/experiences/${e.slug}`} className="group lift flex flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image src={e.image} alt={c.name} fill priority={i < 3} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" />
+                    <div className="absolute left-4 top-4 flex gap-2"><Badge tone="sand" className="bg-white/90">{x.book.categories[e.category]}</Badge></div>
+                    {e.video && <span className="caps absolute bottom-4 left-4 rounded-xs bg-ink/70 px-2 py-1 !text-[10px] text-white">▶ film</span>}
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <p className="caps inline-flex items-center gap-1.5 !text-[10px] text-lake"><Clock className="h-3.5 w-3.5" /> {fmt(x.book.hours, { n: e.durationH })} · {e.times[0]}{e.times.length > 1 ? " +" : ""}</p>
+                    <h3 className="mt-3 font-display text-2xl leading-tight text-ink transition-colors duration-300 group-hover:text-lake">{c.name}</h3>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-slate">{c.tagline}</p>
+                    <div className="mt-5 flex items-end justify-between gap-3 border-t border-line pt-4">
+                      <p><span className="caps !text-[10px] text-slate">{x.book.from}</span> <span className="font-display text-2xl text-ink">{chf(e.price)}</span> <span className="caps !text-[10px] text-slate">{e.priceUnit === "person" ? x.book.perPerson : x.book.perGroup}</span></p>
+                      <span className="rule-link caps !text-[10px] text-ink">{x.book.seeAndBook} <ArrowRight className="h-3 w-3" /></span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-paper py-20 sm:py-28">
         <Container>
           <SectionHeading eyebrow={x.around.eyebrow} title={<Rich text={x.around.title} />} lead={x.around.lead} />
           <div className="mt-12 grid gap-8 md:grid-cols-2">
@@ -42,36 +75,6 @@ export default async function ExperiencesPage({ params }: LangParams) {
                     <h3 className="mt-3 font-display text-3xl text-ink">{c.name}</h3>
                     <p className="mt-2 leading-relaxed text-slate">{c.blurb}</p>
                     <a href="#concierge" className="rule-link caps mt-5 !text-[10px] text-ink">{x.around.ask} <ArrowRight className="h-3 w-3" /></a>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </Container>
-      </section>
-
-      <section className="bg-paper py-20 sm:py-28">
-        <Container>
-          <SectionHeading eyebrow={x.withUs.eyebrow} title={<Rich text={x.withUs.title} />} lead={x.withUs.lead} />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {WITH_US.map((w) => {
-              const c = x.activities[w.id] ?? w;
-              return (
-                <article key={w.id} className="group lift flex flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image src={w.image} alt={c.name} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-[1200ms] group-hover:scale-[1.04]" />
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <h3 className="font-display text-xl text-ink">{c.name}</h3>
-                    <p className="caps mt-2 !text-[10px] text-lake">{c.price}</p>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-slate">{c.blurb}</p>
-                    <div className="mt-4">
-                      {w.extraId ? (
-                        <Link href="/book" className="rule-link caps !text-[10px] text-ink">{x.withUs.add} <ArrowRight className="h-3 w-3" /></Link>
-                      ) : (
-                        <a href="#concierge" className="rule-link caps !text-[10px] text-ink">{x.withUs.ask} <ArrowRight className="h-3 w-3" /></a>
-                      )}
-                    </div>
                   </div>
                 </article>
               );

@@ -9,7 +9,10 @@ import { OfficeShell } from "@/components/office/shell";
 import { EmptyState, Panel, PropertyChip, SourceChip, StatusChip, td, th } from "@/components/office/ui";
 import { inputClass } from "@/components/ui";
 import { addDays, nightsBetween, todayISO } from "@/lib/engine";
-import { TYPE_LABEL, fmtDate, money } from "@/lib/format";
+import { TYPE_LABEL, fmtDate, fmtDateTime, money, plural } from "@/lib/format";
+import { EXPERIENCES } from "@/lib/experiences";
+import { en } from "@/i18n/en";
+import { Button } from "@/components/ui";
 import { useHotel, useOfficeScope } from "@/lib/store";
 import type { ReservationSource, ReservationStatus, ReservationType } from "@/lib/types";
 
@@ -39,12 +42,16 @@ function Reservations() {
   const [type, setType] = useState<ReservationType | "all">("all");
   const [range, setRange] = useState("upcoming");
   const [open, setOpen] = useState<string | null>(null);
+  const [kind, setKind] = useState<"stays" | "experiences">("stays");
+  const xp = useHotel((s) => s.experienceBookings);
+  const updateXp = useHotel((s) => s.updateExperienceBooking);
   const today = todayISO();
 
   // deep links from the Today tiles and the search palette
   useEffect(() => {
     const v = params.get("view");
     if (v && RANGES.some((r) => r.id === v)) setRange(v);
+    if (params.get("kind") === "experiences") setKind("experiences");
     const o = params.get("open");
     if (o) setOpen(o);
     const p = params.get("property");
@@ -77,8 +84,65 @@ function Reservations() {
   const total = list.filter((r) => r.status !== "cancelled").reduce((s, r) => s + r.total, 0);
   const curOf = (pid: string) => scope.allProperties.find((p) => p.id === pid)?.currency ?? "CHF";
 
+  const propertyIds = new Set(scope.properties.map((p) => p.id));
+  const xpList = xp.filter((b) => propertyIds.has(b.propertyId)).filter((b) => (range === "past" ? b.date < today : range === "bookedtoday" ? b.createdAt.slice(0, 10) === today : range === "all" ? true : b.date >= today)).sort((a, b) => (a.date + a.time < b.date + b.time ? -1 : 1));
+  const xpName = (id: string) => en.experiences.catalog[id]?.name ?? id;
+  const xpTotal = xpList.filter((b) => b.status !== "cancelled").reduce((s, b) => s + b.total, 0);
+
   return (
-    <OfficeShell title="Reservations" subtitle={`${list.length} shown${currency ? ` · ${money(total, currency)} total` : ""}`}>
+    <OfficeShell
+      title="Reservations"
+      subtitle={kind === "stays" ? `${list.length} shown${currency ? ` · ${money(total, currency)} total` : ""}` : `${xpList.length} experience bookings · ${money(xpTotal, currency ?? "CHF")}`}
+      actions={
+        <div className="hidden items-center gap-1 rounded-xs bg-white p-1 ring-1 ring-ink/5 sm:flex">
+          {(["stays", "experiences"] as const).map((k) => <button key={k} type="button" onClick={() => setKind(k)} className={clsx("rounded-xs px-3 py-1 text-xs font-semibold capitalize", kind === k ? "bg-ink text-white" : "text-slate")}>{k}</button>)}
+        </div>
+      }
+    >
+      {kind === "experiences" ? (
+        <>
+          <div className="mb-4 flex flex-wrap gap-1 rounded-xs bg-white p-1 ring-1 ring-ink/5 sm:w-fit">
+            {[["upcoming", "Upcoming"], ["bookedtoday", "Booked today"], ["past", "Past"], ["all", "All"]].map(([id, label]) => (
+              <button key={id} type="button" onClick={() => setRange(id)} className={clsx("rounded-xs px-3 py-1.5 text-xs font-semibold transition", range === id ? "bg-ink text-white" : "text-slate hover:text-ink")}>{label}</button>
+            ))}
+          </div>
+          <Panel>
+            {xpList.length === 0 ? <EmptyState title="No experience bookings here" text="They arrive from the experiences pages — open to guests and to anyone else." /> : (
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[900px]">
+                  <thead className="bg-[#fafbfc]"><tr><th className={th}>Ref</th><th className={th}>Experience</th>{scope.all && scope.allProperties.length > 1 && <th className={th}>Property</th>}<th className={th}>When</th><th className={th}>People</th><th className={th}>Guest</th><th className={th}>Stay</th><th className={`${th} text-right`}>Total</th><th className={th}>Status</th><th className={th}>Booked</th><th className={th}></th></tr></thead>
+                  <tbody className="divide-y divide-ink/5">
+                    {xpList.map((b) => {
+                      const e = EXPERIENCES.find((x) => x.slug === b.experienceId);
+                      return (
+                        <tr key={b.id} className={clsx("transition hover:bg-[#fafbfc]", b.status === "cancelled" && "opacity-50")}>
+                          <td className={`${td} font-mono text-xs`}>{b.ref}</td>
+                          <td className={`${td} font-semibold`}>{xpName(b.experienceId)}<span className="block text-xs font-normal text-slate">{e ? `${e.durationH} h · ${e.priceUnit === "person" ? `${money(e.price, "CHF")} pp` : `${money(e.price, "CHF")} per group`}` : ""}</span></td>
+                          {scope.all && scope.allProperties.length > 1 && <td className={td}><PropertyChip id={b.propertyId} /></td>}
+                          <td className={td}>{fmtDate(b.date, "weekday")} · {b.time}</td>
+                          <td className={`${td} tabular-nums`}>{b.people}</td>
+                          <td className={td}><p className="font-semibold">{b.guest.firstName} {b.guest.lastName}</p><p className="text-xs text-slate">{b.guest.email}</p></td>
+                          <td className={td}>{b.stayRef ? <span className="font-mono text-xs">{b.stayRef}</span> : <span className="text-xs text-slate">not staying</span>}</td>
+                          <td className={`${td} text-right tabular-nums`}>{money(b.total, "CHF")}</td>
+                          <td className={td}><span className={clsx("rounded-xs px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]", b.status === "cancelled" ? "bg-[#fdecea] text-[#9f2f24]" : b.status === "done" ? "bg-ink/5 text-slate" : b.paid ? "bg-moss-soft text-moss" : "bg-[#fff3e0] text-[#8a5a00]")}>{b.status === "cancelled" ? "cancelled" : b.status === "done" ? "done" : b.paid ? "paid" : "to pay"}</span></td>
+                          <td className={`${td} text-slate`}>{fmtDateTime(b.createdAt)}</td>
+                          <td className={`${td} text-right whitespace-nowrap`}>
+                            {b.status === "confirmed" && !b.paid && <Button size="sm" variant="secondary" onClick={() => updateXp(b.id, { paid: true })}>Mark paid</Button>}
+                            {b.status === "confirmed" && <button type="button" onClick={() => { if (confirm(`Cancel ${b.ref}?`)) updateXp(b.id, { status: "cancelled" }); }} className="ml-2 text-xs font-semibold text-slate hover:text-clay">Cancel</button>}
+                            {b.status === "cancelled" && <button type="button" onClick={() => updateXp(b.id, { status: "confirmed" })} className="text-xs font-semibold text-lake">Reinstate</button>}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Panel>
+          <p className="mt-2 text-xs text-slate">{plural(xpList.filter((b) => b.status !== "cancelled").reduce((n, b) => n + b.people, 0), "place")} across {plural(xpList.length, "booking")}. Capacity is the group size of each experience; a full departure refuses the next booking.</p>
+        </>
+      ) : (
+      <>
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-[220px] flex-1 sm:max-w-xs">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
@@ -140,6 +204,8 @@ function Reservations() {
         )}
       </Panel>
       {range === "upcoming" && list.length > 0 && <p className="mt-2 text-xs text-slate">Upcoming = everything that has not checked out yet, from {fmtDate(today, "short")}. Tomorrow's arrivals: {scope.reservations.filter((r) => r.checkIn === addDays(today, 1) && r.status !== "cancelled").length}.</p>}
+      </>
+      )}
       <ReservationDrawer id={open} onClose={() => setOpen(null)} />
     </OfficeShell>
   );

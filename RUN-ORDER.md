@@ -4,7 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- Ivana clicks through STEP-20 (the office on two properties) and uploads the five cabin photos from the image flow → `public/images/cabins/{site,hetre,chene,sapin,meleze}.jpg`
+- Ivana clicks through STEP-20 (the office on two properties) and STEP-21 (experiences)
 - Ivana clicks through rounds 4–5 and the four languages; FR proofread; OTA + Amex logo files still welcome
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
 
@@ -15,6 +15,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-19 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
+- STEP-21 Experiences, bookable — six experiences with film or photo, details, date · start · people, open to anyone; reserve → XP reference; the fondue evening sells Les Cabanes; office Reservations gets an Experiences tab; four languages
 - STEP-20 Office shell v2 — the template for every property client: two properties (Maison Vidy + Les Cabanes, four tree-house cabins with a "whole site" parent unit), All-locations view + switcher, rail in Daily / Manage groups that collapses to icons, ⌘K search across records and pages, + New menu (reservation, request, out of order, guest note), Today with per-location tiles, today's guests, a needs-attention list, 14-night outlook with month KPIs, channels and latest bookings — panels drag to reorder; inbox as a request pipeline (New → Replied → Offer sent → Won / Lost) with next actions, notes, timeline, a drag board and convert-to-reservation; calendar drag to move or extend with conflicts refused and Undo; Channels and Reports (five, CSV) pages; housekeeping state on units; guest notes; per-property settings (vocabulary, currency, taxes, payment methods)
 - STEP-15 Round 5 — EN|FR|DE|IT control (menu, footer, rail popover), payment marks in footer + payment step (Stripe, Visa, Mastercard, Twint), channels panel in the office, discreet back-to-top, eyebrow on the booking bar, stale-tab auto-reload, **navigation crash fixed** (pinned track spacer — the real cause of every "page couldn't load"), home carousels (around, offers), descender room in headlines, plates with icons on contact/request/FAQ
 - STEP-12 Languages EN · FR · DE · IT — `/fr /de /it`, translated section slugs, dictionaries for every public string, switch in menu + footer, hreflang + sitemap; office stays EN

@@ -134,6 +134,26 @@ export interface Inquiry {
   reservationId?: string;
 }
 
+export type ExperienceBookingStatus = "confirmed" | "cancelled" | "done";
+
+/** A place on an experience — for a guest of the house or anyone else. */
+export interface ExperienceBooking {
+  id: string;
+  ref: string; // XP-2026-0001
+  experienceId: string;
+  propertyId: string;
+  date: string; // YYYY-MM-DD
+  time: string; // HH:MM
+  people: number;
+  guest: Guest;
+  notes?: string;
+  stayRef?: string;
+  total: number;
+  status: ExperienceBookingStatus;
+  paid: boolean;
+  createdAt: string;
+}
+
 export type SeasonMode = "auto" | "winter" | "summer";
 
 export interface Subscriber {

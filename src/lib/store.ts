@@ -3,10 +3,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useEffect, useState } from "react";
-import { conflictFor, nextReference, todayISO, uid } from "./engine";
+import { addDays, conflictFor, nextReference, todayISO, uid } from "./engine";
 import { fmtDate } from "./format";
 import { ALL_UNITS, EXTRAS, HOTEL, INQUIRIES, PROPERTIES, RATE_PLANS, SEASONS, SITE_PROPERTY, buildDemoReservations } from "./seed";
 import type {
+  ExperienceBooking,
   Extra,
   HotelSettings,
   Housekeeping,
@@ -23,6 +24,7 @@ import type {
 
 type NewReservation = Omit<Reservation, "id" | "ref" | "createdAt" | "timeline" | "propertyId" | "type"> & Partial<Pick<Reservation, "propertyId" | "type">>;
 type NewInquiry = Omit<Inquiry, "id" | "createdAt" | "status" | "notes" | "timeline" | "source"> & Partial<Pick<Inquiry, "source">>;
+type NewExperienceBooking = Omit<ExperienceBooking, "id" | "ref" | "createdAt" | "status" | "paid">;
 
 export interface MoveResult {
   ok: boolean;
@@ -40,6 +42,7 @@ export interface HotelState {
   seasons: Season[];
   settings: HotelSettings;
   subscribers: Subscriber[];
+  experienceBookings: ExperienceBooking[];
   /** Notes kept on a guest, keyed by lower-case email. */
   guestNotes: Record<string, { at: string; text: string }[]>;
   officeUser: string | null;
@@ -66,18 +69,37 @@ export interface HotelState {
   addGuestNote: (email: string, text: string) => void;
   updateSettings: (patch: Partial<HotelSettings>) => void;
   addSubscriber: (s: { email: string; name?: string; page: string }) => Subscriber;
+  /** Books places on an experience; refuses when the departure would go over its group size. */
+  bookExperience: (b: NewExperienceBooking, maxPeople: number) => { ok: true; booking: ExperienceBooking } | { ok: false; reason: "full" };
+  updateExperienceBooking: (id: string, patch: Partial<ExperienceBooking>) => void;
   signIn: (email: string, password: string) => boolean;
   signOut: () => void;
   resetDemo: () => void;
 }
 
-const SEED_VERSION = 9;
+const SEED_VERSION = 10;
 export const PROMO_CODE = "VIDY10";
 export const PROMO_RATE = 0.1;
 
 const now = () => new Date().toISOString().slice(0, 19);
 
 const STATUS_TEXT: Record<InquiryStatus, string> = { new: "Back to new", replied: "Replied", offer: "Offer sent", won: "Won", lost: "Lost" };
+
+/** A few experience bookings so the office tab and the departures have life in them. */
+function seedExperienceBookings(today: string): ExperienceBooking[] {
+  const mk = (n: number, experienceId: string, propertyId: string, dayOffset: number, time: string, people: number, guest: ExperienceBooking["guest"], total: number, stayRef?: string, paid = true): ExperienceBooking => {
+    const date = addDays(today, dayOffset);
+    return { id: `xp_${n}`, ref: `XP-2026-${String(n).padStart(4, "0")}`, experienceId, propertyId, date, time, people, guest, total, stayRef, status: dayOffset < 0 ? "done" : "confirmed", paid, createdAt: `${addDays(date, -9)}T11:20:00` };
+  };
+  return [
+    mk(1, "lavaux-walk", "vidy", -3, "13:30", 2, { firstName: "Thomas", lastName: "Müller", email: "thomas.muller@web.de", phone: "+49 170 555 12 34", country: "Germany" }, 300, "MV-2026-0303"),
+    mk(2, "sunrise-paddle", "vidy", 0, "06:30", 2, { firstName: "Claire", lastName: "Favre", email: "claire.favre@bluewin.ch", phone: "+41 79 555 00 11", country: "Switzerland" }, 110, "MV-2026-0301"),
+    mk(3, "fondue-evening", "cabanes", 1, "18:00", 6, { firstName: "Olivier", lastName: "Besson", email: "olivier.besson@bluewin.ch", phone: "+41 79 555 77 20", country: "Switzerland" }, 570, undefined, false),
+    mk(4, "chocolate-walk", "vidy", 3, "10:00", 3, { firstName: "Grace", lastName: "O'Connor", email: "grace.oconnor@gmail.com", phone: "+353 85 555 4410", country: "Ireland" }, 255),
+    mk(5, "private-boat", "vidy", 5, "17:30", 4, { firstName: "Laura", lastName: "Schmid", email: "laura.schmid@bluewin.ch", phone: "+41 78 555 90 12", country: "Switzerland" }, 480, undefined, false),
+    mk(6, "lavaux-walk", "vidy", 6, "13:30", 4, { firstName: "Kenji", lastName: "Sato", email: "kenji.sato@icloud.com", phone: "+81 90 555 2211", country: "Japan" }, 600, "MV-2026-0318"),
+  ];
+}
 
 function seedState() {
   const today = todayISO();
@@ -104,6 +126,7 @@ function seedState() {
       { id: "sub_2", email: "m.brunner@gmx.ch", page: "/rooms", createdAt: "2026-10-07T08:40:00", code: "VIDY10" },
       { id: "sub_3", email: "sophie.laurent@orange.fr", name: "Sophie", page: "/experiences", createdAt: "2026-10-07T21:05:00", code: "VIDY10" },
     ] as Subscriber[],
+    experienceBookings: seedExperienceBookings(today),
     guestNotes: {
       "claire.favre@bluewin.ch": [{ at: "2026-06-14T10:00:00", text: "Third stay. Likes the Classic Lake, breakfast at 08:00 sharp, oat milk." }],
       "daniel.cohen3@gmail.com": [{ at: "2026-10-09T09:30:00", text: "Travelling with a 3-year-old — high chair at breakfast, babysitter arranged once." }],
@@ -254,6 +277,17 @@ export const useHotel = create<HotelState>()(
         return sub;
       },
 
+      bookExperience: (input, maxPeople) => {
+        const s = get();
+        const taken = s.experienceBookings.filter((b) => b.experienceId === input.experienceId && b.date === input.date && b.time === input.time && b.status !== "cancelled").reduce((n, b) => n + b.people, 0);
+        if (taken + input.people > maxPeople) return { ok: false, reason: "full" };
+        const n = s.experienceBookings.length + 1;
+        const booking: ExperienceBooking = { ...input, id: uid("xp"), ref: `XP-2026-${String(n).padStart(4, "0")}`, status: "confirmed", paid: false, createdAt: now() };
+        set((st) => ({ experienceBookings: [...st.experienceBookings, booking] }));
+        return { ok: true, booking };
+      },
+      updateExperienceBooking: (id, patch) => set((st) => ({ experienceBookings: st.experienceBookings.map((b) => (b.id === id ? { ...b, ...patch } : b)) })),
+
       signIn: (email, password) => {
         const ok = email.trim().toLowerCase() === DEMO_LOGIN.email && password === DEMO_LOGIN.password;
         if (ok) set({ officeUser: email.trim().toLowerCase() });
@@ -278,6 +312,7 @@ export const useHotel = create<HotelState>()(
         seasons: s.seasons,
         settings: s.settings,
         subscribers: s.subscribers,
+        experienceBookings: s.experienceBookings,
         guestNotes: s.guestNotes,
         officeUser: s.officeUser,
         officeProperty: s.officeProperty,
