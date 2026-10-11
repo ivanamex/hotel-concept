@@ -72,9 +72,16 @@ Rules: every figure links to the list behind it; empty states say what to do nex
 
 Tabs New · Replied · Offer sent · Won · Lost (active / won / lost groups). Each request: type (stay · group · event · long stay · question), source (site form, WhatsApp, email, phone, OTA message), status, **next action + due date**, notes, activity timeline (received, read, replied, offer sent, converted). "Convert to reservation" pre-fills the new-reservation form. Guests get the same notes + timeline on their profile.
 
-### 6. Per-property configuration — the replication lever
+### 6. Multi-property from day one — the replication lever
 
-One `property` record drives the shell: name · mark · unit vocabulary (room / unit / villa / apartment) · currency and number format · locale(s) · tax model (per-person-night fixed amount, % of room, or none — one line per tax) · invoice type (receipt · invoice · CFDI for Mexico, later) · check-in/out times · channels · payment methods shown (cards, Twint, OXXO/SPEI later). Switching property re-skins the office; the demo ships one property (Maison Vidy) with the switcher present and a second entry greyed "Add property".
+The first replication client (Mexico, Ivana 10 Oct 23:34) has **three locations**, each a property with its own units; one location's units are tree houses. So the model is `brand → property → unit type → unit` from the start, not a single property with a greyed switcher:
+
+- `property`: name · mark · address · unit vocabulary (room / unit / villa / tree house — per unit type) · currency and number format · locale(s) · tax model (per-person-night fixed amount, % of room, or none — one line per tax) · invoice type (receipt · invoice · CFDI for Mexico, later) · check-in/out times · payment methods shown (cards, Twint; OXXO/SPEI later).
+- Reservations, rates, extras, calendar and channels belong to a property (each location is its own Booking.com / Expedia / Airbnb listing). Guests and the inbox are shared across the brand.
+- The office opens on **All locations**: one Today strip per property, then portfolio totals; the switcher narrows to one property and every page follows. Calendar shows one property at a time (a tape chart across locations is noise).
+- The demo stays Maison Vidy alone — one property in the switcher, "All locations" appears only when there is more than one. No second demo property and nothing branded for the Mexico client before a signed proposal.
+- Public-site counterpart (their build, not this one): brand → three locations → units; the location is the first choice in the booking bar; one brand, three availability calendars.
+- Read from their current site (10 Oct, 23:35): **units nest** — a whole house is bookable as one unit *and* as its four rooms, so a `unit` can have a parent; booking the parent blocks the children and vice versa. **Four booking types**, not one: room night · whole property · retreat / group hold (deposit, headcount, dates held until a date) · venue hire for an outside facilitator. Those last two are requests before they are reservations — the pipeline in §5 is where they live. They run today on an all-in-one subscription (website + booking engine + PMS + channel manager) split across **two accounts**, one per location, with no common view — exactly the gap the portfolio Today closes. Replacing that stack means we also carry the channel manager (STEP-18 becomes mandatory for them, not optional) and a Spanish + English site (their current one is English only, in Mexico).
 
 ### 7. Not in this step (on purpose)
 
