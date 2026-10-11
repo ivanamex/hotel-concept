@@ -4,7 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- STEP-20 Office shell v2 — the template we replicate for every property client (spec written, waiting for go): sidebar in two groups + bottom, ⌘K search, + New menu, Today screen with a needs-attention list, Channels and Reports pages, inbox as a request pipeline, per-property config (currency, taxes, unit vocabulary, languages, property switcher)
+- STEP-20 Office shell v2 — the template we replicate for every property client (spec written, waiting for go): multi-property from day one (All locations + switcher, second fictional property Les Cabanes with nested units), sidebar in two groups + bottom, ⌘K search, + New menu, Today screen with a needs-attention list, Channels and Reports pages, inbox as a request pipeline with a drag board, calendar drag, per-property config (currency, taxes, unit vocabulary, languages)
 - Ivana clicks through rounds 4–5 and the four languages; FR proofread; OTA + Amex logo files still welcome
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
 

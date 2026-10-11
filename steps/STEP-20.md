@@ -79,13 +79,24 @@ The first replication client (Mexico, Ivana 10 Oct 23:34) has **three locations*
 - `property`: name · mark · address · unit vocabulary (room / unit / villa / tree house — per unit type) · currency and number format · locale(s) · tax model (per-person-night fixed amount, % of room, or none — one line per tax) · invoice type (receipt · invoice · CFDI for Mexico, later) · check-in/out times · payment methods shown (cards, Twint; OXXO/SPEI later).
 - Reservations, rates, extras, calendar and channels belong to a property (each location is its own Booking.com / Expedia / Airbnb listing). Guests and the inbox are shared across the brand.
 - The office opens on **All locations**: one Today strip per property, then portfolio totals; the switcher narrows to one property and every page follows. Calendar shows one property at a time (a tape chart across locations is noise).
-- The demo stays Maison Vidy alone — one property in the switcher, "All locations" appears only when there is more than one. No second demo property and nothing branded for the Mexico client before a signed proposal.
+- The demo gets a **second, fictional property** so the logic is visible to anyone poking around the office (Ivana 23:37: the prospect must see at once that this is a real system and his case fits): **Les Cabanes** — four tree-house cabins in the Jorat forest above Lausanne, 20 min from the house, plus a "whole site" parent unit for retreats and groups. Same brand, own calendar, rates, channels, tree-house vocabulary, nested units, retreat holds in the pipeline. Office opens on All locations; the public site stays Maison Vidy's own (the cabins' site is "coming" — not this step). Concept images for the cabins come from the usual image flow; Ivana picks and uploads. Nothing branded for the prospect before a signed proposal — the fiction does the demonstrating.
 - Public-site counterpart (their build, not this one): brand → three locations → units; the location is the first choice in the booking bar; one brand, three availability calendars.
 - Read from their current site (10 Oct, 23:35): **units nest** — a whole house is bookable as one unit *and* as its four rooms, so a `unit` can have a parent; booking the parent blocks the children and vice versa. **Four booking types**, not one: room night · whole property · retreat / group hold (deposit, headcount, dates held until a date) · venue hire for an outside facilitator. Those last two are requests before they are reservations — the pipeline in §5 is where they live. They run today on an all-in-one subscription (website + booking engine + PMS + channel manager) split across **two accounts**, one per location, with no common view — exactly the gap the portfolio Today closes. Replacing that stack means we also carry the channel manager (STEP-18 becomes mandatory for them, not optional) and a Spanish + English site (their current one is English only, in Mexico).
 
-### 7. Not in this step (on purpose)
+### 7. Drag (Ivana 23:37: "they have things you can drag — that would be super fancy")
+
+Sanity: **Sane** — drag is standard in every PMS she looked at, and three places earn it:
+- **Calendar**: drag a reservation to another room or other dates, drag its end to extend or shorten; conflicts refuse with a reason, every move has Undo.
+- **Inbox pipeline**: a board view next to the list — drag a request card from New → Replied → Offer sent → Won / Lost.
+- **Today**: panels reorder with a drag handle (up/down), the order is remembered per browser, "Reset layout" in the page menu.
+Built with dnd-kit (keyboard-accessible, touch on tablets); drag never is the only way — every move also has a button or menu.
+
+### 8. Not in this step (on purpose)
 
 Housekeeping as its own module (room status clean / dirty / inspected / out of order lives in Rooms and in the Today strip) · owner statements (only if the Mexico property is multi-owner) · POS/F&B · revenue-management automation · a mobile app. Each becomes a step when a client asks.
+
+## Notes
+- Vendor demo calls (Cloudbeds, Mews, ResNexus, WebRezPro all gate the demo behind a sales call): skipped for now — Ivana won't spend time being sold a solution for a fictional property. Worth two calls later, once we have a real client, to see how the big systems handle multi-property and housekeeping.
 
 ## Sources
 
