@@ -272,7 +272,7 @@ export const CABINS: Room[] = [
     sizeM2: 130, beds: "Four cabins · 4 double beds + bunks", maxAdults: 8, maxGuests: 12, basePrice: 1150,
     summary: "All four cabins, the yoga deck and the fire pit — for a retreat, a family or a team.",
     description: "Booking the whole site takes the four cabins at once and keeps the forest to your group. The yoga deck, the fire pit and the breakfast baskets are included; a cook and a facilitator can be arranged.",
-    features: [CF.yoga, CF.firepit, CF.breakfast, CF.wifi], images: ["/images/cabins/site.jpg"],
+    features: [CF.yoga, CF.firepit, CF.breakfast, CF.wifi], images: ["/images/cabins/site.jpg", "/images/cabins/hetre.jpg", "/images/cabins/chene.jpg", "/images/cabins/meleze.jpg"],
   },
   {
     ...C, id: "c1", kind: "cabin", parentId: "c0", number: 1, slug: "cabane-hetre", name: "Cabane Hêtre", category: "Cabin for two",
@@ -286,7 +286,7 @@ export const CABINS: Room[] = [
     sizeM2: 32, beds: "Double bed 180 cm", maxAdults: 2, maxGuests: 3, basePrice: 340,
     summary: "The oak cabin, with a bathtub on the terrace.",
     description: "The largest of the four for two: a king bed, a kitchenette, and an outdoor bathtub on the terrace looking down the valley.",
-    features: [CF.tub, CF.kitchen, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/chene.jpg"],
+    features: [CF.tub, CF.kitchen, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/chene.jpg", "/images/cabins/chene-2.jpg"],
   },
   {
     ...C, id: "c3", kind: "cabin", parentId: "c0", number: 3, slug: "cabane-sapin", name: "Cabane Sapin", category: "Family cabin",
@@ -300,7 +300,7 @@ export const CABINS: Room[] = [
     sizeM2: 30, beds: "Double bed 160 cm", maxAdults: 2, maxGuests: 2, basePrice: 360,
     summary: "The larch cabin, with its own sauna at the foot of the tree.",
     description: "The quietest cabin at the end of the path, a private barrel sauna below it and a fire pit of its own.",
-    features: [CF.sauna, CF.firepit, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/meleze.jpg"],
+    features: [CF.sauna, CF.firepit, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/meleze.jpg", "/images/cabins/meleze-2.jpg"],
   },
 ];
 
