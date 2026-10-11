@@ -110,7 +110,7 @@ export const en = {
     band: { eyebrow: "Our second place", title: "Twenty minutes above the lake, *four cabins in the trees.*", text: "Les Cabanes are ours too: four tree-house cabins in the Jorat forest, a round deck for breakfast and fondue evenings, a sauna at the foot of a larch. Same breakfast basket, same people, one booking.", from: "from CHF {p} a night", cta: "Discover Les Cabanes", cta2: "The fondue evening" },
     trackCard: "…and four cabins *in the forest.*",
     trackCta: "See the cabins",
-    where: { label: "Where", house: "The house · 10 rooms", cabanes: "Les Cabanes · 4 cabins" },
+    where: { all: "Both places", label: "Where", house: "The house · 10 rooms", cabanes: "Les Cabanes · 4 cabins" },
     tabs: { house: "The house", cabanes: "Les Cabanes" },
     page: {
       metaTitle: "Les Cabanes — four tree-house cabins above Lausanne",
@@ -349,6 +349,8 @@ export const en = {
     tagline: "Best rate guaranteed · Free cancellation on flexible plans",
     steps: ["Dates", "Room", "Extras", "Details"],
     s1: {
+      bookingRoom: "You’re booking",
+      changeRoom: "Choose another",
       title: "When are you coming?",
       lead: "Up to 21 nights online. Longer stays and groups:",
       leadLink: "send a request",
@@ -376,6 +378,7 @@ export const en = {
       "Skylight over the bed": "Skylight over the bed",
     },
     s2: {
+      lockedGone: "{room} isn’t free on those dates — here is what is.",
       title: "Choose your room",
       changeDates: "Change dates",
       noneTitle: "Nothing free for exactly these dates.",

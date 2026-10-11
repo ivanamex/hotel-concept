@@ -20,7 +20,7 @@ export function BookingBar({ compact = false, roomSlug, places = false }: { comp
   const href = useHref();
   const tt = useT();
   const t = tt.bookingBar;
-  const [place, setPlace] = useState<"vidy" | "cabanes">("vidy");
+  const [place, setPlace] = useState<"all" | "vidy" | "cabanes">("all");
   const dd = defaultDates();
   const [checkIn, setCheckIn] = useState(dd.checkIn);
   const [checkOut, setCheckOut] = useState(dd.checkOut);
@@ -32,7 +32,7 @@ export function BookingBar({ compact = false, roomSlug, places = false }: { comp
     e.preventDefault();
     const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children) });
     if (roomSlug) params.set("room", roomSlug);
-    if (places) params.set("place", place);
+    if (places && place !== "all") params.set("place", place);
     router.push(href(`/book?${params.toString()}`));
   };
 
@@ -54,7 +54,8 @@ export function BookingBar({ compact = false, roomSlug, places = false }: { comp
       {places && (
         <div className={field}>
           <span className={label}>{tt.places.where.label}</span>
-          <select value={place} onChange={(e) => setPlace(e.target.value as "vidy" | "cabanes")} className={control}>
+          <select value={place} onChange={(e) => setPlace(e.target.value as "all" | "vidy" | "cabanes")} className={control}>
+            <option value="all">{tt.places.where.all}</option>
             <option value="vidy">{tt.places.house.short}</option>
             <option value="cabanes">{tt.places.cabanes.short}</option>
           </select>

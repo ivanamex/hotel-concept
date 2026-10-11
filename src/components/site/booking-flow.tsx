@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 import { ArrowLeft, ArrowRight, Check, ChevronDown, Info, Lock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { defaultDates } from "@/components/site/booking-bar";
 import { ExtraIcon } from "@/components/site/extra-icon";
 import { Link } from "@/components/site/link";
@@ -42,17 +42,22 @@ export function BookingFlow() {
   const [children, setChildren] = useState(Number(sp.get("children")) || 0);
   const preRoom = sp.get("room");
   const offer = OFFERS.find((o) => o.slug === sp.get("offer"));
+  const [roomId, setRoomId] = useState<string | null>(null);
 
-  // where: the house or the cabins — from ?place=, or inferred from the room the visitor came from
+  // where: both places by default; ?place= narrows; a room the visitor came from is "locked" and skips the list
   const prePlace = sp.get("place");
-  const roomPlace = preRoom ? allRooms.find((r) => r.slug === preRoom)?.propertyId : undefined;
-  const [place, setPlace] = useState<string>(prePlace && properties.some((p) => p.id === prePlace) ? prePlace : roomPlace ?? "vidy");
-  const property = properties.find((p) => p.id === place) ?? properties[0];
-  const rooms = useMemo(() => allRooms.filter((r) => r.propertyId === place && r.kind !== "whole"), [allRooms, place]);
+  const [locked, setLocked] = useState<Room | null>(() => (preRoom ? allRooms.find((r) => r.slug === preRoom && r.kind !== "whole") ?? null : null));
+  const [place, setPlace] = useState<string>(prePlace && properties.some((p) => p.id === prePlace) ? prePlace : locked?.propertyId ?? "all");
+  const rooms = useMemo(() => allRooms.filter((r) => (place === "all" || r.propertyId === place) && r.kind !== "whole"), [allRooms, place]);
+  /** Whichever place the booking is really for: the chosen room's, else the locked room's, else the narrowed place, else the house. */
+  const bookingPropertyId = (roomId ? allRooms.find((r) => r.id === roomId)?.propertyId : undefined) ?? locked?.propertyId ?? (place !== "all" ? place : properties[0].id);
+  const property = properties.find((p) => p.id === bookingPropertyId) ?? properties[0];
   const placeTax = property.taxes.find((x) => x.kind === "per_person_night")?.amount ?? 0;
+  const [lockedGone, setLockedGone] = useState(false);
+  // came from a room page with dates already chosen → straight to the extras if it is free
+  const [auto, setAuto] = useState(!!locked && !!sp.get("in"));
 
   const [step, setStep] = useState(sp.get("in") ? 2 : 1);
-  const [roomId, setRoomId] = useState<string | null>(null);
   const [planId, setPlanId] = useState<RatePlanId>(offer?.ratePlan ?? "bed_breakfast");
   const [extras, setExtras] = useState<string[]>(offer?.extras ?? []);
   const [conciergeNote, setConciergeNote] = useState("");
@@ -85,7 +90,7 @@ export function BookingFlow() {
   const results = useMemo(() => {
     if (!hydrated || nights < 1) return { available: [] as Room[], unavailable: [] as Room[], tooSmall: [] as Room[] };
     const fit = rooms.filter((r) => roomFits(r, adults, children));
-    const available = fit.filter((r) => isRoomAvailable(r, checkIn, checkOut, reservations, undefined, allRooms)).sort((a, b) => a.basePrice - b.basePrice);
+    const available = fit.filter((r) => isRoomAvailable(r, checkIn, checkOut, reservations, undefined, allRooms)).sort((a, b) => (a.propertyId === b.propertyId ? a.basePrice - b.basePrice : a.propertyId === "vidy" ? -1 : 1));
     const unavailable = fit.filter((r) => !available.includes(r));
     const tooSmall = rooms.filter((r) => !fit.includes(r));
     if (preRoom) {
@@ -97,13 +102,38 @@ export function BookingFlow() {
 
   const goTop = () => document.getElementById("booking-top")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
+  /** With a locked room: skip the list when it is free and fits, otherwise show what is. */
+  const settleLocked = () => {
+    if (!locked) return false;
+    const ok = roomFits(locked, adults, children) && isRoomAvailable(locked, checkIn, checkOut, reservations, undefined, allRooms);
+    if (ok) {
+      setRoomId(locked.id);
+      setLockedGone(false);
+      setStep(3);
+    } else {
+      // show everything that is free, in both places — not only the locked room's
+      setLockedGone(true);
+      setPlace("all");
+      setStep(2);
+    }
+    return true;
+  };
+  useEffect(() => {
+    if (!auto || !hydrated) return;
+    setAuto(false);
+    settleLocked();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auto, hydrated]);
+
   const goSearch = () => {
     if (dateError) return;
     setRoomId(null);
-    setStep(2);
     goTop();
-    const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children), place });
+    const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children) });
+    if (place !== "all") params.set("place", place);
+    if (locked) params.set("room", locked.slug);
     router.replace(href(`/book?${params.toString()}`), { scroll: false });
+    if (!settleLocked()) setStep(2);
   };
 
   const choose = (room: Room, pid: RatePlanId) => {
@@ -137,7 +167,7 @@ export function BookingFlow() {
     setSubmitting(true);
     const fullNotes = [notes.trim(), conciergeNote.trim() ? `${b.conciergeNote}${conciergeNote.trim()}` : "", payment === "hotel" ? b.payAtHotelNote : b.cardOnFileNote].filter(Boolean).join("\n");
     const r = createReservation({
-      propertyId: place,
+      propertyId: selectedRoom.propertyId,
       roomId: selectedRoom.id,
       checkIn,
       checkOut,
@@ -231,13 +261,22 @@ export function BookingFlow() {
             <section className="form-lines">
               <h2 className="font-display text-3xl text-ink">{b.s1.title}</h2>
               <p className="mt-1 text-sm text-slate">{b.s1.lead} <Link href="/request" className="font-semibold text-lake">{b.s1.leadLink}</Link>.</p>
-              {properties.length > 1 && (
+              {locked ? (
+                <div className="mt-8 flex items-center gap-4 rounded-lg bg-white p-3 pr-5 ring-1 ring-lake/40">
+                  <span className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs"><Image src={locked.images[0]} alt="" fill sizes="96px" className="object-cover" /></span>
+                  <div className="min-w-0 flex-1">
+                    <p className="caps !text-[10px] text-slate">{b.s1.bookingRoom}</p>
+                    <p className="truncate font-display text-xl text-ink">{localizeRoom(locked, t).name} <span className="text-sm text-slate">· {properties.find((p) => p.id === locked.propertyId)?.name}</span></p>
+                  </div>
+                  <button type="button" onClick={() => { setLocked(null); setPlace("all"); }} className="text-sm font-semibold text-lake hover:text-lake-deep">{b.s1.changeRoom}</button>
+                </div>
+              ) : properties.length > 1 && (
                 <div className="mt-8">
                   <p className="caps mb-2 !text-[10px] text-slate">{t.places.where.label}</p>
                   <div className="inline-flex flex-wrap rounded-xs ring-1 ring-ink/20">
-                    {properties.map((p) => (
+                    {[{ id: "all", label: t.places.where.all }, ...properties.map((p) => ({ id: p.id, label: p.id === "cabanes" ? t.places.where.cabanes : t.places.where.house }))].map((p) => (
                       <button key={p.id} type="button" onClick={() => { setPlace(p.id); setRoomId(null); }} className={clsx("caps px-4 py-2.5 !text-[10px] transition-colors duration-300", place === p.id ? "bg-ink text-white" : "text-ink hover:bg-ink/5")}>
-                        {p.id === "cabanes" ? t.places.where.cabanes : t.places.where.house}
+                        {p.label}
                       </button>
                     ))}
                   </div>
@@ -267,7 +306,10 @@ export function BookingFlow() {
                 <button type="button" onClick={() => setStep(1)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-lake hover:text-lake-deep"><ArrowLeft className="h-4 w-4" /> {b.s2.changeDates}</button>
               </div>
 
-              {!hydrated ? (
+              {lockedGone && locked && hydrated && !auto && (
+                <p className="mt-5 rounded-md bg-[#fff3e0] px-4 py-3 text-sm text-[#6b4500]">{fmt(b.s2.lockedGone, { room: localizeRoom(locked, t).name })}</p>
+              )}
+              {!hydrated || auto ? (
                 <div className="mt-6 space-y-4">{[0, 1, 2].map((i) => <div key={i} className="h-48 animate-pulse rounded-lg bg-white" />)}</div>
               ) : results.available.length === 0 ? (
                 <div className="mt-6 rounded-lg bg-white p-8 text-center ring-1 ring-ink/5">
@@ -280,9 +322,18 @@ export function BookingFlow() {
                 </div>
               ) : (
                 <div className="mt-6 space-y-5">
-                  {results.available.map((base) => {
+                  {results.available.map((base, idx) => {
                     const room = localizeRoom(base, t);
+                    const prevProp = idx > 0 ? results.available[idx - 1].propertyId : null;
+                    const heading = place === "all" && base.propertyId !== prevProp ? properties.find((p) => p.id === base.propertyId) : null;
                     return (
+                    <div key={room.id} className="space-y-5">
+                    {heading && (
+                      <div className="flex items-baseline gap-3 pt-2">
+                        <h3 className="font-display text-2xl text-ink">{heading.name}</h3>
+                        <span className="caps !text-[10px] text-slate">{results.available.filter((r) => r.propertyId === heading.id).length} · {heading.id === "cabanes" ? t.places.cabanes.tagline : t.places.house.tagline}</span>
+                      </div>
+                    )}
                     <article key={room.id} className={clsx("lift-sm overflow-hidden rounded-lg bg-white shadow-card ring-1", room.slug === preRoom ? "ring-lake" : "ring-ink/5")}>
                       <div className="grid md:grid-cols-[260px_1fr]">
                         <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[220px]">
@@ -301,7 +352,7 @@ export function BookingFlow() {
                           <ul className="mt-4 divide-y divide-line rounded-md border border-line">
                             {ratePlans.map((pb) => {
                               const p = localizeRatePlan(pb, t);
-                              const pq = quote({ room: base, checkIn, checkOut, adults, children, plan: pb, extras: [], seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax });
+                              const pq = quote({ room: base, checkIn, checkOut, adults, children, plan: pb, extras: [], seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: properties.find((p) => p.id === base.propertyId)?.taxes.find((x) => x.kind === "per_person_night")?.amount ?? settings.cityTax });
                               const perNight = Math.round((pq.roomTotal + pq.breakfastTotal) / nights);
                               return (
                                 <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 transition-colors duration-300 hover:bg-mist/60">
@@ -323,6 +374,7 @@ export function BookingFlow() {
                         </div>
                       </div>
                     </article>
+                    </div>
                     );
                   })}
                 </div>

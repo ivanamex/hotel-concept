@@ -111,7 +111,7 @@ export const it: Dict = {
     band: { eyebrow: "Il nostro secondo posto", title: "Venti minuti sopra il lago, *quattro cabine tra gli alberi.*", text: "Anche Les Cabanes sono nostre: quattro cabine sugli alberi nel bosco del Jorat, una piattaforma rotonda per la colazione e le serate fondue, una sauna ai piedi di un larice. Stesso cestino del mattino, stesse persone, una sola prenotazione.", from: "da CHF {p} a notte", cta: "Scoprire Les Cabanes", cta2: "La serata fondue" },
     trackCard: "… e quattro cabine *nel bosco.*",
     trackCta: "Vedi le cabine",
-    where: { label: "Dove", house: "La casa · 10 camere", cabanes: "Les Cabanes · 4 cabine" },
+    where: { all: "Entrambi i posti", label: "Dove", house: "La casa · 10 camere", cabanes: "Les Cabanes · 4 cabine" },
     tabs: { house: "La casa", cabanes: "Les Cabanes" },
     page: {
       metaTitle: "Les Cabanes — quattro cabine sugli alberi sopra Losanna",
@@ -350,6 +350,8 @@ export const it: Dict = {
     tagline: "Tariffa migliore garantita · Cancellazione gratuita sulle tariffe flessibili",
     steps: ["Date", "Camera", "Extra", "Dati"],
     s1: {
+      bookingRoom: "State prenotando",
+      changeRoom: "Scegli un’altra",
       title: "Quando arriva?",
       lead: "Fino a 21 notti online. Per soggiorni più lunghi e gruppi:",
       leadLink: "ci invii una richiesta",
@@ -377,6 +379,7 @@ export const it: Dict = {
       "Skylight over the bed": "Lucernario sopra il letto",
     },
     s2: {
+      lockedGone: "{room} non è libera in quelle date — ecco cosa lo è.",
       title: "Scelga la camera",
       changeDates: "Cambia date",
       noneTitle: "Niente di libero per queste date esatte.",
