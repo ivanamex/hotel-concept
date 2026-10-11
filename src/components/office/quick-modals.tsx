@@ -36,7 +36,7 @@ export function NewRequestModal({ onClose }: { onClose: () => void }) {
           <Field label="Property"><Select value={propertyId} onChange={(e) => setPropertyId(e.target.value)}>{scope.allProperties.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</Select></Field>
           <Field label="Kind">
             <Select value={type} onChange={(e) => setType(e.target.value as InquiryType)}>
-              {(["group", "retreat", "whole", "venue", "long_stay", "concierge", "contact"] as InquiryType[]).map((t) => <option key={t} value={t}>{({ group: "Group", retreat: "Retreat", whole: "Whole property", venue: "Venue hire", long_stay: "Long stay", concierge: "Concierge", contact: "Question" })[t]}</option>)}
+              {(["group", "retreat", "whole", "venue", "long_stay", "concierge", "contact"] as InquiryType[]).map((t) => <option key={t} value={t}>{({ group: "Group", retreat: "Workshop", whole: "Whole property", venue: "Venue hire", long_stay: "Long stay", concierge: "Concierge", contact: "Question" })[t]}</option>)}
             </Select>
           </Field>
           <Field label="Came in by">
@@ -51,7 +51,7 @@ export function NewRequestModal({ onClose }: { onClose: () => void }) {
           <Field label="Phone"><Input value={f.phone} onChange={set("phone")} /></Field>
         </div>
         <div className="grid gap-4 sm:grid-cols-[1fr_160px_120px]">
-          <Field label="Subject"><Input value={f.subject} onChange={set("subject")} placeholder="Yoga retreat, 11 people, May" /></Field>
+          <Field label="Subject"><Input value={f.subject} onChange={set("subject")} placeholder="Fondue weekend, 11 people, May" /></Field>
           <Field label="Dates"><Input value={f.dates} onChange={set("dates")} placeholder="14–17 May 2027" /></Field>
           <Field label="People"><Input type="number" min={1} value={f.headcount} onChange={set("headcount")} /></Field>
         </div>

@@ -65,7 +65,7 @@ export interface Extra {
 
 export type ReservationStatus = "pending" | "confirmed" | "checked_in" | "checked_out" | "cancelled";
 export type ReservationSource = "direct" | "booking.com" | "expedia" | "airbnb" | "phone" | "walk-in" | "email";
-/** stay = one unit · whole = a parent unit for a group · retreat = a group hold with a deposit · venue = the place hired by an outside host */
+/** stay = one unit · whole = a parent unit for a group · retreat = a workshop or group weekend with a deposit · venue = the place hired by an outside host */
 export type ReservationType = "stay" | "whole" | "retreat" | "venue";
 
 export interface Guest {

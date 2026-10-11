@@ -262,17 +262,17 @@ const C = { propertyId: "cabanes", housekeeping: "clean" as const, status: "acti
 const CF = {
   wifi: "Wi-Fi (slow on purpose)", stove: "Wood stove", terrace: "Terrace in the canopy", kitchen: "Kitchenette",
   bath: "Bathroom with rain shower", tub: "Outdoor bathtub", sauna: "Private sauna", breakfast: "Breakfast basket at the ladder",
-  firepit: "Fire pit", yoga: "Yoga deck (shared)", sleeps: "Bunk alcove for two children", stars: "Skylight over the bed",
+  firepit: "Fire pit", deck: "Round deck under the trees (shared)", sleeps: "Bunk alcove for two children", stars: "Skylight over the bed",
 };
 
-/** The second property: four tree-house cabins and a "whole site" parent that books them all for a retreat or a group. */
+/** The second property: four tree-house cabins and a "whole site" parent that books them all for a workshop weekend or a group. */
 export const CABINS: Room[] = [
   {
-    ...C, id: "c0", kind: "whole", number: 0, slug: "whole-site", name: "The whole site", category: "Retreat · group",
+    ...C, id: "c0", kind: "whole", number: 0, slug: "whole-site", name: "The whole site", category: "Workshop · group",
     sizeM2: 130, beds: "Four cabins · 4 double beds + bunks", maxAdults: 8, maxGuests: 12, basePrice: 1150,
-    summary: "All four cabins, the yoga deck and the fire pit — for a retreat, a family or a team.",
-    description: "Booking the whole site takes the four cabins at once and keeps the forest to your group. The yoga deck, the fire pit and the breakfast baskets are included; a cook and a facilitator can be arranged.",
-    features: [CF.yoga, CF.firepit, CF.breakfast, CF.wifi], images: ["/images/cabins/site.jpg", "/images/cabins/hetre.jpg", "/images/cabins/chene.jpg", "/images/cabins/meleze.jpg"],
+    summary: "All four cabins, the round deck and the fire pit — for a cooking weekend, a family or a team.",
+    description: "Booking the whole site takes the four cabins at once and keeps the forest to your group. The round deck, the fire pit and the breakfast baskets are included; a chef for the deck kitchen and a host can be arranged.",
+    features: [CF.deck, CF.firepit, CF.breakfast, CF.wifi], images: ["/images/cabins/site.jpg", "/images/cabins/hetre.jpg", "/images/cabins/chene.jpg", "/images/cabins/meleze.jpg"],
   },
   {
     ...C, id: "c1", kind: "cabin", parentId: "c0", number: 1, slug: "cabane-hetre", name: "Cabane Hêtre", category: "Cabin for two",
@@ -474,7 +474,7 @@ interface EnsureOpts {
   notes?: string;
 }
 
-/** Place one reservation exactly, cancelling whatever it collides with (used to guarantee today's arrivals, departures, a hold and a retreat). */
+/** Place one reservation exactly, cancelling whatever it collides with (used to guarantee today's arrivals, departures, a hold and a workshop weekend). */
 function ensure(o: EnsureOpts, out: Reservation[], seq: number, r: () => number): number {
   const room = ALL_UNITS.find((x) => x.id === o.roomId)!;
   const family = [room.id, room.parentId, ...ALL_UNITS.filter((u) => u.parentId === room.id).map((u) => u.id)].filter(Boolean);
@@ -515,8 +515,8 @@ export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
   seq = ensure({ property: cabanes, roomId: "c2", checkIn: today, checkOut: addDays(today, 2), name: ["Zoé", "Monnier", "Switzerland", "CH"], status: "confirmed", source: "airbnb", paid: true }, out, seq, r);
   seq = ensure({ property: cabanes, roomId: "c1", checkIn: addDays(today, -2), checkOut: today, name: ["Felix", "Wagner", "Germany", "DE"], status: "checked_in", source: "direct", paid: true }, out, seq, r);
   seq = ensure({ property: cabanes, roomId: "c4", checkIn: addDays(today, -1), checkOut: addDays(today, 1), name: ["Camille", "Roux", "France", "FR"], status: "checked_in", source: "direct", paid: true }, out, seq, r);
-  // a retreat that books the whole site, confirmed with a deposit
-  seq = ensure({ property: cabanes, roomId: "c0", checkIn: addDays(today, 18), checkOut: addDays(today, 21), name: ["Nina", "Haugen", "Norway", "NO"], status: "confirmed", source: "email", type: "retreat", headcount: 10, deposit: 1800, notes: "Breathwork retreat, 10 participants · vegetarian · yoga deck 07:00 and 17:00." }, out, seq, r);
+  // a cooking weekend that books the whole site, confirmed with a deposit
+  seq = ensure({ property: cabanes, roomId: "c0", checkIn: addDays(today, 18), checkOut: addDays(today, 21), name: ["Nina", "Haugen", "Norway", "NO"], status: "confirmed", source: "email", type: "retreat", headcount: 10, deposit: 1800, notes: "Fondue & raclette weekend, 10 participants · chef from Épalinges · cellar visit in Lavaux on Saturday." }, out, seq, r);
   // a group hold on the whole site: dates kept until a day, nothing paid yet
   seq = ensure({ property: cabanes, roomId: "c0", checkIn: addDays(today, 39), checkOut: addDays(today, 41), name: ["Katrin", "Vogel", "Switzerland", "CH"], status: "pending", source: "phone", type: "whole", headcount: 9, holdUntil: addDays(today, 5), notes: "Team offsite option B — hold until Friday." }, out, seq, r);
 
@@ -579,22 +579,22 @@ export const INQUIRIES: Inquiry[] = [
     notes: [], timeline: [T("2026-10-02T14:10:00", "Received from the website")],
   },
   {
-    id: "inq_7", type: "retreat", source: "instagram", propertyId: "cabanes", name: "Lena Hartmann", email: "lena@stillpoint-yoga.ch", phone: "+41 79 555 44 10",
-    subject: "Yoga retreat, whole site, 14–17 May 2027", dates: "14–17 May 2027", headcount: 11,
-    message: "I run small yoga retreats (10–12 people) and found you on Instagram. Could we take all four cabins for three nights in May, with the yoga deck in the morning and a vegetarian cook? What is the deposit?",
+    id: "inq_7", type: "retreat", source: "instagram", propertyId: "cabanes", name: "Lena Hartmann", email: "lena@table-sauvage.ch", phone: "+41 79 555 44 10",
+    subject: "Fondue weekend, whole site, 14–17 May 2027", dates: "14–17 May 2027", headcount: 11,
+    message: "I run small cooking weekends (10–12 people) and found you on Instagram. Could we take all four cabins for three nights in May, with the round deck for a fondue and raclette class on the Saturday and a cellar visit in Lavaux? What is the deposit?",
     createdAt: "2026-10-09T21:30:00", status: "replied",
-    reply: "Yes — the whole site is yours for those dates, the deck is included and we work with a cook from Épalinges. Offer with the deposit terms follows tomorrow. — Les Cabanes",
-    nextAction: { label: "Send retreat offer with 30 % deposit", due: "2026-10-12" },
-    notes: [T("2026-10-10T08:15:00", "Second retreat this year from Instagram — the cabins' link in bio works.")],
+    reply: "Yes — the whole site is yours for those dates, the deck and its outdoor kitchen are included and we work with a cheesemaker in Épalinges for the fondue. Offer with the deposit terms follows tomorrow. — Les Cabanes",
+    nextAction: { label: "Send cooking-weekend offer with 30 % deposit", due: "2026-10-12" },
+    notes: [T("2026-10-10T08:15:00", "Second cooking group this year from Instagram — the cabins' link in bio works.")],
     timeline: [T("2026-10-09T21:30:00", "Received on Instagram"), T("2026-10-10T08:10:00", "Replied")],
   },
   {
     id: "inq_8", type: "venue", source: "email", propertyId: "cabanes", name: "Rafael Costa", email: "r.costa@lumen-studio.com",
-    subject: "Team day with an outside facilitator, 28 November", dates: "28 Nov 2026", headcount: 14,
-    message: "We would like to hire the site for one day (no overnight) for a team workshop of 14 with our own facilitator — the yoga deck, the fire pit and lunch. Is that something you do?",
+    subject: "Team day with our own trainer, 28 November", dates: "28 Nov 2026", headcount: 14,
+    message: "We would like to hire the site for one day (no overnight) for a team workshop of 14 with our own trainer — the round deck, the fire pit and lunch. Is that something you do?",
     createdAt: "2026-10-08T15:05:00", status: "lost",
-    reply: "Thank you — the site is booked by a retreat that week and we only hire the deck to groups staying overnight. We would gladly host the team for a night in the spring. — Les Cabanes",
-    notes: [T("2026-10-09T09:00:00", "Dates clash with the breathwork retreat; offered spring instead.")],
+    reply: "Thank you — the site is taken by a cooking weekend that week and we only hire the deck to groups staying overnight. We would gladly host the team for a night in the spring. — Les Cabanes",
+    notes: [T("2026-10-09T09:00:00", "Dates clash with the fondue weekend; offered spring instead.")],
     timeline: [T("2026-10-08T15:05:00", "Received by email"), T("2026-10-09T08:50:00", "Replied"), T("2026-10-09T08:50:00", "Lost — dates not available")],
   },
 ];

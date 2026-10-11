@@ -22,7 +22,7 @@ export interface NewReservationInitial {
   inquiryId?: string;
 }
 
-const TYPE_LABEL: Record<ReservationType, string> = { stay: "Stay", whole: "Whole property", retreat: "Retreat / group", venue: "Venue hire" };
+const TYPE_LABEL: Record<ReservationType, string> = { stay: "Stay", whole: "Whole property", retreat: "Workshop / group", venue: "Venue hire" };
 
 export function NewReservationModal({ onClose, initial }: { onClose: () => void; initial?: NewReservationInitial }) {
   const scope = useOfficeScope();

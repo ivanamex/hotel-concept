@@ -91,7 +91,7 @@ export const SOURCE_LABEL: Record<string, string> = {
 export const TYPE_LABEL: Record<string, string> = {
   stay: "Stay",
   whole: "Whole property",
-  retreat: "Retreat",
+  retreat: "Workshop",
   venue: "Venue hire",
 };
 
@@ -99,7 +99,7 @@ export const INQUIRY_TYPE_LABEL: Record<string, string> = {
   contact: "Question",
   concierge: "Concierge",
   group: "Group",
-  retreat: "Retreat",
+  retreat: "Workshop",
   venue: "Venue hire",
   whole: "Whole property",
   long_stay: "Long stay",
