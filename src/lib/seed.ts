@@ -3,6 +3,7 @@ import type {
   Extra,
   HotelSettings,
   Inquiry,
+  Property,
   RatePlan,
   Reservation,
   ReservationSource,
@@ -112,8 +113,14 @@ const F = {
   twin: "Beds can be joined",
 };
 
+/** The house on the lake — the property the public site is built for. */
+export const SITE_PROPERTY = "vidy";
+
+const V = { propertyId: SITE_PROPERTY, kind: "room" as const, housekeeping: "clean" as const };
+
 export const ROOMS: Room[] = [
   {
+    ...V,
     id: "r1", number: 1, slug: "classic-garden", name: "Classic Garden", category: "Classic",
     floor: 1, sizeM2: 20, beds: "Queen bed 160 cm", maxAdults: 2, maxGuests: 2, view: "Garden", basePrice: 230,
     summary: "Our most-booked room: calm, bright, opening onto the garden.",
@@ -123,6 +130,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r2", number: 2, slug: "single-courtyard", name: "Single Courtyard", category: "Single",
     floor: 1, sizeM2: 16, beds: "Single bed 120 cm", maxAdults: 1, maxGuests: 1, view: "Courtyard", basePrice: 175,
     summary: "A proper single room for the solo traveller, not a cupboard.",
@@ -132,6 +140,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r3", number: 3, slug: "classic-lake", name: "Classic Lake", category: "Classic",
     floor: 2, sizeM2: 22, beds: "Queen bed 160 cm", maxAdults: 2, maxGuests: 2, view: "Lake", basePrice: 260,
     summary: "Wake up to Lake Geneva and the Savoy Alps across the water.",
@@ -141,6 +150,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r4", number: 4, slug: "twin-garden", name: "Twin Garden", category: "Twin",
     floor: 2, sizeM2: 21, beds: "Two single beds 90 cm (can be joined)", maxAdults: 2, maxGuests: 2, view: "Garden", basePrice: 240,
     summary: "Two beds, one view of the garden — for friends or colleagues.",
@@ -150,6 +160,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r5", number: 5, slug: "deluxe-lake", name: "Deluxe Lake", category: "Deluxe",
     floor: 2, sizeM2: 28, beds: "King bed 180 cm + sofa bed", maxAdults: 2, maxGuests: 3, view: "Lake", basePrice: 320,
     summary: "More room, a king bed and two armchairs facing the water.",
@@ -159,6 +170,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r6", number: 6, slug: "junior-suite-balcony", name: "Junior Suite Balcony", category: "Junior Suite",
     floor: 3, sizeM2: 34, beds: "King bed 180 cm + sofa bed", maxAdults: 2, maxGuests: 3, view: "Lake", basePrice: 390,
     summary: "A private balcony over the lake and a bed you will not want to leave.",
@@ -168,6 +180,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r7", number: 7, slug: "family-garden", name: "Family Garden", category: "Family",
     floor: 1, sizeM2: 36, beds: "Queen bed 160 cm + two single beds 90 cm", maxAdults: 3, maxGuests: 4, view: "Garden", basePrice: 360,
     summary: "One big room for four, straight onto the garden.",
@@ -177,6 +190,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r8", number: 8, slug: "attic-lake", name: "Attic Lake", category: "Attic",
     floor: 4, sizeM2: 24, beds: "Queen bed 160 cm", maxAdults: 2, maxGuests: 2, view: "Lake", basePrice: 270,
     summary: "Under the roof, with a dormer framing the lake like a painting.",
@@ -186,6 +200,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r9", number: 9, slug: "duplex-suite", name: "Duplex Suite", category: "Suite",
     floor: 3, sizeM2: 48, beds: "King bed 180 cm on the mezzanine + sofa bed", maxAdults: 3, maxGuests: 4, view: "Lake", basePrice: 520,
     summary: "Two levels, a round window on the lake and a table for six.",
@@ -195,6 +210,7 @@ export const ROOMS: Room[] = [
     status: "active",
   },
   {
+    ...V,
     id: "r10", number: 10, slug: "attic-courtyard", name: "Attic Courtyard", category: "Attic",
     floor: 4, sizeM2: 19, beds: "Queen bed 150 cm", maxAdults: 2, maxGuests: 2, view: "Courtyard", basePrice: 215,
     summary: "Small, quiet and full of character — the best value in the house.",
@@ -204,6 +220,91 @@ export const ROOMS: Room[] = [
     status: "active",
   },
 ];
+
+/* ---------- properties ---------- */
+
+export const PROPERTIES: Property[] = [
+  {
+    id: SITE_PROPERTY, slug: "maison-vidy", name: "Maison Vidy", short: "Vidy", kind: "Hotel · 10 rooms",
+    tagline: "Lausanne, by the lake.", address: "Chemin du Lac 12", city: "1007 Lausanne", country: "Switzerland",
+    currency: "CHF", locale: "fr-CH", unitLabel: { one: "room", many: "rooms" },
+    taxes: [{ id: "city", name: "City tax (taxe de séjour)", kind: "per_person_night", amount: 3.5 }],
+    checkIn: "15:00", checkOut: "11:00",
+    channels: [
+      { id: "direct", name: "Direct (website)", connected: true, lastSync: "live", note: "no commission" },
+      { id: "booking", name: "Booking.com", connected: true, lastSync: "2026-10-11T07:58:00", note: "15 % commission" },
+      { id: "expedia", name: "Expedia", connected: true, lastSync: "2026-10-11T07:55:00", note: "18 % commission" },
+      { id: "google", name: "Google Hotel Ads", connected: false },
+      { id: "airbnb", name: "Airbnb", connected: false },
+    ],
+    paymentMethods: ["Visa", "Mastercard", "Amex", "Twint"],
+    refPrefix: "MV", accent: "#1b4b73", image: "/images/house/lounge.jpg", website: "/",
+  },
+  {
+    id: "cabanes", slug: "les-cabanes", name: "Les Cabanes", short: "Cabanes", kind: "Tree-house cabins · 4 cabins",
+    tagline: "Four cabins in the Jorat forest, twenty minutes above the lake.", address: "Route du Chalet-à-Gobet", city: "1000 Lausanne 25", country: "Switzerland",
+    currency: "CHF", locale: "fr-CH", unitLabel: { one: "cabin", many: "cabins" },
+    taxes: [{ id: "city", name: "City tax (taxe de séjour)", kind: "per_person_night", amount: 3.5 }],
+    checkIn: "16:00", checkOut: "11:00",
+    channels: [
+      { id: "direct", name: "Direct (website)", connected: true, lastSync: "live", note: "no commission" },
+      { id: "airbnb", name: "Airbnb", connected: true, lastSync: "2026-10-11T07:51:00", note: "3 % host fee" },
+      { id: "booking", name: "Booking.com", connected: true, lastSync: "2026-10-11T07:58:00", error: "Rate push rejected for Cabane Sapin — minimum stay missing" },
+      { id: "expedia", name: "Expedia", connected: false },
+      { id: "google", name: "Google Hotel Ads", connected: false },
+    ],
+    paymentMethods: ["Visa", "Mastercard", "Twint"],
+    refPrefix: "LC", accent: "#3f6b4f", image: "/images/cabins/site.jpg",
+  },
+];
+
+const C = { propertyId: "cabanes", housekeeping: "clean" as const, status: "active" as const, view: "Forest" as const, floor: 1 };
+const CF = {
+  wifi: "Wi-Fi (slow on purpose)", stove: "Wood stove", terrace: "Terrace in the canopy", kitchen: "Kitchenette",
+  bath: "Bathroom with rain shower", tub: "Outdoor bathtub", sauna: "Private sauna", breakfast: "Breakfast basket at the ladder",
+  firepit: "Fire pit", yoga: "Yoga deck (shared)", sleeps: "Bunk alcove for two children", stars: "Skylight over the bed",
+};
+
+/** The second property: four tree-house cabins and a "whole site" parent that books them all for a retreat or a group. */
+export const CABINS: Room[] = [
+  {
+    ...C, id: "c0", kind: "whole", number: 0, slug: "whole-site", name: "The whole site", category: "Retreat · group",
+    sizeM2: 130, beds: "Four cabins · 4 double beds + bunks", maxAdults: 8, maxGuests: 12, basePrice: 1150,
+    summary: "All four cabins, the yoga deck and the fire pit — for a retreat, a family or a team.",
+    description: "Booking the whole site takes the four cabins at once and keeps the forest to your group. The yoga deck, the fire pit and the breakfast baskets are included; a cook and a facilitator can be arranged.",
+    features: [CF.yoga, CF.firepit, CF.breakfast, CF.wifi], images: ["/images/cabins/site.jpg"],
+  },
+  {
+    ...C, id: "c1", kind: "cabin", parentId: "c0", number: 1, slug: "cabane-hetre", name: "Cabane Hêtre", category: "Cabin for two",
+    sizeM2: 28, beds: "Double bed 160 cm", maxAdults: 2, maxGuests: 2, basePrice: 290,
+    summary: "The first cabin up the path, in an old beech.",
+    description: "Six metres up, a bed under a skylight, a wood stove and a terrace in the leaves. Breakfast arrives in a basket at the foot of the ladder.",
+    features: [CF.stars, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/hetre.jpg"],
+  },
+  {
+    ...C, id: "c2", kind: "cabin", parentId: "c0", number: 2, slug: "cabane-chene", name: "Cabane Chêne", category: "Cabin with bathtub",
+    sizeM2: 32, beds: "Double bed 180 cm", maxAdults: 2, maxGuests: 3, basePrice: 340,
+    summary: "The oak cabin, with a bathtub on the terrace.",
+    description: "The largest of the four for two: a king bed, a kitchenette, and an outdoor bathtub on the terrace looking down the valley.",
+    features: [CF.tub, CF.kitchen, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/chene.jpg"],
+  },
+  {
+    ...C, id: "c3", kind: "cabin", parentId: "c0", number: 3, slug: "cabane-sapin", name: "Cabane Sapin", category: "Family cabin",
+    sizeM2: 40, beds: "Double bed 160 cm + bunk alcove", maxAdults: 2, maxGuests: 4, basePrice: 390,
+    summary: "The fir cabin — two levels, for a family of four.",
+    description: "A double bed upstairs, a bunk alcove below, a kitchenette and a wide terrace with a rope net. The one children ask to come back to.",
+    features: [CF.sleeps, CF.kitchen, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/sapin.jpg"],
+  },
+  {
+    ...C, id: "c4", kind: "cabin", parentId: "c0", number: 4, slug: "cabane-meleze", name: "Cabane Mélèze", category: "Cabin with sauna",
+    sizeM2: 30, beds: "Double bed 160 cm", maxAdults: 2, maxGuests: 2, basePrice: 360,
+    summary: "The larch cabin, with its own sauna at the foot of the tree.",
+    description: "The quietest cabin at the end of the path, a private barrel sauna below it and a fire pit of its own.",
+    features: [CF.sauna, CF.firepit, CF.stove, CF.terrace, CF.bath, CF.breakfast, CF.wifi], images: ["/images/cabins/meleze.jpg"],
+  },
+];
+
+export const ALL_UNITS: Room[] = [...ROOMS, ...CABINS];
 
 /* ---------- demo reservations (deterministic) ---------- */
 
@@ -233,6 +334,7 @@ const NAMES: [string, string, string, string][] = [
 ];
 
 const SOURCES: ReservationSource[] = ["direct", "direct", "direct", "booking.com", "booking.com", "expedia", "phone", "walk-in", "email"];
+const CABIN_SOURCES: ReservationSource[] = ["direct", "direct", "airbnb", "airbnb", "booking.com", "email", "phone"];
 const NOTES = [
   "", "", "", "Anniversary — flowers in the room please.", "Arrives by train, late check-in around 22:00.",
   "Allergic to nuts (breakfast).", "Travelling with a toddler, cot requested.", "Quiet room if possible.",
@@ -255,21 +357,37 @@ function phoneFor(cc: string, r: () => number) {
   return `${p} ${n.slice(0, 3)} ${n.slice(3, 5)} ${n.slice(5, 7)}`;
 }
 
-export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
-  const r = rng(20261008);
-  const out: Reservation[] = [];
-  const start = "2026-09-01";
+type Name = [string, string, string, string];
+
+interface GenOpts {
+  property: Property;
+  units: Room[];
+  sources: ReservationSource[];
+  seed: number;
+  count: number;
+  today: string;
+  /** How far the window reaches back and forward from today. */
+  back: number;
+  span: number;
+}
+
+/** Deterministic reservations for one property, anchored on `today` so the office always has arrivals, departures and in-house guests. */
+function generate(o: GenOpts, out: Reservation[], seqStart: number): number {
+  const r = rng(o.seed);
+  const bookable = o.units.filter((u) => u.kind !== "whole");
+  const start = addDays(o.today, -o.back);
   let attempts = 0;
-  let seq = 0;
-  while (out.length < 300 && attempts < 20000) {
+  let seq = seqStart;
+  let made = 0;
+  while (made < o.count && attempts < 20000) {
     attempts++;
-    const offset = Math.floor(r() * 112); // Sep 1 → Dec 21
+    const offset = Math.floor(r() * o.span);
     const checkIn = addDays(start, offset);
     const nights = 1 + Math.floor(r() * r() * 5) + (r() > 0.85 ? 2 : 0); // 1–7, skewed short
     const checkOut = addDays(checkIn, Math.max(1, nights));
-    const room = ROOMS[Math.floor(r() * ROOMS.length)];
+    const room = bookable[Math.floor(r() * bookable.length)];
     const overlapping = out.some(
-      (o) => o.roomId === room.id && o.status !== "cancelled" && rangesOverlap(checkIn, checkOut, o.checkIn, o.checkOut),
+      (x) => x.propertyId === o.property.id && x.status !== "cancelled" && rangesOverlap(checkIn, checkOut, x.checkIn, x.checkOut) && (x.roomId === room.id || x.roomId === room.parentId),
     );
     if (overlapping) continue;
 
@@ -279,29 +397,36 @@ export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
     const ratePlan = planRoll < 0.45 ? "bed_breakfast" : planRoll < 0.8 ? "room_only" : "non_refundable";
     const plan = RATE_PLANS.find((p) => p.id === ratePlan)!;
     const extras: string[] = [];
-    if (r() > 0.7) extras.push("parking");
-    if (r() > 0.85) extras.push("airport_ride");
-    if (r() > 0.88) extras.push("late_checkout");
-    if (r() > 0.9) extras.push("ebike");
-    if (r() > 0.92) extras.push("lavaux_tour");
+    if (o.property.id === SITE_PROPERTY) {
+      if (r() > 0.7) extras.push("parking");
+      if (r() > 0.85) extras.push("airport_ride");
+      if (r() > 0.88) extras.push("late_checkout");
+      if (r() > 0.9) extras.push("ebike");
+      if (r() > 0.92) extras.push("lavaux_tour");
+    } else {
+      if (r() > 0.8) extras.push("welcome");
+      if (r() > 0.9) extras.push("station_pickup");
+    }
+    const tax = o.property.taxes.find((t) => t.kind === "per_person_night")?.amount ?? 0;
     const q = quote({
       room, checkIn, checkOut, adults, children, plan,
       extras: EXTRAS.filter((e) => extras.includes(e.id)),
-      seasons: SEASONS, breakfastPrice: HOTEL.breakfastPrice, cityTaxPerPersonNight: HOTEL.cityTax,
+      seasons: SEASONS, breakfastPrice: HOTEL.breakfastPrice, cityTaxPerPersonNight: tax,
     });
     const firstName = NAMES[seq % NAMES.length][0];
     const [, lastName, country, cc] = NAMES[(seq * 11 + 5) % NAMES.length];
-    const source = SOURCES[Math.floor(r() * SOURCES.length)];
+    const source = o.sources[Math.floor(r() * o.sources.length)];
     let status: ReservationStatus;
     if (r() > 0.93) status = "cancelled";
-    else if (checkOut <= today) status = "checked_out";
-    else if (checkIn <= today) status = "checked_in";
+    else if (checkOut <= o.today) status = "checked_out";
+    else if (checkIn <= o.today) status = "checked_in";
     else status = source === "booking.com" && r() > 0.7 ? "pending" : "confirmed";
     const bookedOn = addDays(checkIn, -Math.floor(r() * 60) - 1);
-    const createdDay = bookedOn > today ? addDays(today, -Math.floor(r() * 20)) : bookedOn;
+    const createdDay = bookedOn > o.today ? addDays(o.today, -Math.floor(r() * 20)) : bookedOn;
     const createdAt = `${createdDay}T${String(8 + Math.floor(r() * 12)).padStart(2, "0")}:${String(Math.floor(r() * 60)).padStart(2, "0")}:00`;
     seq++;
-    const ref = `MV-2026-${String(seq).padStart(4, "0")}`;
+    made++;
+    const ref = `${o.property.refPrefix}-2026-${String(seq).padStart(4, "0")}`;
     const timeline = [{ at: createdAt, text: `Booked via ${source === "direct" ? "the website" : source}` }];
     if (status === "checked_in" || status === "checked_out") timeline.push({ at: `${checkIn}T15:30:00`, text: "Checked in" });
     if (status === "checked_out") timeline.push({ at: `${checkOut}T10:40:00`, text: "Checked out" });
@@ -309,7 +434,9 @@ export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
     out.push({
       id: `res_${seq}`,
       ref,
+      propertyId: o.property.id,
       roomId: room.id,
+      type: "stay",
       checkIn,
       checkOut,
       adults,
@@ -328,69 +455,147 @@ export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
       timeline,
     });
   }
-  // guarantee a few arrivals and departures today for the demo overview
-  const ensure = (roomId: string, checkIn: string, checkOut: string, name: [string, string, string, string], status: ReservationStatus, source: ReservationSource) => {
-    const room = ROOMS.find((x) => x.id === roomId)!;
-    const clash = out.filter((o) => o.roomId === roomId && o.status !== "cancelled" && rangesOverlap(checkIn, checkOut, o.checkIn, o.checkOut));
-    for (const c of clash) c.status = "cancelled";
-    seq++;
-    const plan = RATE_PLANS[1];
-    const q = quote({ room, checkIn, checkOut, adults: 2, children: 0, plan, extras: [], seasons: SEASONS, breakfastPrice: HOTEL.breakfastPrice, cityTaxPerPersonNight: HOTEL.cityTax });
-    out.push({
-      id: `res_${seq}`, ref: `MV-2026-${String(seq).padStart(4, "0")}`, roomId, checkIn, checkOut, adults: 2, children: 0,
-      guest: { firstName: name[0], lastName: name[1], email: emailFor(name[0], name[1], seq), phone: phoneFor(name[3], r), country: name[2] },
-      ratePlan: "bed_breakfast", extras: [], notes: "", arrivalTime: ARRIVALS[1], status, source, total: q.total, cityTax: q.cityTax,
-      paid: false, createdAt: `${addDays(checkIn, -12)}T10:00:00`, timeline: [{ at: `${addDays(checkIn, -12)}T10:00:00`, text: `Booked via ${source === "direct" ? "the website" : source}` }],
-    });
-  };
-  ensure("r3", today, addDays(today, 3), ["Claire", "Favre", "Switzerland", "CH"], "confirmed", "direct");
-  ensure("r6", today, addDays(today, 2), ["James", "Whitfield", "United Kingdom", "GB"], "confirmed", "booking.com");
-  ensure("r5", addDays(today, -2), today, ["Elena", "Rossi", "Italy", "IT"], "checked_in", "direct");
-  ensure("r1", addDays(today, -3), today, ["Thomas", "Müller", "Germany", "DE"], "checked_in", "expedia");
-  ensure("r9", addDays(today, -1), addDays(today, 2), ["Daniel", "Cohen", "United States", "US"], "checked_in", "direct");
+  return seq;
+}
+
+interface EnsureOpts {
+  property: Property;
+  roomId: string;
+  checkIn: string;
+  checkOut: string;
+  name: Name;
+  status: ReservationStatus;
+  source: ReservationSource;
+  type?: Reservation["type"];
+  headcount?: number;
+  holdUntil?: string;
+  deposit?: number;
+  paid?: boolean;
+  notes?: string;
+}
+
+/** Place one reservation exactly, cancelling whatever it collides with (used to guarantee today's arrivals, departures, a hold and a retreat). */
+function ensure(o: EnsureOpts, out: Reservation[], seq: number, r: () => number): number {
+  const room = ALL_UNITS.find((x) => x.id === o.roomId)!;
+  const family = [room.id, room.parentId, ...ALL_UNITS.filter((u) => u.parentId === room.id).map((u) => u.id)].filter(Boolean);
+  for (const c of out) {
+    if (c.propertyId === o.property.id && family.includes(c.roomId) && c.status !== "cancelled" && rangesOverlap(o.checkIn, o.checkOut, c.checkIn, c.checkOut)) c.status = "cancelled";
+  }
+  seq++;
+  const plan = RATE_PLANS[1];
+  const tax = o.property.taxes.find((t) => t.kind === "per_person_night")?.amount ?? 0;
+  const adults = o.headcount ? Math.min(room.maxAdults, o.headcount) : 2;
+  const q = quote({ room, checkIn: o.checkIn, checkOut: o.checkOut, adults, children: 0, plan, extras: [], seasons: SEASONS, breakfastPrice: HOTEL.breakfastPrice, cityTaxPerPersonNight: tax });
+  const total = o.headcount ? q.roomTotal + nightsBetween(o.checkIn, o.checkOut) * o.headcount * (HOTEL.breakfastPrice + tax) : q.total;
+  const bookedAt = `${addDays(o.checkIn, -12)}T10:00:00`;
+  out.push({
+    id: `res_${seq}`, ref: `${o.property.refPrefix}-2026-${String(seq).padStart(4, "0")}`, propertyId: o.property.id, roomId: o.roomId,
+    type: o.type ?? "stay", checkIn: o.checkIn, checkOut: o.checkOut, adults, children: 0, headcount: o.headcount, holdUntil: o.holdUntil, deposit: o.deposit,
+    guest: { firstName: o.name[0], lastName: o.name[1], email: emailFor(o.name[0], o.name[1], seq), phone: phoneFor(o.name[3], r), country: o.name[2] },
+    ratePlan: "bed_breakfast", extras: [], notes: o.notes ?? "", arrivalTime: ARRIVALS[1], status: o.status, source: o.source, total: Math.round(total), cityTax: q.cityTax,
+    paid: o.paid ?? false, createdAt: bookedAt, timeline: [{ at: bookedAt, text: `Booked via ${o.source === "direct" ? "the website" : o.source}` }],
+  });
+  return seq;
+}
+
+export function buildDemoReservations(today = DEMO_TODAY): Reservation[] {
+  const out: Reservation[] = [];
+  const [vidy, cabanes] = PROPERTIES;
+  const r = rng(20261011);
+
+  let seq = generate({ property: vidy, units: ROOMS, sources: SOURCES, seed: 20261008, count: 300, today, back: 40, span: 112 }, out, 0);
+  seq = ensure({ property: vidy, roomId: "r3", checkIn: today, checkOut: addDays(today, 3), name: ["Claire", "Favre", "Switzerland", "CH"], status: "confirmed", source: "direct", paid: true }, out, seq, r);
+  seq = ensure({ property: vidy, roomId: "r6", checkIn: today, checkOut: addDays(today, 2), name: ["James", "Whitfield", "United Kingdom", "GB"], status: "confirmed", source: "booking.com", notes: "Arrives by train, late check-in around 22:00." }, out, seq, r);
+  seq = ensure({ property: vidy, roomId: "r5", checkIn: addDays(today, -2), checkOut: today, name: ["Elena", "Rossi", "Italy", "IT"], status: "checked_in", source: "direct" }, out, seq, r);
+  seq = ensure({ property: vidy, roomId: "r1", checkIn: addDays(today, -3), checkOut: today, name: ["Thomas", "Müller", "Germany", "DE"], status: "checked_in", source: "expedia", paid: true }, out, seq, r);
+  seq = ensure({ property: vidy, roomId: "r9", checkIn: addDays(today, -1), checkOut: addDays(today, 2), name: ["Daniel", "Cohen", "United States", "US"], status: "checked_in", source: "direct", paid: true }, out, seq, r);
+  seq = ensure({ property: vidy, roomId: "r7", checkIn: today, checkOut: addDays(today, 4), name: ["Mateo", "García", "Mexico", "MX"], status: "pending", source: "booking.com", notes: "Travelling with a toddler, cot requested." }, out, seq, r);
+
+  seq = generate({ property: cabanes, units: CABINS, sources: CABIN_SOURCES, seed: 20261010, count: 120, today, back: 40, span: 112 }, out, 1000);
+  seq = ensure({ property: cabanes, roomId: "c2", checkIn: today, checkOut: addDays(today, 2), name: ["Zoé", "Monnier", "Switzerland", "CH"], status: "confirmed", source: "airbnb", paid: true }, out, seq, r);
+  seq = ensure({ property: cabanes, roomId: "c1", checkIn: addDays(today, -2), checkOut: today, name: ["Felix", "Wagner", "Germany", "DE"], status: "checked_in", source: "direct", paid: true }, out, seq, r);
+  seq = ensure({ property: cabanes, roomId: "c4", checkIn: addDays(today, -1), checkOut: addDays(today, 1), name: ["Camille", "Roux", "France", "FR"], status: "checked_in", source: "direct", paid: true }, out, seq, r);
+  // a retreat that books the whole site, confirmed with a deposit
+  seq = ensure({ property: cabanes, roomId: "c0", checkIn: addDays(today, 18), checkOut: addDays(today, 21), name: ["Nina", "Haugen", "Norway", "NO"], status: "confirmed", source: "email", type: "retreat", headcount: 10, deposit: 1800, notes: "Breathwork retreat, 10 participants · vegetarian · yoga deck 07:00 and 17:00." }, out, seq, r);
+  // a group hold on the whole site: dates kept until a day, nothing paid yet
+  seq = ensure({ property: cabanes, roomId: "c0", checkIn: addDays(today, 39), checkOut: addDays(today, 41), name: ["Katrin", "Vogel", "Switzerland", "CH"], status: "pending", source: "phone", type: "whole", headcount: 9, holdUntil: addDays(today, 5), notes: "Team offsite option B — hold until Friday." }, out, seq, r);
 
   return out.sort((a, b) => (a.checkIn < b.checkIn ? -1 : 1));
 }
 
+const T = (at: string, text: string) => ({ at, text });
+
 export const INQUIRIES: Inquiry[] = [
   {
-    id: "inq_1", type: "group", name: "Katrin Vogel", email: "k.vogel@helvetia-consult.ch", phone: "+41 44 555 12 90",
-    subject: "Team offsite, 6 rooms, 12–14 November", dates: "12–14 Nov 2026",
+    id: "inq_1", type: "group", source: "website", propertyId: SITE_PROPERTY, name: "Katrin Vogel", email: "k.vogel@helvetia-consult.ch", phone: "+41 44 555 12 90",
+    subject: "Team offsite, 6 rooms, 12–14 November", dates: "12–14 Nov 2026", headcount: 9,
     message: "We are a team of 9 (6 rooms, 3 of them twin) looking for two nights with breakfast and the use of a meeting space for one afternoon. Could you send a group offer? We would also like a dinner reservation nearby for Thursday evening.",
-    createdAt: "2026-10-07T16:42:00", status: "new",
+    createdAt: "2026-10-07T16:42:00", status: "offer",
+    reply: "Offer sent: 6 rooms B&B at the group rate, salon reserved Thursday afternoon, table for 9 at Le Rivage held until Friday.",
+    nextAction: { label: "Call Katrin — twin rooms confirmed?", due: "2026-10-12" },
+    notes: [T("2026-10-08T09:20:00", "Prefers invoice to the company, VAT number to follow."), T("2026-10-09T11:05:00", "Also asked about the cabins for option B — hold placed on the whole site 19–21 Nov.")],
+    timeline: [T("2026-10-07T16:42:00", "Received from the website"), T("2026-10-08T09:15:00", "Replied"), T("2026-10-09T10:50:00", "Offer sent")],
   },
   {
-    id: "inq_2", type: "concierge", name: "Sophie Laurent", email: "sophie.laurent@orange.fr",
+    id: "inq_2", type: "concierge", source: "whatsapp", propertyId: SITE_PROPERTY, name: "Sophie Laurent", email: "sophie.laurent@orange.fr",
     subject: "Château de Chillon tickets + boat", dates: "18 Oct 2026",
     message: "We arrive on the 17th. Could you book two tickets for Château de Chillon for Sunday morning and tell us the best boat from Ouchy? We would love to come back by train through Lavaux.",
-    createdAt: "2026-10-07T09:15:00", status: "new",
+    createdAt: "2026-10-10T09:15:00", status: "new",
+    nextAction: { label: "Book Chillon tickets, send boat times", due: "2026-10-11" },
+    notes: [], timeline: [T("2026-10-10T09:15:00", "Received on WhatsApp")],
   },
   {
-    id: "inq_3", type: "contact", name: "Marco Bellini", email: "marco.bellini@icloud.com", phone: "+39 338 555 0142",
+    id: "inq_3", type: "contact", source: "website", propertyId: SITE_PROPERTY, name: "Marco Bellini", email: "marco.bellini@icloud.com", phone: "+39 338 555 0142",
     subject: "Anniversary dinner on the terrace",
     message: "It is our 10th anniversary on 24 October. Is it possible to have a private dinner on the terrace, or a table at a restaurant with a lake view that you would recommend? Also, flowers in the room please — I will book the Junior Suite now.",
     createdAt: "2026-10-06T20:05:00", status: "replied",
     reply: "Congratulations! The terrace closes for dinner in late October, but we can set a candlelit table in the salon with the lake lit outside, or reserve at Le Rivage in Ouchy. Flowers will be in the room. — Reception",
+    nextAction: { label: "Confirm salon table or Le Rivage", due: "2026-10-14" },
+    notes: [T("2026-10-07T08:00:00", "Booked the Junior Suite 23–25 Oct (MV-2026-0287).")],
+    timeline: [T("2026-10-06T20:05:00", "Received from the website"), T("2026-10-07T07:55:00", "Replied")],
   },
   {
-    id: "inq_4", type: "contact", name: "Ingrid Berg", email: "ingrid.berg@gmail.com",
+    id: "inq_4", type: "contact", source: "email", propertyId: SITE_PROPERTY, name: "Ingrid Berg", email: "ingrid.berg@gmail.com",
     subject: "Gluten-free breakfast?",
     message: "Before I book: is a gluten-free breakfast possible? Bread, cereals, etc. Thank you.",
     createdAt: "2026-10-05T11:30:00", status: "replied",
     reply: "Yes — gluten-free bread, granola and a hot option every morning. Just mention it in the booking notes. — Reception",
+    notes: [], timeline: [T("2026-10-05T11:30:00", "Received by email"), T("2026-10-05T12:10:00", "Replied")],
   },
   {
-    id: "inq_5", type: "concierge", name: "Daniel Cohen", email: "daniel.cohen3@gmail.com",
+    id: "inq_5", type: "concierge", source: "whatsapp", propertyId: SITE_PROPERTY, name: "Daniel Cohen", email: "daniel.cohen3@gmail.com",
     subject: "Babysitter for Saturday evening", dates: "10 Oct 2026",
     message: "We are in the Duplex Suite until Saturday. Could you arrange a babysitter (English speaking) from 19:00 to 23:00 so we can have dinner out?",
-    createdAt: "2026-10-04T18:20:00", status: "closed",
+    createdAt: "2026-10-04T18:20:00", status: "won",
     reply: "Arranged with Mme Perret (English/French), CHF 35 per hour, she will be at the hotel at 18:50. — Reception",
+    notes: [], timeline: [T("2026-10-04T18:20:00", "Received on WhatsApp"), T("2026-10-04T18:40:00", "Replied"), T("2026-10-05T09:00:00", "Done — babysitter confirmed")],
   },
   {
-    id: "inq_6", type: "group", name: "Aurélie & Noah", email: "aurelie.noah.wedding@gmail.com",
-    subject: "Wedding guests, whole house, 5–7 June 2027", dates: "5–7 Jun 2027",
+    id: "inq_6", type: "whole", source: "website", propertyId: SITE_PROPERTY, name: "Aurélie & Noah", email: "aurelie.noah.wedding@gmail.com",
+    subject: "Wedding guests, whole house, 5–7 June 2027", dates: "5–7 Jun 2027", headcount: 22,
     message: "We are getting married in Lutry next June and would love to book the whole hotel for our families (about 22 people). Is that possible, and what would the terms be?",
     createdAt: "2026-10-02T14:10:00", status: "new",
+    nextAction: { label: "Send whole-house terms (22 guests, 2 nights)", due: "2026-10-11" },
+    notes: [], timeline: [T("2026-10-02T14:10:00", "Received from the website")],
+  },
+  {
+    id: "inq_7", type: "retreat", source: "instagram", propertyId: "cabanes", name: "Lena Hartmann", email: "lena@stillpoint-yoga.ch", phone: "+41 79 555 44 10",
+    subject: "Yoga retreat, whole site, 14–17 May 2027", dates: "14–17 May 2027", headcount: 11,
+    message: "I run small yoga retreats (10–12 people) and found you on Instagram. Could we take all four cabins for three nights in May, with the yoga deck in the morning and a vegetarian cook? What is the deposit?",
+    createdAt: "2026-10-09T21:30:00", status: "replied",
+    reply: "Yes — the whole site is yours for those dates, the deck is included and we work with a cook from Épalinges. Offer with the deposit terms follows tomorrow. — Les Cabanes",
+    nextAction: { label: "Send retreat offer with 30 % deposit", due: "2026-10-12" },
+    notes: [T("2026-10-10T08:15:00", "Second retreat this year from Instagram — the cabins' link in bio works.")],
+    timeline: [T("2026-10-09T21:30:00", "Received on Instagram"), T("2026-10-10T08:10:00", "Replied")],
+  },
+  {
+    id: "inq_8", type: "venue", source: "email", propertyId: "cabanes", name: "Rafael Costa", email: "r.costa@lumen-studio.com",
+    subject: "Team day with an outside facilitator, 28 November", dates: "28 Nov 2026", headcount: 14,
+    message: "We would like to hire the site for one day (no overnight) for a team workshop of 14 with our own facilitator — the yoga deck, the fire pit and lunch. Is that something you do?",
+    createdAt: "2026-10-08T15:05:00", status: "lost",
+    reply: "Thank you — the site is booked by a retreat that week and we only hire the deck to groups staying overnight. We would gladly host the team for a night in the spring. — Les Cabanes",
+    notes: [T("2026-10-09T09:00:00", "Dates clash with the breathwork retreat; offered spring instead.")],
+    timeline: [T("2026-10-08T15:05:00", "Received by email"), T("2026-10-09T08:50:00", "Replied"), T("2026-10-09T08:50:00", "Lost — dates not available")],
   },
 ];
 

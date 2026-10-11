@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { X } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { STATUS_LABEL } from "@/lib/format";
+import { useHotel } from "@/lib/store";
 import type { InquiryStatus, ReservationStatus } from "@/lib/types";
 
 export function Panel({ children, className, title, action }: { children: ReactNode; className?: string; title?: string; action?: ReactNode }) {
@@ -46,13 +47,13 @@ export function StatusChip({ status }: { status: ReservationStatus }) {
 }
 
 export function InquiryChip({ status }: { status: InquiryStatus }) {
-  const map = { new: "bg-[#fff3e0] text-[#8a5a00]", replied: "bg-mist text-lake", closed: "bg-ink/5 text-slate" };
-  const label = { new: "New", replied: "Replied", closed: "Closed" };
+  const map: Record<InquiryStatus, string> = { new: "bg-[#fff3e0] text-[#8a5a00]", replied: "bg-mist text-lake", offer: "bg-[#eef3ff] text-[#2f4b8f]", won: "bg-moss-soft text-moss", lost: "bg-ink/5 text-slate" };
+  const label: Record<InquiryStatus, string> = { new: "New", replied: "Replied", offer: "Offer sent", won: "Won", lost: "Lost" };
   return <span className={clsx("inline-flex items-center rounded-xs px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]", map[status])}>{label[status]}</span>;
 }
 
 export function SourceChip({ source }: { source: string }) {
-  const label: Record<string, string> = { direct: "Direct", "booking.com": "Booking.com", expedia: "Expedia", phone: "Phone", "walk-in": "Walk-in", email: "Email" };
+  const label: Record<string, string> = { direct: "Direct", "booking.com": "Booking.com", expedia: "Expedia", airbnb: "Airbnb", phone: "Phone", "walk-in": "Walk-in", email: "Email" };
   return <span className={clsx("inline-flex rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset", source === "direct" ? "bg-moss-soft text-moss ring-moss/20" : "bg-white text-slate ring-line")}>{label[source] ?? source}</span>;
 }
 
@@ -117,5 +118,17 @@ export function EmptyState({ title, text }: { title: string; text?: string }) {
       <p className="font-display text-lg font-semibold text-ink">{title}</p>
       {text && <p className="mt-1 text-sm text-slate">{text}</p>}
     </div>
+  );
+}
+
+/** A small coloured tag naming the property a record belongs to. */
+export function PropertyChip({ id, size = "sm", className }: { id: string; size?: "xs" | "sm"; className?: string }) {
+  const property = useHotel((s) => s.properties.find((p) => p.id === id));
+  if (!property) return null;
+  return (
+    <span className={clsx("inline-flex items-center gap-1 whitespace-nowrap rounded-xs font-semibold", size === "xs" ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-0.5 text-[11px]", className)} style={{ background: `${property.accent}1a`, color: property.accent }}>
+      <span className="h-1.5 w-1.5 rounded-full" style={{ background: property.accent }} />
+      {property.short}
+    </span>
   );
 }

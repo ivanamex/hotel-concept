@@ -11,7 +11,7 @@ import { useT } from "@/i18n/context";
 import { Rich } from "@/i18n/rich";
 import { nightsBetween } from "@/lib/engine";
 import { chf } from "@/lib/format";
-import { useHotel, useHydrated } from "@/lib/store";
+import { useSiteRooms, useHotel, useHydrated } from "@/lib/store";
 
 function icsFor(args: { ref: string; checkIn: string; checkOut: string; summary: string; description: string; address: string }) {
   const d = (s: string) => s.replace(/-/g, "");
@@ -29,7 +29,7 @@ export function Confirmation({ reference }: { reference: string }) {
   const c = t.confirm;
   const hydrated = useHydrated();
   const reservation = useHotel((s) => s.reservations.find((r) => r.ref === reference));
-  const rooms = useHotel((s) => s.rooms);
+  const rooms = useSiteRooms();
   const ratePlans = useHotel((s) => s.ratePlans);
   const extrasAll = useHotel((s) => s.extras);
   const settings = useHotel((s) => s.settings);

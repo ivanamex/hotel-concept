@@ -8,7 +8,10 @@ import { useT } from "@/i18n/context";
 import { useHotel } from "@/lib/store";
 import type { InquiryType } from "@/lib/types";
 
-export function InquiryForm({ type, compact = false, defaultSubject }: { type: InquiryType; compact?: boolean; defaultSubject?: string }) {
+/** The three request forms the public site offers. */
+export type SiteInquiryType = Extract<InquiryType, "contact" | "concierge" | "group">;
+
+export function InquiryForm({ type, compact = false, defaultSubject }: { type: SiteInquiryType; compact?: boolean; defaultSubject?: string }) {
   const t = useT();
   const f = t.forms;
   const subjects = f.subjects[type];

@@ -125,20 +125,45 @@ export function quote(input: QuoteInput): Quote {
 
 /* ---------- availability ---------- */
 
+/** Units whose reservations block this one: itself, its parent ("whole" unit) and its children. */
+export function blockingIds(room: Room, rooms: Room[]): string[] {
+  const ids = [room.id];
+  if (room.parentId) ids.push(room.parentId);
+  for (const r of rooms) if (r.parentId === room.id) ids.push(r.id);
+  return ids;
+}
+
 export function isRoomAvailable(
   room: Room,
   checkIn: string,
   checkOut: string,
   reservations: Reservation[],
   ignoreId?: string,
+  rooms: Room[] = [],
 ): boolean {
   if (room.status !== "active") return false;
+  const ids = blockingIds(room, rooms);
   return !reservations.some(
     (r) =>
-      r.roomId === room.id &&
+      ids.includes(r.roomId) &&
       r.id !== ignoreId &&
       r.status !== "cancelled" &&
       rangesOverlap(checkIn, checkOut, r.checkIn, r.checkOut),
+  );
+}
+
+/** The reservation that stands in the way, if any (for the calendar's "why not" messages). */
+export function conflictFor(
+  room: Room,
+  checkIn: string,
+  checkOut: string,
+  reservations: Reservation[],
+  rooms: Room[],
+  ignoreId?: string,
+): Reservation | undefined {
+  const ids = blockingIds(room, rooms);
+  return reservations.find(
+    (r) => ids.includes(r.roomId) && r.id !== ignoreId && r.status !== "cancelled" && rangesOverlap(checkIn, checkOut, r.checkIn, r.checkOut),
   );
 }
 
@@ -148,8 +173,8 @@ export function roomFits(room: Room, adults: number, children: number): boolean 
 
 /* ---------- references ---------- */
 
-export function nextReference(reservations: Reservation[], year = new Date().getFullYear()): string {
-  const prefix = `MV-${year}-`;
+export function nextReference(reservations: Reservation[], refPrefix = "MV", year = new Date().getFullYear()): string {
+  const prefix = `${refPrefix}-${year}-`;
   const max = reservations
     .filter((r) => r.ref.startsWith(prefix))
     .map((r) => Number(r.ref.slice(prefix.length)) || 0)
@@ -163,12 +188,22 @@ export function uid(prefix = "id"): string {
 
 /* ---------- KPIs for the office ---------- */
 
+/** Sellable units: everything that is not a "whole" parent (a whole-site booking occupies its children). */
+export function sellableUnits(rooms: Room[]): Room[] {
+  return rooms.filter((r) => r.kind !== "whole");
+}
+
+/** Is this unit occupied on the night of `date` — directly, or through its parent / a child? */
+export function unitOccupiedOn(room: Room, date: string, rooms: Room[], reservations: Reservation[]): Reservation | undefined {
+  const ids = blockingIds(room, rooms);
+  return reservations.find((r) => ids.includes(r.roomId) && r.status !== "cancelled" && r.checkIn <= date && r.checkOut > date);
+}
+
 export function occupancyOn(date: string, rooms: Room[], reservations: Reservation[]): number {
-  const active = rooms.filter((r) => r.status === "active").length || 1;
-  const occupied = reservations.filter(
-    (r) => r.status !== "cancelled" && r.checkIn <= date && r.checkOut > date,
-  ).length;
-  return Math.min(1, occupied / active);
+  const units = sellableUnits(rooms).filter((r) => r.status === "active");
+  if (!units.length) return 0;
+  const occupied = units.filter((u) => unitOccupiedOn(u, date, rooms, reservations)).length;
+  return Math.min(1, occupied / units.length);
 }
 
 export function reservationNights(r: Reservation): number {

@@ -15,7 +15,7 @@ import { useHref, useT } from "@/i18n/context";
 import { OFFERS } from "@/lib/content";
 import { addDays, extraCost, isRoomAvailable, nightsBetween, quote, roomFits, todayISO } from "@/lib/engine";
 import { chf } from "@/lib/format";
-import { PROMO_CODE, PROMO_RATE, useHotel, useHydrated } from "@/lib/store";
+import { PROMO_CODE, PROMO_RATE, useHotel, useHydrated, useSiteRooms } from "@/lib/store";
 import type { Guest, RatePlanId, Room } from "@/lib/types";
 
 export function BookingFlow() {
@@ -26,7 +26,7 @@ export function BookingFlow() {
   const sp = useSearchParams();
   const hydrated = useHydrated();
 
-  const rooms = useHotel((s) => s.rooms);
+  const rooms = useSiteRooms();
   const reservations = useHotel((s) => s.reservations);
   const ratePlans = useHotel((s) => s.ratePlans);
   const seasons = useHotel((s) => s.seasons);

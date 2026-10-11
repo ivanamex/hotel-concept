@@ -1,10 +1,17 @@
 import { parseISODate } from "./engine";
 
-export function chf(n: number, opts: { decimals?: boolean } = {}): string {
+/** Money in a property's currency — Swiss grouping for CHF, thin spaces elsewhere. */
+export function money(n: number, currency = "CHF", opts: { decimals?: boolean } = {}): string {
   const v = opts.decimals ? n.toFixed(2) : Math.round(n).toString();
   const [int, dec] = v.split(".");
-  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, "’");
-  return `CHF ${grouped}${dec ? "." + dec : ""}`;
+  const sep = currency === "CHF" ? "’" : " ";
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+  const symbol = currency === "MXN" ? "MX$" : currency === "EUR" ? "€" : currency === "USD" ? "$" : currency;
+  return `${symbol} ${grouped}${dec ? "." + dec : ""}`;
+}
+
+export function chf(n: number, opts: { decimals?: boolean } = {}): string {
+  return money(n, "CHF", opts);
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -75,7 +82,43 @@ export const SOURCE_LABEL: Record<string, string> = {
   direct: "Direct",
   "booking.com": "Booking.com",
   expedia: "Expedia",
+  airbnb: "Airbnb",
   phone: "Phone",
   "walk-in": "Walk-in",
   email: "Email",
 };
+
+export const TYPE_LABEL: Record<string, string> = {
+  stay: "Stay",
+  whole: "Whole property",
+  retreat: "Retreat",
+  venue: "Venue hire",
+};
+
+export const INQUIRY_TYPE_LABEL: Record<string, string> = {
+  contact: "Question",
+  concierge: "Concierge",
+  group: "Group",
+  retreat: "Retreat",
+  venue: "Venue hire",
+  whole: "Whole property",
+  long_stay: "Long stay",
+};
+
+export const INQUIRY_SOURCE_LABEL: Record<string, string> = {
+  website: "Website",
+  whatsapp: "WhatsApp",
+  email: "Email",
+  phone: "Phone",
+  instagram: "Instagram",
+  ota: "OTA message",
+};
+
+/** "today", "tomorrow", "in 3 days", "2 days ago" — for next actions and holds. */
+export function relativeDay(iso: string, today: string): string {
+  const diff = Math.round((parseISODate(iso).getTime() - parseISODate(today).getTime()) / 86_400_000);
+  if (diff === 0) return "today";
+  if (diff === 1) return "tomorrow";
+  if (diff === -1) return "yesterday";
+  return diff > 0 ? `in ${diff} days` : `${-diff} days ago`;
+}

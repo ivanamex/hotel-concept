@@ -6,11 +6,12 @@ import { en } from "@/i18n/en";
 
 const UNIT_LABEL = en.units;
 import { OfficeShell } from "@/components/office/shell";
-import { Panel, Toggle, td, th } from "@/components/office/ui";
+import Link from "next/link";
+import { Panel, PropertyChip, Toggle, td, th } from "@/components/office/ui";
 import { inputClass } from "@/components/ui";
-import { chf, fmtDate } from "@/lib/format";
+import { fmtDate, money } from "@/lib/format";
 import { nightlyPrice, todayISO, addDays } from "@/lib/engine";
-import { useHotel } from "@/lib/store";
+import { useHotel, useOfficeScope } from "@/lib/store";
 
 const num = clsx(inputClass, "h-9 w-24 px-2 text-sm tabular-nums");
 
@@ -19,18 +20,20 @@ export default function RatesPage() {
   const seasons = useHotel((s) => s.seasons);
   const extras = useHotel((s) => s.extras);
   const settings = useHotel((s) => s.settings);
-  const rooms = useHotel((s) => s.rooms);
+  const scope = useOfficeScope();
   const updateRatePlan = useHotel((s) => s.updateRatePlan);
   const updateSeason = useHotel((s) => s.updateSeason);
   const updateExtra = useHotel((s) => s.updateExtra);
   const updateSettings = useHotel((s) => s.updateSettings);
 
-  const sample = rooms[2];
+  const sampleProperty = scope.property ?? scope.allProperties[0];
+  const sample = scope.allRooms.find((r) => r.propertyId === sampleProperty.id && r.kind !== "whole" && r.number === 3) ?? scope.allRooms.find((r) => r.propertyId === sampleProperty.id && r.kind !== "whole")!;
+  const cur = sampleProperty.currency;
   const today = todayISO();
   const preview = [0, 30, 90, 180, 270].map((d) => addDays(today, d));
 
   return (
-    <OfficeShell title="Rates & extras" subtitle="Plans, seasons, add-ons and taxes">
+    <OfficeShell title="Rates & extras" subtitle="Plans and seasons shared by the brand · base rates per unit · taxes per property">
       <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Rate plans">
           <ul className="divide-y divide-ink/5">
@@ -52,7 +55,13 @@ export default function RatesPage() {
         <Panel title="Taxes & breakfast">
           <div className="grid gap-4 px-5 py-4 sm:grid-cols-2">
             <label className="text-sm"><span className="block text-xs font-medium text-slate">Breakfast, per adult per night (CHF)</span><input type="number" value={settings.breakfastPrice} onChange={(e) => updateSettings({ breakfastPrice: Number(e.target.value) })} className={clsx(num, "mt-1 w-32")} /><span className="mt-1 block text-xs text-slate">Children pay half.</span></label>
-            <label className="text-sm"><span className="block text-xs font-medium text-slate">City tax, per adult per night (CHF)</span><input type="number" step={0.1} value={settings.cityTax} onChange={(e) => updateSettings({ cityTax: Number(e.target.value) })} className={clsx(num, "mt-1 w-32")} /><span className="mt-1 block text-xs text-slate">Shown separately to the guest.</span></label>
+            <div className="text-sm">
+              <span className="block text-xs font-medium text-slate">Taxes, per property</span>
+              <ul className="mt-1 space-y-1">
+                {scope.allProperties.map((p) => <li key={p.id} className="flex items-center gap-2 text-xs text-ink-soft"><PropertyChip id={p.id} size="xs" />{p.taxes.map((t) => `${t.name}: ${t.kind === "percent" ? `${t.amount} %` : money(t.amount, p.currency, { decimals: true })}${t.kind === "per_person_night" ? " per person-night" : t.kind === "per_night" ? " per night" : ""}`).join(" · ")}</li>)}
+              </ul>
+              <Link href="/office/settings" className="mt-1 inline-block text-xs font-semibold text-lake">Edit in Settings →</Link>
+            </div>
           </div>
           <div className="border-t border-ink/5 px-5 py-4">
             <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate">Weekend rule</p>
@@ -79,18 +88,18 @@ export default function RatesPage() {
           <p className="px-5 py-3 text-xs text-slate">Dates as MM-DD. Later rows override earlier ones where they overlap (Montreux Jazz sits inside high season).</p>
         </Panel>
 
-        <Panel title={`Price preview · ${sample.name} (base ${chf(sample.basePrice)})`}>
+        <Panel title={`Price preview · ${sample.name} (base ${money(sample.basePrice, cur)})`} action={scope.allProperties.length > 1 ? <PropertyChip id={sampleProperty.id} /> : undefined}>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px]">
               <thead className="bg-[#fafbfc]"><tr><th className={th}>Night</th>{ratePlans.map((p) => <th key={p.id} className={`${th} text-right`}>{p.short}</th>)}</tr></thead>
               <tbody className="divide-y divide-ink/5">
                 {preview.map((d) => (
-                  <tr key={d}><td className={td}>{fmtDate(d, "weekday")}</td>{ratePlans.map((p) => <td key={p.id} className={`${td} text-right tabular-nums`}>{chf(nightlyPrice(sample, d, p, seasons))}</td>)}</tr>
+                  <tr key={d}><td className={td}>{fmtDate(d, "weekday")}</td>{ratePlans.map((p) => <td key={p.id} className={`${td} text-right tabular-nums`}>{money(nightlyPrice(sample, d, p, seasons), cur)}</td>)}</tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="px-5 py-3 text-xs text-slate">Room price only; breakfast and city tax are added per person.</p>
+          <p className="px-5 py-3 text-xs text-slate">Unit price only; breakfast and taxes are added per person. Base rates per unit are edited on the <Link href="/office/rooms" className="font-semibold text-lake">units page</Link>.</p>
         </Panel>
       </div>
 
