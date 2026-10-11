@@ -4,6 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
+- STEP-22 Two places on the public site (spec written, waiting for go): footer "Our locations", nav Stay → The house · Les Cabanes, a second-place band on the home page, `/cabanes` location page, cabin detail pages, a "Where" step in the booking engine, rooms page tabs
 - Ivana clicks through STEP-20 (the office on two properties) and STEP-21 (experiences)
 - Ivana clicks through rounds 4–5 and the four languages; FR proofread; OTA + Amex logo files still welcome
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
