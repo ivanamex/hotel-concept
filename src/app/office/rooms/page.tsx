@@ -5,8 +5,8 @@ import { Sparkles } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { OfficeShell } from "@/components/office/shell";
-import { Drawer, Panel, PropertyChip, Toggle, td, th } from "@/components/office/ui";
-import { Button, Field, Input, Select, Textarea, inputClass } from "@/components/ui";
+import { Drawer, Panel, PropertyChip, Toggle, numInput, td, th } from "@/components/office/ui";
+import { Button, Field, Input, Select, Textarea } from "@/components/ui";
 import { todayISO, unitOccupiedOn } from "@/lib/engine";
 import { money } from "@/lib/format";
 import { useHotel, useOfficeScope } from "@/lib/store";
@@ -103,7 +103,7 @@ function Units() {
                           <td className={td}>
                             <div className="flex items-center gap-1">
                               <span className="text-xs text-slate">{p.currency}</span>
-                              <input type="number" value={room.basePrice} min={50} step={5} onChange={(e) => updateRoom(room.id, { basePrice: Number(e.target.value) })} className={clsx(inputClass, "h-9 w-24 px-2 text-sm tabular-nums")} aria-label={`Base rate ${room.name}`} />
+                              <input type="number" value={room.basePrice} min={50} step={5} onChange={(e) => updateRoom(room.id, { basePrice: Number(e.target.value) })} className={numInput} aria-label={`Base rate ${room.name}`} />
                             </div>
                           </td>
                           <td className={td}><span className={clsx("rounded-xs px-2.5 py-1 text-xs font-semibold", st.cls)}>{st.label}</span></td>

@@ -77,7 +77,7 @@ function Guests() {
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-[220px] flex-1 sm:max-w-xs">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search guests" className={clsx(inputClass, "h-10 pl-9 text-sm")} />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search guests" className={clsx(inputClass, "!h-10 !pl-9 !text-sm")} />
         </div>
         <div className="flex gap-1 rounded-xs bg-white p-1 ring-1 ring-ink/5">
           {(["all", "inhouse", "upcoming", "returning"] as const).map((f) => (

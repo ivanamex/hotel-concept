@@ -102,6 +102,8 @@ export function Modal({ open, onClose, title, children, width = "max-w-2xl" }: {
 }
 
 export const th = "px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-slate";
+/** A compact number box for tables — the base input class is overridden with !important so the width and padding always win. */
+export const numInput = "!h-9 !w-28 rounded-xs border border-line bg-white !px-2.5 !text-sm tabular-nums text-ink transition focus:border-lake focus:outline-none focus:ring-2 focus:ring-lake/15";
 export const td = "px-4 py-3 text-sm text-ink align-middle";
 
 export function Toggle({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label?: string }) {

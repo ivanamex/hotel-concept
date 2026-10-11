@@ -7,13 +7,13 @@ import { en } from "@/i18n/en";
 const UNIT_LABEL = en.units;
 import { OfficeShell } from "@/components/office/shell";
 import Link from "next/link";
-import { Panel, PropertyChip, Toggle, td, th } from "@/components/office/ui";
+import { Panel, PropertyChip, Toggle, numInput, td, th } from "@/components/office/ui";
 import { inputClass } from "@/components/ui";
 import { fmtDate, money } from "@/lib/format";
 import { nightlyPrice, todayISO, addDays } from "@/lib/engine";
 import { useHotel, useOfficeScope } from "@/lib/store";
 
-const num = clsx(inputClass, "h-9 w-24 px-2 text-sm tabular-nums");
+const num = numInput;
 
 export default function RatesPage() {
   const ratePlans = useHotel((s) => s.ratePlans);
@@ -44,7 +44,7 @@ export default function RatesPage() {
                   <p className="text-xs text-slate">{p.description} {p.cancellation}</p>
                 </div>
                 <div className="flex items-center gap-4 text-sm">
-                  <label className="flex items-center gap-2 text-xs text-slate">Discount %<input type="number" min={0} max={50} value={Math.round(p.discount * 100)} onChange={(e) => updateRatePlan(p.id, { discount: Number(e.target.value) / 100 })} className={clsx(num, "w-16")} /></label>
+                  <label className="flex items-center gap-2 text-xs text-slate">Discount %<input type="number" min={0} max={50} value={Math.round(p.discount * 100)} onChange={(e) => updateRatePlan(p.id, { discount: Number(e.target.value) / 100 })} className={clsx(num, "!w-20")} /></label>
                   <label className="flex items-center gap-2 text-xs text-slate">Breakfast <Toggle on={p.includesBreakfast} onChange={(v) => updateRatePlan(p.id, { includesBreakfast: v })} label={`${p.name} includes breakfast`} /></label>
                 </div>
               </li>
@@ -54,7 +54,7 @@ export default function RatesPage() {
 
         <Panel title="Taxes & breakfast">
           <div className="grid gap-4 px-5 py-4 sm:grid-cols-2">
-            <label className="text-sm"><span className="block text-xs font-medium text-slate">Breakfast, per adult per night (CHF)</span><input type="number" value={settings.breakfastPrice} onChange={(e) => updateSettings({ breakfastPrice: Number(e.target.value) })} className={clsx(num, "mt-1 w-32")} /><span className="mt-1 block text-xs text-slate">Children pay half.</span></label>
+            <label className="text-sm"><span className="block text-xs font-medium text-slate">Breakfast, per adult per night (CHF)</span><input type="number" value={settings.breakfastPrice} onChange={(e) => updateSettings({ breakfastPrice: Number(e.target.value) })} className={clsx(num, "mt-1 !w-32")} /><span className="mt-1 block text-xs text-slate">Children pay half.</span></label>
             <div className="text-sm">
               <span className="block text-xs font-medium text-slate">Taxes, per property</span>
               <ul className="mt-1 space-y-1">
@@ -77,8 +77,8 @@ export default function RatesPage() {
                 {seasons.map((s) => (
                   <tr key={s.id}>
                     <td className={`${td} font-semibold`}>{s.name}</td>
-                    <td className={td}><input value={s.from} onChange={(e) => updateSeason(s.id, { from: e.target.value })} className={clsx(num, "w-20 font-mono")} /></td>
-                    <td className={td}><input value={s.to} onChange={(e) => updateSeason(s.id, { to: e.target.value })} className={clsx(num, "w-20 font-mono")} /></td>
+                    <td className={td}><input value={s.from} onChange={(e) => updateSeason(s.id, { from: e.target.value })} className={clsx(num, "!w-24 font-mono")} /></td>
+                    <td className={td}><input value={s.to} onChange={(e) => updateSeason(s.id, { to: e.target.value })} className={clsx(num, "!w-24 font-mono")} /></td>
                     <td className={td}><input type="number" step={0.05} min={0.5} max={2} value={s.multiplier} onChange={(e) => updateSeason(s.id, { multiplier: Number(e.target.value) })} className={num} /></td>
                   </tr>
                 ))}
@@ -113,7 +113,7 @@ export default function RatesPage() {
                   <td className={td}><div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-mist text-lake"><ExtraIcon name={e.icon} className="h-4 w-4" /></span><div><p className="font-semibold">{e.name}</p><p className="text-xs text-slate">{e.short}{e.requestOnly ? " · request only" : ""}</p></div></div></td>
                   <td className={td}>{e.requestOnly ? <span className="text-slate">free</span> : <input type="number" value={e.price} min={0} step={5} onChange={(ev) => updateExtra(e.id, { price: Number(ev.target.value) })} className={num} />}</td>
                   <td className={td}>
-                    <select value={e.unit} onChange={(ev) => updateExtra(e.id, { unit: ev.target.value as typeof e.unit })} className={clsx(inputClass, "h-9 w-auto text-sm")}>
+                    <select value={e.unit} onChange={(ev) => updateExtra(e.id, { unit: ev.target.value as typeof e.unit })} className={clsx(inputClass, "!h-9 !w-auto !text-sm")}>
                       {Object.entries(UNIT_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                     </select>
                   </td>
