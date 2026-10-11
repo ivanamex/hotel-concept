@@ -1,6 +1,6 @@
 # STEP-22 — Two places on the public site
 
-Status: spec written 11 Oct 2026 (10:25), waiting for go.
+Status: go 11 Oct 2026 (10:28) · built and pushed the same morning. Verified on the production build: /cabanes in four languages (`/de/huetten`), cabin detail pages, rooms tabs, the booking engine on the cabins (no house rooms, no whole site), the home band, the footer locations.
 
 Ivana: the office knows two properties; the website still shows one. Put "our locations" in the footer and carry the two-location logic through the site — home, navigation, booking — so a visitor sees the brand has two places, without spinning the cabins off into their own site.
 

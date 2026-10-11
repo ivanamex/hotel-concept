@@ -1,7 +1,7 @@
 import { Quote, Star } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Closing, FilmBreak, KnockoutBand, LocationBlock, NextPage } from "@/components/site/bands";
+import { Closing, FilmBreak, KnockoutBand, LocationBlock, NextPage, SecondPlaceBand } from "@/components/site/bands";
 import { BookingBar } from "@/components/site/booking-bar";
 import { Carousel } from "@/components/site/carousel";
 import { HeroFilm } from "@/components/site/hero-film";
@@ -41,7 +41,7 @@ export default async function HomePage({ params }: LangParams) {
           </div>
           <div className="mt-10 max-w-5xl">
             <p className="caps mb-3 !text-[10px] text-white/80">{t.bookingBar.eyebrow}</p>
-            <BookingBar />
+            <BookingBar places />
             <p className="caps mt-3 !text-[10px] text-white/70">{t.bookingBar.note}</p>
           </div>
         </Container>
@@ -94,6 +94,9 @@ export default async function HomePage({ params }: LangParams) {
 
       {/* ROOMS — horizontal track */}
       <RoomsTrack rooms={ROOMS} />
+
+      {/* OUR SECOND PLACE */}
+      <SecondPlaceBand />
 
       {/* AROUND */}
       <section className="py-20 sm:py-28 lg:py-36">

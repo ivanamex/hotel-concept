@@ -15,10 +15,12 @@ export function defaultDates() {
   return { checkIn, checkOut: addDays(checkIn, 2) };
 }
 
-export function BookingBar({ compact = false, roomSlug }: { compact?: boolean; roomSlug?: string }) {
+export function BookingBar({ compact = false, roomSlug, places = false }: { compact?: boolean; roomSlug?: string; places?: boolean }) {
   const router = useRouter();
   const href = useHref();
-  const t = useT().bookingBar;
+  const tt = useT();
+  const t = tt.bookingBar;
+  const [place, setPlace] = useState<"vidy" | "cabanes">("vidy");
   const dd = defaultDates();
   const [checkIn, setCheckIn] = useState(dd.checkIn);
   const [checkOut, setCheckOut] = useState(dd.checkOut);
@@ -30,6 +32,7 @@ export function BookingBar({ compact = false, roomSlug }: { compact?: boolean; r
     e.preventDefault();
     const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children) });
     if (roomSlug) params.set("room", roomSlug);
+    if (places) params.set("place", place);
     router.push(href(`/book?${params.toString()}`));
   };
 
@@ -45,9 +48,18 @@ export function BookingBar({ compact = false, roomSlug }: { compact?: boolean; r
   return (
     <form
       onSubmit={submit}
-      className="grid overflow-hidden rounded-xs bg-white shadow-lift ring-1 ring-ink/10 sm:grid-cols-2 lg:grid-cols-[1.1fr_1.1fr_0.7fr_0.7fr_auto]"
+      className={clsx("grid overflow-hidden rounded-xs bg-white shadow-lift ring-1 ring-ink/10 sm:grid-cols-2", places ? "lg:grid-cols-[1fr_1.1fr_1.1fr_0.7fr_0.7fr_auto]" : "lg:grid-cols-[1.1fr_1.1fr_0.7fr_0.7fr_auto]")}
       aria-label={t.cta}
     >
+      {places && (
+        <div className={field}>
+          <span className={label}>{tt.places.where.label}</span>
+          <select value={place} onChange={(e) => setPlace(e.target.value as "vidy" | "cabanes")} className={control}>
+            <option value="vidy">{tt.places.house.short}</option>
+            <option value="cabanes">{tt.places.cabanes.short}</option>
+          </select>
+        </div>
+      )}
       <div className={field}>
         <span className={label}>{t.checkIn}</span>
         <input type="date" value={checkIn} min={today} onChange={(e) => onCheckIn(e.target.value)} className={control} required />

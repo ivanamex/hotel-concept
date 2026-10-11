@@ -6,7 +6,7 @@ import { ButtonLink, Container } from "@/components/ui";
 import { getDict } from "@/i18n";
 import { pageMeta, type LangParams } from "@/i18n/meta";
 import { Rich } from "@/i18n/rich";
-import { ROOMS } from "@/lib/seed";
+import { CABINS, ROOMS } from "@/lib/seed";
 
 export async function generateMetadata({ params }: LangParams): Promise<Metadata> {
   const { lang } = await params;
@@ -22,7 +22,7 @@ export default async function RoomsPage({ params }: LangParams) {
       <PageIntro eyebrow={t.rooms.eyebrow} title={<Rich text={t.rooms.title} />} lead={t.rooms.lead} crumb={t.nav.items.rooms.label} />
       <section className="pb-24">
         <Container>
-          <RoomsList rooms={ROOMS} />
+          <RoomsList rooms={ROOMS} cabins={CABINS} />
           <div className="lift-sm mt-16 rounded-lg bg-lake-deep p-8 text-white sm:p-10 lg:flex lg:items-center lg:justify-between">
             <div>
               <h2 className="font-display text-2xl"><Rich text={t.rooms.groupTitle} /></h2>

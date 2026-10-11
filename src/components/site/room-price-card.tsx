@@ -25,12 +25,13 @@ export function RoomPriceCard({ room: staticRoom }: { room: Room }) {
 
   const room = useHotel((s) => s.rooms.find((r) => r.id === staticRoom.id)) ?? staticRoom;
   const reservations = useHotel((s) => s.reservations);
+  const allRooms = useHotel((s) => s.rooms);
   const ratePlans = useHotel((s) => s.ratePlans);
   const seasons = useHotel((s) => s.seasons);
   const settings = useHotel((s) => s.settings);
 
   const nights = Math.max(0, nightsBetween(checkIn, checkOut));
-  const available = hydrated && nights > 0 && isRoomAvailable(room, checkIn, checkOut, reservations);
+  const available = hydrated && nights > 0 && isRoomAvailable(room, checkIn, checkOut, reservations, undefined, allRooms);
   const fits = roomFits(room, adults, children);
 
   const quotes = useMemo(

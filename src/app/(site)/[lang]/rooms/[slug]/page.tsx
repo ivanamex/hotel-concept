@@ -10,29 +10,31 @@ import { Badge, Container } from "@/components/ui";
 import { fmt, getDict, localizeRoom, viewLabel } from "@/i18n";
 import { pageMeta, type LangSlugParams } from "@/i18n/meta";
 import { Rich } from "@/i18n/rich";
-import { HOTEL, ROOMS } from "@/lib/seed";
+import { ALL_UNITS, HOTEL, ROOMS } from "@/lib/seed";
 
 export function generateStaticParams() {
-  return ROOMS.map((r) => ({ slug: r.slug }));
+  return ALL_UNITS.filter((r) => r.kind !== "whole").map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({ params }: LangSlugParams): Promise<Metadata> {
   const { lang, slug } = await params;
   const t = getDict(lang);
-  const base = ROOMS.find((r) => r.slug === slug);
+  const base = ALL_UNITS.find((r) => r.slug === slug && r.kind !== "whole");
   if (!base) return {};
   const room = localizeRoom(base, t);
-  return pageMeta(lang, `/rooms/${slug}`, { title: room.name, description: room.summary, image: room.images[0] });
+  return pageMeta(lang, `/rooms/${slug}`, { title: base.propertyId === "cabanes" ? `${room.name} · Les Cabanes` : room.name, description: room.summary, image: room.images[0] });
 }
 
 export default async function RoomPage({ params }: LangSlugParams) {
   const { lang, slug } = await params;
   const t = getDict(lang);
-  const base = ROOMS.find((r) => r.slug === slug);
+  const base = ALL_UNITS.find((r) => r.slug === slug && r.kind !== "whole");
   if (!base) notFound();
   const room = localizeRoom(base, t);
-  const others = ROOMS.filter((r) => r.id !== room.id && (r.view === room.view || r.category === base.category)).slice(0, 3);
-  const fallbackOthers = others.length >= 3 ? others : [...others, ...ROOMS.filter((r) => r.id !== room.id && !others.includes(r))].slice(0, 3);
+  const cabin = base.propertyId === "cabanes";
+  const pool = cabin ? ALL_UNITS.filter((r) => r.propertyId === "cabanes" && r.kind !== "whole") : ROOMS;
+  const others = pool.filter((r) => r.id !== room.id && (r.view === room.view || r.category === base.category)).slice(0, 3);
+  const fallbackOthers = others.length >= 3 ? others : [...others, ...pool.filter((r) => r.id !== room.id && !others.includes(r))].slice(0, 3);
   const d = t.rooms.detail;
 
   const facts = [
@@ -48,7 +50,7 @@ export default async function RoomPage({ params }: LangSlugParams) {
       <section className="pt-10 sm:pt-14 lg:pt-20">
         <Container>
           <nav className="caps mb-6 !text-[10px] text-slate" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-ink">Maison Vidy</Link> <span className="mx-2">/</span> <Link href="/rooms" className="hover:text-ink">{t.nav.items.rooms.label}</Link> <span className="mx-2">/</span> <span className="text-ink">{room.name}</span>
+            <Link href="/" className="hover:text-ink">Maison Vidy</Link> <span className="mx-2">/</span> {cabin ? <Link href="/cabanes" className="hover:text-ink">Les Cabanes</Link> : <Link href="/rooms" className="hover:text-ink">{t.nav.items.rooms.label}</Link>} <span className="mx-2">/</span> <span className="text-ink">{room.name}</span>
           </nav>
           <RoomGallery images={room.images} name={room.name} />
         </Container>
@@ -58,8 +60,8 @@ export default async function RoomPage({ params }: LangSlugParams) {
         <Container className="grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone={room.view === "Lake" ? "lake" : room.view === "Garden" ? "moss" : "sand"}>{viewLabel(room.view, t)}</Badge>
-              <Badge tone="slate">{room.category} · {t.rooms.roomN} {room.number}</Badge>
+              <Badge tone={room.view === "Lake" ? "lake" : room.view === "Garden" || room.view === "Forest" ? "moss" : "sand"}>{viewLabel(room.view, t)}</Badge>
+              <Badge tone="slate">{room.category} · {cabin ? t.places.cabanes.unitOne : t.rooms.roomN} {room.number}</Badge>
             </div>
             <h1 className="mt-5 font-display text-5xl leading-[1.0] text-ink sm:text-6xl">{room.name}</h1>
             <p className="mt-3 text-lg text-slate">{room.summary}</p>
@@ -80,6 +82,11 @@ export default async function RoomPage({ params }: LangSlugParams) {
             </ul>
 
             <h2 className="mt-12 font-display text-3xl text-ink"><Rich text={d.goodToKnow} /></h2>
+            {cabin ? (
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {t.places.page.good.items.map((x) => <li key={x} className="lift-sm rounded-md bg-white p-4 text-sm leading-relaxed text-slate ring-1 ring-ink/5">{x}</li>)}
+              </ul>
+            ) : (
             <dl className="mt-4 grid gap-4 sm:grid-cols-2">
               {[
                 [d.checkInOut, fmt(d.checkInOutText, { in: HOTEL.checkIn, out: HOTEL.checkOut })],
@@ -93,6 +100,7 @@ export default async function RoomPage({ params }: LangSlugParams) {
                 </div>
               ))}
             </dl>
+            )}
           </div>
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <RoomPriceCard room={room} />
@@ -110,7 +118,7 @@ export default async function RoomPage({ params }: LangSlugParams) {
           </div>
         </Container>
       </section>
-      <NextPage current="/rooms" />
+      <NextPage current={cabin ? "/cabanes" : "/rooms"} />
     </>
   );
 }

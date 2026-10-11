@@ -2,7 +2,8 @@
 
 import { Container } from "@/components/ui";
 import { useT } from "@/i18n/context";
-import { HOTEL } from "@/lib/seed";
+import { HOTEL, PROPERTIES } from "@/lib/seed";
+import { MapPin } from "lucide-react";
 import { LangSwitch } from "./lang-switch";
 import { Link } from "./link";
 import { Logo } from "./logo";
@@ -47,7 +48,27 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
-        <div className="mt-14 flex flex-col gap-6 border-t border-line pt-8 lg:flex-row lg:items-center lg:justify-between">
+        {/* our locations */}
+        <div className="mt-14 border-t border-line pt-8">
+          <h3 className="caps !text-[10px] text-slate">{t.places.footerTitle}</h3>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {[
+              { href: "/", name: t.places.house.name, line: t.places.house.line, tag: t.places.house.tagline, image: PROPERTIES[0].image },
+              { href: "/cabanes", name: t.places.cabanes.name, line: t.places.cabanes.line, tag: t.places.cabanes.tagline, image: PROPERTIES[1].image },
+            ].map((pl) => (
+              <Link key={pl.href} href={pl.href} className="group lift-sm flex items-center gap-4 rounded-lg bg-white/70 p-3 ring-1 ring-ink/5 transition hover:bg-white">
+                <span className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs bg-cover bg-center" style={{ backgroundImage: pl.image ? `url(${pl.image})` : undefined }} />
+                <span className="min-w-0">
+                  <span className="block font-display text-xl text-ink transition-colors group-hover:text-lake">{pl.name}</span>
+                  <span className="block truncate text-xs text-slate">{pl.tag}</span>
+                  <span className="mt-1 flex items-center gap-1 text-xs text-ink-soft"><MapPin className="h-3 w-3 text-lake" /> {pl.line}</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-6 border-t border-line pt-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <PaymentMarks />
             <p className="mt-3 text-xs text-slate">{f.bestRate}</p>

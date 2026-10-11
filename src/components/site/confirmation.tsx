@@ -11,7 +11,7 @@ import { useT } from "@/i18n/context";
 import { Rich } from "@/i18n/rich";
 import { nightsBetween } from "@/lib/engine";
 import { chf } from "@/lib/format";
-import { useSiteRooms, useHotel, useHydrated } from "@/lib/store";
+import { useHotel, useHydrated } from "@/lib/store";
 
 function icsFor(args: { ref: string; checkIn: string; checkOut: string; summary: string; description: string; address: string }) {
   const d = (s: string) => s.replace(/-/g, "");
@@ -29,7 +29,8 @@ export function Confirmation({ reference }: { reference: string }) {
   const c = t.confirm;
   const hydrated = useHydrated();
   const reservation = useHotel((s) => s.reservations.find((r) => r.ref === reference));
-  const rooms = useSiteRooms();
+  const rooms = useHotel((s) => s.rooms);
+  const properties = useHotel((s) => s.properties);
   const ratePlans = useHotel((s) => s.ratePlans);
   const extrasAll = useHotel((s) => s.extras);
   const settings = useHotel((s) => s.settings);
@@ -49,7 +50,8 @@ export function Confirmation({ reference }: { reference: string }) {
   const plan = localizeRatePlan(ratePlans.find((p) => p.id === reservation.ratePlan)!, t);
   const extras = extrasAll.filter((e) => reservation.extras.includes(e.id)).map((e) => localizeExtra(e, t));
   const nights = nightsBetween(reservation.checkIn, reservation.checkOut);
-  const address = `${settings.name}, ${settings.address}, ${settings.city}`;
+  const property = properties.find((p) => p.id === reservation.propertyId) ?? properties[0];
+  const address = `${property.name}, ${property.address}, ${property.city}`;
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -71,8 +73,8 @@ export function Confirmation({ reference }: { reference: string }) {
             <h2 className="font-display text-2xl text-ink">{room.name}</h2>
             <p className="text-sm text-slate">{room.category} · {viewLabel(room.view, t)} · {room.sizeM2} m² · {room.beds}</p>
             <dl className="mt-5 grid gap-4 sm:grid-cols-3">
-              <div><dt className="caps !text-[10px] text-slate">{c.checkIn}</dt><dd className="font-semibold text-ink">{fmtDateL(reservation.checkIn, t, "weekday")}<span className="block text-xs font-normal text-slate">{c.from} {settings.checkIn}</span></dd></div>
-              <div><dt className="caps !text-[10px] text-slate">{c.checkOut}</dt><dd className="font-semibold text-ink">{fmtDateL(reservation.checkOut, t, "weekday")}<span className="block text-xs font-normal text-slate">{c.until} {settings.checkOut}</span></dd></div>
+              <div><dt className="caps !text-[10px] text-slate">{c.checkIn}</dt><dd className="font-semibold text-ink">{fmtDateL(reservation.checkIn, t, "weekday")}<span className="block text-xs font-normal text-slate">{c.from} {property.checkIn}</span></dd></div>
+              <div><dt className="caps !text-[10px] text-slate">{c.checkOut}</dt><dd className="font-semibold text-ink">{fmtDateL(reservation.checkOut, t, "weekday")}<span className="block text-xs font-normal text-slate">{c.until} {property.checkOut}</span></dd></div>
               <div><dt className="caps !text-[10px] text-slate">{c.guests}</dt><dd className="font-semibold text-ink">{guestsLabelL(reservation.adults, reservation.children, t)}<span className="block text-xs font-normal text-slate">{nightsLabel(nights, t)}</span></dd></div>
             </dl>
             <div className="mt-5 border-t border-line pt-5">
@@ -98,7 +100,7 @@ export function Confirmation({ reference }: { reference: string }) {
             <h3 className="font-display text-lg text-ink">{c.nextTitle}</h3>
             <ol className="mt-3 space-y-3 text-sm text-slate">
               {c.next.map(([when, what]) => (
-                <li key={when}><span className="font-semibold text-ink">{when}</span> — {fmt(what, { in: settings.checkIn })}</li>
+                <li key={when}><span className="font-semibold text-ink">{when}</span> — {fmt(what, { in: property.checkIn })}</li>
               ))}
             </ol>
           </div>

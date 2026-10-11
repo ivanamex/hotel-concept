@@ -3,10 +3,11 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { Container, RuleLink } from "@/components/ui";
+import { ButtonLink, Container, RuleLink } from "@/components/ui";
+import { fmt } from "@/i18n";
 import { useT } from "@/i18n/context";
 import { Rich } from "@/i18n/rich";
-import { HOTEL } from "@/lib/seed";
+import { CABINS, HOTEL, PROPERTIES } from "@/lib/seed";
 import { ContactModal } from "./contact-modal";
 import { Link } from "./link";
 import { InView, Reveal } from "./motion";
@@ -88,10 +89,37 @@ export function FilmBreak() {
 
 /* ---------- Location block (illustrated map) ---------- */
 
-export function LocationBlock({ compact = false }: { compact?: boolean }) {
+/** The second place, on the home page after the rooms. */
+export function SecondPlaceBand() {
+  const t = useT();
+  const p = t.places;
+  const from = Math.min(...CABINS.filter((c) => c.kind !== "whole").map((c) => c.basePrice)) * 0.85;
+  return (
+    <section className="bg-lake-deep text-white">
+      <div className="grid lg:grid-cols-2">
+        <div className="group relative min-h-[360px] overflow-hidden lg:min-h-[640px]">
+          <Image src="/images/cabins/site.jpg" alt={p.page.heroAlt} fill sizes="(min-width:1024px) 50vw, 100vw" className="object-cover transition duration-[1600ms] group-hover:scale-[1.03]" />
+        </div>
+        <div className="flex flex-col justify-center px-6 py-16 sm:px-12 lg:px-20">
+          <p className="caps !text-[10px] text-sky">{p.band.eyebrow}</p>
+          <h2 className="mt-4 font-display text-4xl leading-[1.02] sm:text-5xl"><Rich text={p.band.title} /></h2>
+          <p className="mt-6 max-w-xl leading-relaxed text-sky/90">{p.band.text}</p>
+          <p className="caps mt-6 !text-[10.5px] text-sky">{fmt(p.band.from, { p: Math.round(from) })}</p>
+          <div className="mt-8 flex flex-wrap items-center gap-6">
+            <ButtonLink href="/cabanes" variant="light" arrow>{p.band.cta}</ButtonLink>
+            <RuleLink href="/experiences/fondue-evening" light>{p.band.cta2}</RuleLink>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function LocationBlock({ compact = false, place = "vidy" }: { compact?: boolean; place?: "vidy" | "cabanes" }) {
   const t = useT();
   const l = t.location;
-  const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${HOTEL.name}, ${HOTEL.address}, ${HOTEL.city}`)}`;
+  const prop = PROPERTIES.find((x) => x.id === place) ?? PROPERTIES[0];
+  const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${prop.name}, ${prop.address}, ${prop.city}`)}`;
   return (
     <section id="find-us" className="grid scroll-mt-16 lg:grid-cols-2">
       <div className="relative min-h-[320px] bg-[#f3eee4] sm:min-h-[420px] lg:min-h-[560px]">
@@ -99,8 +127,9 @@ export function LocationBlock({ compact = false }: { compact?: boolean }) {
       </div>
       <div className="flex flex-col items-center justify-center bg-lake-deep px-6 py-16 text-center text-white sm:px-12 lg:py-24">
         <p className="caps !text-[10px] text-sky">{l.eyebrow}</p>
-        <h2 className="mt-4 font-display text-4xl sm:text-5xl">{HOTEL.name}</h2>
-        <p className="mt-4 text-sky/90">{HOTEL.address}<br />{HOTEL.city}</p>
+        <h2 className="mt-4 font-display text-4xl sm:text-5xl">{prop.name}</h2>
+        <p className="mt-4 text-sky/90">{prop.address}<br />{prop.city}</p>
+        {place === "cabanes" && <p className="mt-2 text-sm text-sky/70">{t.places.page.mapNote}</p>}
         <a href={maps} target="_blank" rel="noopener" className="ticket sweep caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]">{l.maps} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
         <div className="mt-8 space-y-1 text-sky/90">
           <a href={`mailto:${HOTEL.email}`} className="block hover:text-white">{HOTEL.email}</a>
@@ -124,6 +153,7 @@ export function LocationBlock({ compact = false }: { compact?: boolean }) {
 const ORDER = [
   { href: "/", key: "home" },
   { href: "/rooms", key: "rooms" },
+  { href: "/cabanes", key: "cabanes" },
   { href: "/experiences", key: "experiences" },
   { href: "/dining", key: "dining" },
   { href: "/offers", key: "offers" },

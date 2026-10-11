@@ -15,7 +15,7 @@ import { useHref, useT } from "@/i18n/context";
 import { OFFERS } from "@/lib/content";
 import { addDays, extraCost, isRoomAvailable, nightsBetween, quote, roomFits, todayISO } from "@/lib/engine";
 import { chf } from "@/lib/format";
-import { PROMO_CODE, PROMO_RATE, useHotel, useHydrated, useSiteRooms } from "@/lib/store";
+import { PROMO_CODE, PROMO_RATE, useHotel, useHydrated } from "@/lib/store";
 import type { Guest, RatePlanId, Room } from "@/lib/types";
 
 export function BookingFlow() {
@@ -26,7 +26,8 @@ export function BookingFlow() {
   const sp = useSearchParams();
   const hydrated = useHydrated();
 
-  const rooms = useSiteRooms();
+  const allRooms = useHotel((s) => s.rooms);
+  const properties = useHotel((s) => s.properties);
   const reservations = useHotel((s) => s.reservations);
   const ratePlans = useHotel((s) => s.ratePlans);
   const seasons = useHotel((s) => s.seasons);
@@ -41,6 +42,14 @@ export function BookingFlow() {
   const [children, setChildren] = useState(Number(sp.get("children")) || 0);
   const preRoom = sp.get("room");
   const offer = OFFERS.find((o) => o.slug === sp.get("offer"));
+
+  // where: the house or the cabins — from ?place=, or inferred from the room the visitor came from
+  const prePlace = sp.get("place");
+  const roomPlace = preRoom ? allRooms.find((r) => r.slug === preRoom)?.propertyId : undefined;
+  const [place, setPlace] = useState<string>(prePlace && properties.some((p) => p.id === prePlace) ? prePlace : roomPlace ?? "vidy");
+  const property = properties.find((p) => p.id === place) ?? properties[0];
+  const rooms = useMemo(() => allRooms.filter((r) => r.propertyId === place && r.kind !== "whole"), [allRooms, place]);
+  const placeTax = property.taxes.find((x) => x.kind === "per_person_night")?.amount ?? 0;
 
   const [step, setStep] = useState(sp.get("in") ? 2 : 1);
   const [roomId, setRoomId] = useState<string | null>(null);
@@ -67,16 +76,16 @@ export function BookingFlow() {
   const selectedExtras = extrasAll.filter((e) => extras.includes(e.id)).map((e) => localizeExtra(e, t));
   const q = useMemo(() => {
     if (!selectedRoom || nights <= 0) return null;
-    const base = quote({ room: selectedRoom, checkIn, checkOut, adults, children, plan, extras: selectedExtras.filter((e) => !e.requestOnly), seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax });
+    const base = quote({ room: selectedRoom, checkIn, checkOut, adults, children, plan, extras: selectedExtras.filter((e) => !e.requestOnly), seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: placeTax });
     if (!promoOk) return { ...base, discount: 0 };
     const discount = Math.round(base.roomTotal * PROMO_RATE);
     return { ...base, discount, total: base.total - discount };
-  }, [selectedRoom, nights, checkIn, checkOut, adults, children, plan, selectedExtras, seasons, settings, promoOk]);
+  }, [selectedRoom, nights, checkIn, checkOut, adults, children, plan, selectedExtras, seasons, settings, promoOk, placeTax]);
 
   const results = useMemo(() => {
     if (!hydrated || nights < 1) return { available: [] as Room[], unavailable: [] as Room[], tooSmall: [] as Room[] };
     const fit = rooms.filter((r) => roomFits(r, adults, children));
-    const available = fit.filter((r) => isRoomAvailable(r, checkIn, checkOut, reservations)).sort((a, b) => a.basePrice - b.basePrice);
+    const available = fit.filter((r) => isRoomAvailable(r, checkIn, checkOut, reservations, undefined, allRooms)).sort((a, b) => a.basePrice - b.basePrice);
     const unavailable = fit.filter((r) => !available.includes(r));
     const tooSmall = rooms.filter((r) => !fit.includes(r));
     if (preRoom) {
@@ -84,7 +93,7 @@ export function BookingFlow() {
       if (idx > 0) available.unshift(...available.splice(idx, 1));
     }
     return { available, unavailable, tooSmall };
-  }, [hydrated, rooms, reservations, checkIn, checkOut, adults, children, nights, preRoom]);
+  }, [hydrated, rooms, allRooms, reservations, checkIn, checkOut, adults, children, nights, preRoom]);
 
   const goTop = () => document.getElementById("booking-top")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -93,7 +102,7 @@ export function BookingFlow() {
     setRoomId(null);
     setStep(2);
     goTop();
-    const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children) });
+    const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children), place });
     router.replace(href(`/book?${params.toString()}`), { scroll: false });
   };
 
@@ -128,6 +137,7 @@ export function BookingFlow() {
     setSubmitting(true);
     const fullNotes = [notes.trim(), conciergeNote.trim() ? `${b.conciergeNote}${conciergeNote.trim()}` : "", payment === "hotel" ? b.payAtHotelNote : b.cardOnFileNote].filter(Boolean).join("\n");
     const r = createReservation({
+      propertyId: place,
       roomId: selectedRoom.id,
       checkIn,
       checkOut,
@@ -155,6 +165,7 @@ export function BookingFlow() {
     <div className="rounded-lg bg-white p-5 shadow-card ring-1 ring-ink/5">
       <h2 className="font-display text-xl text-ink">{b.summary.title}</h2>
       <dl className="mt-4 space-y-2.5 text-sm">
+        {properties.length > 1 && <div className="flex justify-between gap-3"><dt className="text-slate">{t.places.where.label}</dt><dd className="text-right font-medium text-ink">{property.name}</dd></div>}
         <div className="flex justify-between gap-3"><dt className="text-slate">{b.summary.dates}</dt><dd className="text-right font-medium text-ink">{fmtDateL(checkIn, t, "short")} → {fmtDateL(checkOut, t, "short")}{nights > 0 && <span className="block text-xs font-normal text-slate">{nightsLabel(nights, t)}</span>}</dd></div>
         <div className="flex justify-between gap-3"><dt className="text-slate">{b.summary.guests}</dt><dd className="font-medium text-ink">{guestsLabelL(adults, children, t)}</dd></div>
         <div className="flex justify-between gap-3"><dt className="text-slate">{b.summary.room}</dt><dd className="text-right font-medium text-ink">{selectedRoom ? selectedRoom.name : <span className="text-slate">—</span>}</dd></div>
@@ -220,6 +231,18 @@ export function BookingFlow() {
             <section className="form-lines">
               <h2 className="font-display text-3xl text-ink">{b.s1.title}</h2>
               <p className="mt-1 text-sm text-slate">{b.s1.lead} <Link href="/request" className="font-semibold text-lake">{b.s1.leadLink}</Link>.</p>
+              {properties.length > 1 && (
+                <div className="mt-8">
+                  <p className="caps mb-2 !text-[10px] text-slate">{t.places.where.label}</p>
+                  <div className="inline-flex flex-wrap rounded-xs ring-1 ring-ink/20">
+                    {properties.map((p) => (
+                      <button key={p.id} type="button" onClick={() => { setPlace(p.id); setRoomId(null); }} className={clsx("caps px-4 py-2.5 !text-[10px] transition-colors duration-300", place === p.id ? "bg-ink text-white" : "text-ink hover:bg-ink/5")}>
+                        {p.id === "cabanes" ? t.places.where.cabanes : t.places.where.house}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <Field label={t.bookingBar.checkIn}><Input type="date" value={checkIn} min={todayISO()} onChange={(e) => { setCheckIn(e.target.value); if (e.target.value >= checkOut) setCheckOut(addDays(e.target.value, 1)); }} /></Field>
                 <Field label={t.bookingBar.checkOut}><Input type="date" value={checkOut} min={addDays(checkIn, 1)} onChange={(e) => setCheckOut(e.target.value)} /></Field>

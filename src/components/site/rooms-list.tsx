@@ -8,16 +8,22 @@ import type { Room, ViewType } from "@/lib/types";
 import { RoomCard } from "./room-card";
 
 const GUESTS = [1, 2, 3, 4];
-const VIEWS: ViewType[] = ["Lake", "Garden", "Courtyard"];
+const HOUSE_VIEWS: ViewType[] = ["Lake", "Garden", "Courtyard"];
+const CABIN_VIEWS: ViewType[] = ["Forest"];
 
-export function RoomsList({ rooms }: { rooms: Room[] }) {
+/** The house's rooms, and — when `cabins` is given — a second tab for Les Cabanes. */
+export function RoomsList({ rooms: house, cabins }: { rooms: Room[]; cabins?: Room[] }) {
   const t = useT();
+  const [place, setPlace] = useState<"house" | "cabanes">("house");
   const [guests, setGuests] = useState<number | null>(null);
   const [view, setView] = useState<ViewType | null>(null);
+  const rooms = place === "cabanes" && cabins ? cabins : house;
+  const VIEWS = place === "cabanes" ? CABIN_VIEWS : HOUSE_VIEWS;
 
   const list = useMemo(
     () =>
       rooms
+        .filter((r) => r.kind !== "whole")
         .filter((r) => (guests ? r.maxGuests >= guests : true))
         .filter((r) => (view ? r.view === view : true))
         .sort((a, b) => a.basePrice - b.basePrice),
@@ -32,6 +38,15 @@ export function RoomsList({ rooms }: { rooms: Room[] }) {
 
   return (
     <div>
+      {cabins && (
+        <div className="mb-8 inline-flex rounded-xs ring-1 ring-ink/20">
+          {(["house", "cabanes"] as const).map((pl) => (
+            <button key={pl} type="button" onClick={() => { setPlace(pl); setView(null); }} className={clsx("caps px-4 py-2 !text-[10px] transition-colors duration-300", place === pl ? "bg-ink text-white" : "text-ink hover:bg-ink/5")}>
+              {t.places.tabs[pl]} <span className={place === pl ? "text-white/60" : "text-slate"}>· {(pl === "cabanes" ? cabins : house).filter((r) => r.kind !== "whole").length}</span>
+            </button>
+          ))}
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
         <div className="flex items-center gap-2">
           <span className="caps mr-1 !text-[10px] text-slate">{t.rooms.filterGuests}</span>
@@ -49,7 +64,7 @@ export function RoomsList({ rooms }: { rooms: Room[] }) {
             </button>
           ))}
         </div>
-        <span className="text-sm text-slate">{fmt(t.rooms.count, { n: list.length, total: rooms.length })}</span>
+        <span className="text-sm text-slate">{fmt(t.rooms.count, { n: list.length, total: rooms.filter((r) => r.kind !== "whole").length })}</span>
       </div>
       <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {list.map((room, i) => (

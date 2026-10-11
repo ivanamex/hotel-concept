@@ -12,6 +12,7 @@ export function isLang(x: string | undefined | null): x is Lang {
 /** Internal route key → public slug per language. Room slugs stay as they are. */
 export const SECTION_SLUGS: Record<string, Record<Lang, string>> = {
   rooms: { en: "rooms", fr: "chambres", de: "zimmer", it: "camere" },
+  cabanes: { en: "cabanes", fr: "cabanes", de: "huetten", it: "cabanes" },
   book: { en: "book", fr: "reserver", de: "buchen", it: "prenota" },
   confirmed: { en: "confirmed", fr: "confirme", de: "bestaetigt", it: "confermata" },
   experiences: { en: "experiences", fr: "experiences", de: "erlebnisse", it: "esperienze" },

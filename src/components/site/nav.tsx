@@ -18,6 +18,7 @@ import { whatsappUrl } from "./whatsapp";
 export const NAV = [
   { key: "home", href: "/", image: "/images/lake/aerial-dusk.jpg" },
   { key: "rooms", href: "/rooms", image: "/images/rooms/room-junior-suite.jpg" },
+  { key: "cabanes", href: "/cabanes", image: "/images/cabins/site.jpg" },
   { key: "experiences", href: "/experiences", image: "/images/around/lavaux.jpg" },
   { key: "dining", href: "/dining", image: "/images/house/terrace-dusk.jpg" },
   { key: "offers", href: "/offers", image: "/images/lake/swans.jpg" },

@@ -146,6 +146,8 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
           <div className="text-center">
             <p className="font-display text-3xl text-ink"><Rich text={r.allTitle} /></p>
             <RuleLink href="/rooms" className="mt-6">{r.all}</RuleLink>
+            <p className="mt-10 font-display text-2xl text-ink-soft"><Rich text={t.places.trackCard} /></p>
+            <RuleLink href="/cabanes" className="mt-4">{t.places.trackCta}</RuleLink>
           </div>
         </div>
       </div>
