@@ -42,9 +42,10 @@ export function AroundCarousel({ t }: { t: Dict }) {
 }
 
 /** The six bookable experiences, as a carousel. */
-export function ExperiencesCarousel({ t }: { t: Dict }) {
-  const b = t.brand.experiences;
+export function ExperiencesCarousel({ t, copy, first }: { t: Dict; copy?: { eyebrow: string; title: string; lead: string; all: string }; /** Slug to show first (the fondue evening on a cabin page, say). */ first?: string }) {
+  const b = copy ?? t.brand.experiences;
   const x = t.experiences;
+  const list = first ? [...EXPERIENCES].sort((a, c) => (a.slug === first ? -1 : c.slug === first ? 1 : 0)) : EXPERIENCES;
   return (
     <section className="py-20 sm:py-28 lg:py-36">
       <Container>
@@ -53,7 +54,7 @@ export function ExperiencesCarousel({ t }: { t: Dict }) {
           link={<RuleLink href="/experiences#book">{b.all}</RuleLink>}
           itemClass="w-[80vw] sm:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)]"
         >
-          {EXPERIENCES.map((e) => {
+          {list.map((e) => {
             const c = x.catalog[e.slug];
             return (
               <Link key={e.slug} href={`/experiences/${e.slug}`} className="group lift flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-ink/5">

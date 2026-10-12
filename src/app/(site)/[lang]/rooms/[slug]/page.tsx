@@ -1,7 +1,7 @@
 import { BedDouble, Building2, Check, Eye, Maximize2, Users } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { NextPage } from "@/components/site/bands";
+import { ExperiencesCarousel } from "@/components/site/home-sections";
 import { Link } from "@/components/site/link";
 import { RoomCard } from "@/components/site/room-card";
 import { RoomGallery } from "@/components/site/room-gallery";
@@ -11,6 +11,7 @@ import { fmt, getDict, localizeRoom, viewLabel } from "@/i18n";
 import { pageMeta, type LangSlugParams } from "@/i18n/meta";
 import { Rich } from "@/i18n/rich";
 import { ALL_UNITS, HOTEL, ROOMS } from "@/lib/seed";
+import { SITE } from "@/lib/site";
 
 export function generateStaticParams() {
   return ALL_UNITS.filter((r) => r.kind !== "whole").map((r) => ({ slug: r.slug }));
@@ -118,7 +119,7 @@ export default async function RoomPage({ params }: LangSlugParams) {
           </div>
         </Container>
       </section>
-      <NextPage current={cabin ? "/cabanes" : "/rooms"} />
+      {SITE.features.experiences && <ExperiencesCarousel t={t} copy={t.rooms.detail.xp} first={cabin ? "fondue-evening" : "lavaux-walk"} />}
     </>
   );
 }

@@ -33,6 +33,7 @@ export function Confirmation({ reference }: { reference: string }) {
   const properties = useHotel((s) => s.properties);
   const ratePlans = useHotel((s) => s.ratePlans);
   const extrasAll = useHotel((s) => s.extras);
+  const xpBookings = useHotel((s) => s.experienceBookings);
   const settings = useHotel((s) => s.settings);
 
   if (!hydrated) return <div className="h-64 animate-pulse rounded-lg bg-white" />;
@@ -49,6 +50,7 @@ export function Confirmation({ reference }: { reference: string }) {
   const room = localizeRoom(rooms.find((r) => r.id === reservation.roomId)!, t);
   const plan = localizeRatePlan(ratePlans.find((p) => p.id === reservation.ratePlan)!, t);
   const extras = extrasAll.filter((e) => reservation.extras.includes(e.id)).map((e) => localizeExtra(e, t));
+  const xpForStay = xpBookings.filter((x) => x.stayRef === reservation.ref && x.status !== "cancelled");
   const nights = nightsBetween(reservation.checkIn, reservation.checkOut);
   const property = properties.find((p) => p.id === reservation.propertyId) ?? properties[0];
   const address = `${property.name}, ${property.address}, ${property.city}`;
@@ -88,9 +90,19 @@ export function Confirmation({ reference }: { reference: string }) {
               )}
               {reservation.notes && <p className="mt-3 whitespace-pre-line text-sm text-slate">{reservation.notes}</p>}
             </div>
+            {xpForStay.length > 0 && (
+              <div className="mt-5 border-t border-line pt-5">
+                <p className="caps !text-[10px] text-slate">{c.xpTitle}</p>
+                <ul className="mt-2 space-y-1.5 text-sm text-ink">
+                  {xpForStay.map((x) => (
+                    <li key={x.id} className="flex justify-between gap-3"><span>{fmt(c.xpLine, { name: t.experiences.catalog[x.experienceId]?.name ?? x.experienceId, date: fmtDateL(x.date, t, "weekday"), time: x.time, n: x.people, ref: x.ref })}</span><span className="shrink-0 text-slate">{chf(x.total)}</span></li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className="mt-5 flex items-baseline justify-between border-t border-line pt-5">
-              <span className="text-sm text-slate">{c.total}</span>
-              <span className="font-display text-2xl text-ink">{chf(reservation.total, { decimals: true })}</span>
+              <span className="text-sm text-slate">{xpForStay.length ? t.book.summary.grand : c.total}</span>
+              <span className="font-display text-2xl text-ink">{chf(reservation.total + xpForStay.reduce((n, x) => n + x.total, 0), { decimals: true })}</span>
             </div>
           </div>
         </div>

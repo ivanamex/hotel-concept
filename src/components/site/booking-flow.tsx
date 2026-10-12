@@ -13,7 +13,9 @@ import { Button, Field, Input, Select, Textarea } from "@/components/ui";
 import { fmt, fmtDateL, guestsLabelL, localizeExtra, localizeRatePlan, localizeRoom, nightsLabel, unitLabel, viewLabel } from "@/i18n";
 import { useHref, useT } from "@/i18n/context";
 import { OFFERS } from "@/lib/content";
-import { addDays, extraCost, isRoomAvailable, nightsBetween, quote, roomFits, todayISO } from "@/lib/engine";
+import { addDays, eachNight, extraCost, isRoomAvailable, nightsBetween, quote, roomFits, todayISO } from "@/lib/engine";
+import { EXPERIENCES, experienceTotal, runsOn } from "@/lib/experiences";
+import { SITE } from "@/lib/site";
 import { chf } from "@/lib/format";
 import { PROMO_CODE, PROMO_RATE, useHotel, useHydrated } from "@/lib/store";
 import type { Guest, RatePlanId, Room } from "@/lib/types";
@@ -34,6 +36,8 @@ export function BookingFlow() {
   const extrasAll = useHotel((s) => s.extras);
   const settings = useHotel((s) => s.settings);
   const createReservation = useHotel((s) => s.createReservation);
+  const bookExperience = useHotel((s) => s.bookExperience);
+  const experienceBookings = useHotel((s) => s.experienceBookings);
 
   const dd = defaultDates();
   const [checkIn, setCheckIn] = useState(sp.get("in") || dd.checkIn);
@@ -60,6 +64,8 @@ export function BookingFlow() {
   const [step, setStep] = useState(sp.get("in") ? 2 : 1);
   const [planId, setPlanId] = useState<RatePlanId>(offer?.ratePlan ?? "bed_breakfast");
   const [extras, setExtras] = useState<string[]>(offer?.extras ?? []);
+  /** Experiences added to the stay: slug → day, start, people. Booked with the room, one confirmation. */
+  const [xp, setXp] = useState<Record<string, { date: string; time: string; people: number }>>({});
   const [conciergeNote, setConciergeNote] = useState("");
   const [guest, setGuest] = useState<Guest>({ firstName: "", lastName: "", email: "", phone: "", country: t.book.s4.countries[0] });
   const [arrivalTime, setArrivalTime] = useState(t.book.s4.arrivalOptions[2]);
@@ -86,6 +92,17 @@ export function BookingFlow() {
     const discount = Math.round(base.roomTotal * PROMO_RATE);
     return { ...base, discount, total: base.total - discount };
   }, [selectedRoom, nights, checkIn, checkOut, adults, children, plan, selectedExtras, seasons, settings, promoOk, placeTax]);
+
+  /** Which experiences run on a day of the stay (check-in day to check-out day), with the departures that still have room. */
+  const xpOffers = useMemo(() => {
+    if (!SITE.features.experiences || nights === 0) return [];
+    const days = [...eachNight(checkIn, checkOut), checkOut];
+    const left = (slug: string, date: string, time: string, max: number) => max - experienceBookings.filter((x) => x.experienceId === slug && x.date === date && x.time === time && x.status !== "cancelled").reduce((n, x) => n + x.people, 0);
+    return EXPERIENCES.map((e) => ({ e, days: days.filter((d) => runsOn(e, d) && e.times.some((tm) => left(e.slug, d, tm, e.maxPeople) >= Math.max(1, Math.min(e.minPeople, adults)))) })).filter((o) => o.days.length > 0);
+  }, [nights, checkIn, checkOut, adults, experienceBookings]);
+  const xpLines = Object.entries(xp).flatMap(([slug, v]) => { const e = EXPERIENCES.find((x) => x.slug === slug); return e ? [{ e, ...v, total: experienceTotal(e, v.people) }] : []; });
+  const xpTotal = xpLines.reduce((n, l) => n + l.total, 0);
+  const toggleXp = (slug: string) => setXp((cur) => { if (cur[slug]) { const { [slug]: _, ...rest } = cur; return rest; } const o = xpOffers.find((x) => x.e.slug === slug); if (!o) return cur; return { ...cur, [slug]: { date: o.days[0], time: o.e.times[0], people: Math.max(o.e.minPeople, Math.min(adults, o.e.maxPeople)) } }; });
 
   const results = useMemo(() => {
     if (!hydrated || nights < 1) return { available: [] as Room[], unavailable: [] as Room[], tooSmall: [] as Room[] };
@@ -186,6 +203,9 @@ export function BookingFlow() {
       discount: promoOk ? q.discount : undefined,
       paid: planId === "non_refundable",
     });
+    for (const l of xpLines) {
+      bookExperience({ experienceId: l.e.slug, propertyId: l.e.propertyId, date: l.date, time: l.time, people: l.people, guest, stayRef: r.ref, total: l.total, notes: undefined }, l.e.maxPeople);
+    }
     await new Promise((res) => setTimeout(res, 700));
     router.push(href(`/book/confirmed/${r.ref}`));
   };
@@ -217,6 +237,19 @@ export function BookingFlow() {
             <span className="font-semibold text-ink">{b.summary.total}</span>
             <span className="font-display text-3xl text-ink">{chf(q.total, { decimals: true })}</span>
           </div>
+          {xpLines.length > 0 && (
+            <>
+              <dl className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
+                {xpLines.map((l) => (
+                  <div key={l.e.slug} className="flex justify-between gap-3"><dt className="text-slate">{t.experiences.catalog[l.e.slug]?.name}<span className="block text-xs">{fmtDateL(l.date, t, "short")} · {l.time} · {l.people}</span></dt><dd className="text-ink">{chf(l.total)}</dd></div>
+                ))}
+              </dl>
+              <div className="mt-3 flex items-baseline justify-between">
+                <span className="text-sm text-slate">{b.summary.grand}</span>
+                <span className="font-display text-2xl text-ink">{chf(q.total + xpTotal, { decimals: true })}</span>
+              </div>
+            </>
+          )}
           <p className="mt-2 text-xs text-slate">{plan.cancellation} {planId === "non_refundable" ? b.summary.chargedNow : b.summary.nothingToday}</p>
         </>
       )}
@@ -449,9 +482,53 @@ export function BookingFlow() {
                   <Textarea value={conciergeNote} onChange={(e) => setConciergeNote(e.target.value)} placeholder={b.s3.conciergePlaceholder} />
                 </Field>
               )}
+              {xpOffers.length > 0 && (
+                <div className="mt-10">
+                  <h3 className="font-display text-2xl text-ink">{b.s3.xpTitle}</h3>
+                  <p className="mt-1 text-sm text-slate">{b.s3.xpLead}</p>
+                  <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                    {xpOffers.map(({ e, days }) => {
+                      const c = t.experiences.catalog[e.slug];
+                      const on = xp[e.slug];
+                      return (
+                        <li key={e.slug} className={clsx("lift-sm overflow-hidden rounded-lg bg-white ring-1", on ? "ring-2 ring-lake" : "ring-ink/5")}>
+                          <button type="button" onClick={() => toggleXp(e.slug)} aria-pressed={!!on} className="flex w-full items-stretch gap-3 text-left">
+                            <span className="relative block w-28 shrink-0 self-stretch overflow-hidden"><Image src={e.image} alt={c?.name ?? e.slug} fill sizes="112px" className="object-cover" /></span>
+                            <span className="min-w-0 flex-1 py-3 pr-3">
+                              <span className="block text-sm font-semibold leading-snug text-ink">{c?.name}</span>
+                              <span className="block text-xs text-slate">{chf(e.price)} {e.priceUnit === "person" ? b.s3.xpPerPerson : b.s3.xpPerGroup} · {fmt(t.experiences.book.hours, { n: e.durationH })}</span>
+                              <span className={clsx("caps mt-2 inline-flex items-center gap-1.5 !text-[10px]", on ? "text-lake" : "text-ink")}>{on ? <><Check className="h-3 w-3" /> {b.s3.xpAdded}</> : `+ ${b.s3.xpAdd}`}</span>
+                            </span>
+                          </button>
+                          {on && (
+                            <div className="grid grid-cols-3 gap-2 border-t border-line px-3 py-3">
+                              <label className="caps !text-[10px] text-slate">{b.s3.xpDay}
+                                <select value={on.date} onChange={(ev) => setXp((cur) => ({ ...cur, [e.slug]: { ...cur[e.slug], date: ev.target.value } }))} className="mt-1 block w-full rounded-xs border border-line bg-white px-2 py-1.5 font-sans text-sm normal-case tracking-normal text-ink">
+                                  {days.map((d) => <option key={d} value={d}>{fmtDateL(d, t, "weekday")}</option>)}
+                                </select>
+                              </label>
+                              <label className="caps !text-[10px] text-slate">{t.experiences.book.time}
+                                <select value={on.time} onChange={(ev) => setXp((cur) => ({ ...cur, [e.slug]: { ...cur[e.slug], time: ev.target.value } }))} className="mt-1 block w-full rounded-xs border border-line bg-white px-2 py-1.5 font-sans text-sm normal-case tracking-normal text-ink">
+                                  {e.times.map((tm) => <option key={tm} value={tm}>{tm}</option>)}
+                                </select>
+                              </label>
+                              <label className="caps !text-[10px] text-slate">{b.s3.xpPeople}
+                                <select value={on.people} onChange={(ev) => setXp((cur) => ({ ...cur, [e.slug]: { ...cur[e.slug], people: Number(ev.target.value) } }))} className="mt-1 block w-full rounded-xs border border-line bg-white px-2 py-1.5 font-sans text-sm normal-case tracking-normal text-ink">
+                                  {Array.from({ length: e.maxPeople - e.minPeople + 1 }, (_, i) => e.minPeople + i).map((n) => <option key={n} value={n}>{n}</option>)}
+                                </select>
+                              </label>
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button onClick={() => setStep(4)} arrow>{b.s3.cta}</Button>
-                <Button variant="ghost" onClick={() => { setExtras([]); setStep(4); }}>{b.s3.skip}</Button>
+                <Button variant="ghost" onClick={() => { setExtras([]); setXp({}); setStep(4); }}>{b.s3.skip}</Button>
               </div>
             </section>
           )}
@@ -520,7 +597,7 @@ export function BookingFlow() {
               </div>
 
               <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-8">
-                <Button type="submit" size="lg" disabled={submitting}>{submitting ? b.s4.confirming : fmt(b.s4.confirm, { total: chf(q.total, { decimals: true }) })}</Button>
+                <Button type="submit" size="lg" disabled={submitting}>{submitting ? b.s4.confirming : fmt(b.s4.confirm, { total: chf(q.total + xpTotal, { decimals: true }) })}</Button>
                 <p className="text-xs text-slate">{b.s4.terms} <Link href="/terms" className="underline">{b.s4.termsLink}</Link>. {plan.cancellation}</p>
               </div>
             </form>
@@ -533,7 +610,7 @@ export function BookingFlow() {
         {/* summary: mobile */}
         <div className="fixed inset-x-0 bottom-0 z-30 lg:hidden">
           <button type="button" onClick={() => setSummaryOpen((v) => !v)} className="flex w-full items-center justify-between border-t border-line bg-white px-5 py-3 text-sm shadow-[0_-8px_24px_-12px_rgba(23,26,31,0.25)]">
-            <span className="font-semibold text-ink">{q ? chf(q.total, { decimals: true }) : nightsLabel(nights, t)}</span>
+            <span className="font-semibold text-ink">{q ? chf(q.total + xpTotal, { decimals: true }) : nightsLabel(nights, t)}</span>
             <span className="inline-flex items-center gap-1 text-lake">{b.summary.title} <ChevronDown className={clsx("h-4 w-4 transition", summaryOpen && "rotate-180")} /></span>
           </button>
           {summaryOpen && <div className="max-h-[60vh] overflow-y-auto bg-sand p-4">{Summary}</div>}

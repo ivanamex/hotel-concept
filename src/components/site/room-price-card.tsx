@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { defaultDates } from "@/components/site/booking-bar";
 import { Link } from "@/components/site/link";
 import { inputClass } from "@/components/ui";
-import { fmt, localizeRatePlan, nightsLabel } from "@/i18n";
+import { fmt, localizeRatePlan, localizeRoom, nightsLabel } from "@/i18n";
 import { useT } from "@/i18n/context";
 import { addDays, isRoomAvailable, nightsBetween, quote, roomFits, todayISO } from "@/lib/engine";
 import { chf } from "@/lib/format";
@@ -47,6 +47,18 @@ export function RoomPriceCard({ room: staticRoom }: { room: Room }) {
 
   const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children), room: room.slug });
   const today = todayISO();
+  const dateParams = `in=${checkIn}&out=${checkOut}&adults=${adults}&children=${children}`;
+
+  /** When this one is taken or too small: the units that are free and fit — this place first, cheapest first. */
+  const alternatives = useMemo(() => {
+    if (!hydrated || nights === 0 || (available && fits)) return [];
+    const plan = ratePlans[0];
+    return allRooms
+      .filter((r) => r.id !== room.id && r.kind !== "whole" && roomFits(r, adults, children) && isRoomAvailable(r, checkIn, checkOut, reservations, undefined, allRooms))
+      .map((r) => ({ r, total: plan ? quote({ room: r, checkIn, checkOut, adults, children, plan, extras: [], seasons, breakfastPrice: settings.breakfastPrice, cityTaxPerPersonNight: settings.cityTax }).roomTotal : r.basePrice * nights }))
+      .sort((a, b) => (a.r.propertyId === room.propertyId ? 0 : 1) - (b.r.propertyId === room.propertyId ? 0 : 1) || a.total - b.total)
+      .slice(0, 3);
+  }, [hydrated, nights, available, fits, allRooms, room, adults, children, checkIn, checkOut, reservations, ratePlans, seasons, settings]);
 
   return (
     <div className="rounded-lg bg-white p-5 shadow-lift ring-1 ring-ink/5 sm:p-6">
@@ -82,10 +94,32 @@ export function RoomPriceCard({ room: staticRoom }: { room: Room }) {
       <div className="mt-5 space-y-2">
         {!hydrated ? (
           <div className="h-24 animate-pulse rounded-md bg-sand" />
-        ) : !fits ? (
-          <p className="flex items-start gap-2 rounded-md bg-clay-soft p-3 text-sm text-clay"><Info className="mt-0.5 h-4 w-4 shrink-0" /> {fmt(p.tooMany, { max: room.maxGuests, adults: room.maxAdults })}</p>
-        ) : !available ? (
-          <p className="flex items-start gap-2 rounded-md bg-sand p-3 text-sm text-ink-soft"><Info className="mt-0.5 h-4 w-4 shrink-0 text-slate" /> {p.notAvailable}</p>
+        ) : !fits || !available ? (
+          <div className="rounded-md bg-sand p-3 text-sm text-ink-soft">
+            <p className="flex items-start gap-2"><Info className="mt-0.5 h-4 w-4 shrink-0 text-slate" /> {!fits ? fmt(p.tooMany, { max: room.maxGuests, adults: room.maxAdults }) : alternatives.length ? p.notAvailable : p.noneFree}</p>
+            {alternatives.length > 0 && (
+              <ul className="mt-3 space-y-1.5">
+                {alternatives.map(({ r, total }) => {
+                  const alt = localizeRoom(r, t);
+                  return (
+                    <li key={r.id}>
+                      <Link href={`/book?${dateParams}&room=${r.slug}`} className="rise flex items-center justify-between gap-3 rounded-md bg-white px-3 py-2.5 ring-1 ring-ink/10 hover:ring-ink/30">
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-medium text-ink">{alt.name}</span>
+                          <span className="block text-xs text-slate">{t.places.where[r.propertyId === "cabanes" ? "cabanes" : "house"].split(" · ")[0]} · {t.common.upTo} {r.maxGuests}</span>
+                        </span>
+                        <span className="shrink-0 text-right">
+                          <span className="block text-sm font-semibold text-ink">{chf(total)}</span>
+                          <span className="block text-[11px] text-slate">{fmt(p.forNights, { n: nightsLabel(nights, t) })}</span>
+                          <span className="caps block !text-[9px] text-lake">{t.common.book} →</span>
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
         ) : (
           quotes.map(({ plan: base, q }) => {
             const plan = localizeRatePlan(base, t);
@@ -109,11 +143,11 @@ export function RoomPriceCard({ room: staticRoom }: { room: Room }) {
         <Link href={`/book?${params.toString()}`} className="ticket sweep caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-lake !text-[11px] text-white [--sweep:var(--color-lake-deep)]">
           {p.bookThis} <ArrowRight className="arrow h-3.5 w-3.5" />
         </Link>
-      ) : (
-        <Link href={`/book?in=${checkIn}&out=${checkOut}&adults=${adults}&children=${children}`} className="ticket sweep caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-ink !text-[11px] text-white [--sweep:var(--color-lake)]">
-          {p.seeAvailable} <ArrowRight className="arrow h-3.5 w-3.5" />
+      ) : hydrated && alternatives.length === 0 ? (
+        <Link href={`/request?${dateParams}`} className="ticket sweep caps mt-5 inline-flex h-12 w-full items-center justify-center gap-3 rounded-xs bg-ink !text-[11px] text-white [--sweep:var(--color-lake)]">
+          {p.askUs} <ArrowRight className="arrow h-3.5 w-3.5" />
         </Link>
-      )}
+      ) : null}
       <ul className="mt-4 space-y-1.5 text-xs text-slate">
         <li className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-moss" /> {p.bestRate}</li>
         <li className="flex items-center gap-2"><Check className="h-3.5 w-3.5 text-moss" /> {fmt(p.cityTax, { t: settings.cityTax.toFixed(2) })}</li>
