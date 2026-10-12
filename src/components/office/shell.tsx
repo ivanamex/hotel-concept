@@ -235,7 +235,7 @@ export function OfficeShell({ children, title, subtitle, actions }: { children: 
             {subtitle && <p className="truncate text-xs text-slate">{subtitle}</p>}
           </div>
           <button type="button" onClick={() => setPalette(true)} className="hidden h-9 w-64 items-center gap-2 rounded-xs bg-[#f5f6f8] px-3 text-sm text-slate ring-1 ring-ink/5 transition hover:ring-ink/20 md:flex">
-            <Search className="h-4 w-4" /><span className="flex-1 text-left">Search reservations, guests, units…</span><kbd className="text-[10px]">⌘K</kbd>
+            <Search className="h-4 w-4 shrink-0" /><span className="flex-1 truncate text-left">Search…</span><kbd className="shrink-0 text-[10px]">⌘K</kbd>
           </button>
           <span className="hidden text-sm text-slate xl:block">{fmtDate(today, "long")}</span>
           {actions}
@@ -267,9 +267,16 @@ function PropertySwitcher({ compact }: { compact: boolean }) {
   const scope = useOfficeScope();
   const set = useHotel((s) => s.setOfficeProperty);
   const [open, setOpen] = useState(false);
+  const [at, setAt] = useState<{ top: number; left: number } | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   useOutside(ref, () => setOpen(false), open);
   const multi = scope.allProperties.length > 1;
+  const toggle = () => {
+    if (!multi) return;
+    const r = ref.current?.getBoundingClientRect();
+    if (r) setAt({ top: r.top, left: r.right + 8 });
+    setOpen((o) => !o);
+  };
   const label = scope.all ? (multi ? "All locations" : scope.allProperties[0].name) : scope.property!.name;
   const accent = scope.property?.accent;
 
@@ -277,7 +284,7 @@ function PropertySwitcher({ compact }: { compact: boolean }) {
     <div ref={ref} className="relative">
       <button
         type="button"
-        onClick={() => multi && setOpen((o) => !o)}
+        onClick={toggle}
         aria-haspopup={multi ? "listbox" : undefined}
         aria-expanded={open}
         title={compact ? label : undefined}
@@ -289,7 +296,7 @@ function PropertySwitcher({ compact }: { compact: boolean }) {
         {!compact && <><span className="flex-1 truncate">{label}</span>{multi && <ChevronDown className={clsx("h-4 w-4 text-sky/70 transition", open && "rotate-180")} />}</>}
       </button>
       {open && (
-        <ul role="listbox" className={clsx("absolute z-40 mt-1 w-64 rounded-md bg-white p-1 text-ink shadow-lift ring-1 ring-ink/10", compact ? "left-full top-0 ml-2 mt-0" : "left-0")}>
+        <ul role="listbox" style={compact && at ? { top: at.top, left: at.left } : undefined} className={clsx("z-40 rounded-md bg-white p-1 text-ink shadow-lift ring-1 ring-ink/10", compact ? "fixed w-60" : "absolute left-0 right-0 mt-1")}>
           <li role="option" aria-selected={scope.all}>
             <button type="button" onClick={() => { set("all"); setOpen(false); }} className={clsx("flex w-full items-center gap-3 rounded-xs px-3 py-2 text-left text-sm hover:bg-ink/5", scope.all && "font-semibold")}>
               <span className="grid h-2.5 w-2.5 grid-cols-2 gap-px">{scope.allProperties.slice(0, 4).map((p) => <span key={p.id} className="rounded-[1px]" style={{ background: p.accent }} />)}</span>
@@ -303,13 +310,13 @@ function PropertySwitcher({ compact }: { compact: boolean }) {
             <li key={p.id} role="option" aria-selected={scope.property?.id === p.id}>
               <button type="button" onClick={() => { set(p.id); setOpen(false); }} className={clsx("flex w-full items-center gap-3 rounded-xs px-3 py-2 text-left text-sm hover:bg-ink/5", scope.property?.id === p.id && "font-semibold")}>
                 <span className="h-2.5 w-2.5 rounded-full" style={{ background: p.accent }} />
-                <span className="min-w-0 flex-1"><span className="block truncate">{p.name}</span><span className="block truncate text-[11px] font-normal text-slate">{p.kind} · {p.city}</span></span>
+                <span className="min-w-0 flex-1"><span className="block truncate">{p.name}</span><span className="block truncate text-[11px] font-normal text-slate">{p.kind}</span></span>
                 {scope.property?.id === p.id && <Check className="h-4 w-4 text-lake" />}
               </button>
             </li>
           ))}
           <li className="my-1 h-px bg-ink/5" />
-          <li><span className="block px-3 py-2 text-xs text-slate">Add a property — in Settings, when the brand grows.</span></li>
+          <li><span className="block truncate px-3 py-2 text-xs text-slate">Add a property in Settings</span></li>
         </ul>
       )}
     </div>

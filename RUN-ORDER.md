@@ -4,7 +4,7 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- STEP-24 Round 6 — Ivana's click-through list (steps/STEP-24.md): every remark goes on the list first, read top to bottom before every push; 20 items, all done → share with the prospect
+- STEP-24 Round 6 — Ivana's click-through list (steps/STEP-24.md): every remark goes on the list first, read top to bottom before every push; 22 items, all done → share with the prospect
 - Ivana clicks through STEP-20 (the office on two properties), STEP-21 (experiences) and STEP-22 (two places on the site)
 - Ivana clicks through rounds 4–5 and the four languages; FR proofread; OTA + Amex logo files still welcome
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
@@ -17,7 +17,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-19 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
-- STEP-24 Round 6 — 20 remarks from the 12 Oct click-through: film v2→v7 (shorter woods, lake glide, steady walk, no halts, seamless loop), one track for rooms and cabins, no WhatsApp lines beside the button, free alternatives in a busy room's card, experiences at the end of room pages and in the booking (named in the summary), overlapping extras off, reserve a table on Dining, FAQ in two columns, both places on Contact, the film first and the words later on the brand hero, the house landing opens like the cabins landing
+- STEP-24 Round 6 — 22 remarks from the 12 Oct click-through: film v2→v7 (shorter woods, lake glide, steady walk, no halts, seamless loop), one track for rooms and cabins, no WhatsApp lines beside the button, free alternatives in a busy room's card, experiences at the end of room pages and in the booking (named in the summary), overlapping extras off, reserve a table on Dining, FAQ in two columns, both places on Contact, the film first and the words later on the brand hero, the house landing opens like the cabins landing
 - STEP-23 Brand home + switchboard — `/` is the brand page (brand film, "one lake, two ways to stay", Where in the booking bar, the two places as cards with from-prices, see · book, the whole place for groups, the six experiences in a carousel, lake film, offers, reviews, both addresses, closing); `/maison` (`/fr/maison` `/de/haus` `/it/casa`) is the house's own landing = the former home; menu, footer, next-page chain, home sections and features (experiences, offers, dining, gallery, whole-place, newsletter, season switch, ticker, WhatsApp) read `src/lib/site.ts` — the next client is a config change plus copy; four languages
 - STEP-22 Two places on the public site — footer "Our locations", Les Cabanes in the menu, a second-place band on the home page and on the rooms track, `/cabanes` location page (story, the four cabins with live prices, the whole site for groups, the fondue evening, good to know, getting there, map), cabin detail pages, rooms page tabs, "Where" in the booking engine and the hero booking bar, confirmation names the place; four languages
 - STEP-21 Experiences, bookable — six experiences with film or photo, details, date · start · people, open to anyone; reserve → XP reference; the fondue evening sells Les Cabanes; office Reservations gets an Experiences tab; four languages

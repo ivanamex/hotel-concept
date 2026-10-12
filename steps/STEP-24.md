@@ -28,6 +28,8 @@ Rule from this round: **every remark goes on this list before anything is built;
 | 18 | Contact: the second place disappeared from "Where we are" | done |
 | 19 | Yannick: the film first, the words and the booking bar a beat later | done — words 1.2 s after the film starts (3 s if no film plays), the bar half a second after the words; reduced motion shows everything at once |
 | 20 | The house landing opens with the film, the cabins with a photo — the same for both: the house opens with the house | done — photo hero of the house (from the air), no bar, no ticker; "Book a room" in the intro like "Book a cabin" |
+| 21 | Office: the location switcher's dropdown is cut on the right | done — it fits the rail; in the icon rail it floats beside it; one line per place (kind, no city) |
+| 22 | Office: the search box's text wraps onto two lines | done — "Search…" + ⌘K |
 
 ## Not in this round
 A config UI for the switchboard; a third place; real users.
