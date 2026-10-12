@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Closing, FilmBreak, KnockoutBand, LocationBlock, NextPage, SecondPlaceBand } from "@/components/site/bands";
-import { BookingBar } from "@/components/site/booking-bar";
-import { Crumb } from "@/components/site/crumb";
-import { HeroFilm } from "@/components/site/hero-film";
+import { PhotoHero } from "@/components/site/page-intro";
 import { AroundCarousel, OffersCarousel, ReviewsSection } from "@/components/site/home-sections";
 import { FadeIn, Parallax, Reveal } from "@/components/site/motion";
 import { RoomsTrack } from "@/components/site/rooms-track";
-import { Ticker } from "@/components/site/ticker";
 import { ButtonLink, Container, Eyebrow, RuleLink, SectionHeading } from "@/components/ui";
 import { fmt, getDict } from "@/i18n";
 import { pageMeta, type LangParams } from "@/i18n/meta";
@@ -30,26 +27,8 @@ export default async function MaisonPage({ params }: LangParams) {
 
   return (
     <>
-      {/* HERO */}
-      <HeroFilm caption={h.heroCaption}>
-        <Container className="flex min-h-[92svh] flex-col justify-end pb-28 pt-24 sm:pb-16">
-          <div className="max-w-3xl">
-            {SITE.brand.multiPlace && <Crumb current={t.brand.maison.crumb} light />}
-            <Eyebrow light className="mb-5">{h.eyebrow}</Eyebrow>
-            <Reveal as="h1" className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
-              <Rich text={h.title} />
-            </Reveal>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">{h.lead}</p>
-          </div>
-          <div className="mt-10 max-w-5xl">
-            <p className="caps mb-3 !text-[10px] text-white/80">{t.bookingBar.eyebrow}</p>
-            <BookingBar place="vidy" />
-            <p className="caps mt-3 !text-[10px] text-white/70">{t.bookingBar.note}</p>
-          </div>
-        </Container>
-      </HeroFilm>
-
-      {f.ticker && <Ticker />}
+      {/* HERO — the same opening as the cabins: the house, its name, one line */}
+      <PhotoHero image="/images/lake/aerial-day.jpg" alt={h.heroAlt} eyebrow={h.eyebrow} title={<Rich text={h.title} />} lead={h.lead} crumb={t.brand.maison.crumb} />
 
       {/* INTRO */}
       <section className="py-20 sm:py-28 lg:py-36">
@@ -71,7 +50,8 @@ export default async function MaisonPage({ params }: LangParams) {
               </dl>
               <p className="font-script mt-10 text-4xl text-ink-soft">{h.house.signature}</p>
               <div className="mt-8 flex flex-wrap items-center gap-6">
-                <ButtonLink href="/rooms" arrow>{h.house.seeRooms}</ButtonLink>
+                <ButtonLink href="/book?place=vidy" arrow>{t.home.closing.bookRoom}</ButtonLink>
+                <RuleLink href="/rooms">{h.house.seeRooms}</RuleLink>
                 {f.gallery && <RuleLink href="/gallery">{h.house.gallery}</RuleLink>}
               </div>
             </FadeIn>

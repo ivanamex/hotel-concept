@@ -60,7 +60,6 @@ export function Closing() {
             <li><Link href="/book" className={lineCls}>{c.bookRoom} {arrow}</Link></li>
             <li><Link href="/contact#find-us" className={lineCls}>{c.findWay} {arrow}</Link></li>
             <li><button type="button" onClick={() => setContact(true)} className={lineCls}>{c.write} {arrow}</button></li>
-            {SITE.features.whatsapp && <li><a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className={lineCls}>{c.whatsapp} {arrow}</a></li>}
           </ul>
         </div>
       </Container>

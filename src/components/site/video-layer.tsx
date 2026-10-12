@@ -9,7 +9,7 @@ import { prefersReducedMotion } from "./motion";
  * Still image underneath, video fades in on top once it is really playing.
  * Missing file, slow network, reduced motion or a browser without the codec → the still stays.
  */
-export function VideoLayer({ video, image, alt, drift = false, driftVideo = true, priority = false, className }: { video?: string | string[]; image: string; alt: string; drift?: boolean; driftVideo?: boolean; priority?: boolean; className?: string }) {
+export function VideoLayer({ video, image, alt, drift = false, driftVideo = true, priority = false, className, onPlaying }: { video?: string | string[]; image: string; alt: string; drift?: boolean; driftVideo?: boolean; priority?: boolean; className?: string; /** Fires once the film is actually on screen. */ onPlaying?: () => void }) {
   const [src, setSrc] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const candidates = (Array.isArray(video) ? video : video ? [video] : []).join("|");
@@ -46,7 +46,7 @@ export function VideoLayer({ video, image, alt, drift = false, driftVideo = true
           loop
           playsInline
           preload="auto"
-          onPlaying={() => setPlaying(true)}
+          onPlaying={() => { setPlaying(true); onPlaying?.(); }}
           onError={() => setSrc(null)}
         />
       )}
