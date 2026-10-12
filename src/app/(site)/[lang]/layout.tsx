@@ -9,6 +9,7 @@ import { StayInTouch } from "@/components/site/stay-in-touch";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { LOCALES, alternates, getDict, isLang } from "@/i18n";
 import { LangProvider } from "@/i18n/context";
+import { SITE } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -40,9 +41,9 @@ export default async function SiteLayout({ children, params }: { children: React
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </div>
-        <WhatsAppButton />
+        {SITE.features.whatsapp && <WhatsAppButton />}
         <BackToTop />
-        <StayInTouch />
+        {SITE.features.newsletter && <StayInTouch />}
       </MotionProvider>
     </LangProvider>
   );

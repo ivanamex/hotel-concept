@@ -61,7 +61,8 @@ export const en = {
     rail: "Maison Vidy · Lausanne",
     bookRail: "Book a stay",
     items: {
-      home: { label: "Home", note: "Lausanne, by the lake" },
+      home: { label: "Home", note: "One lake, two places" },
+      maison: { label: "The house", note: "Ten rooms by the lake" },
       rooms: { label: "Rooms & suites", note: "Ten rooms, three views" },
       cabanes: { label: "Les Cabanes", note: "Four cabins in the forest" },
       experiences: { label: "Experiences", note: "The lake, Lavaux, the city" },
@@ -84,6 +85,8 @@ export const en = {
     discover: "Discover",
     house: "House",
     links: {
+      maison: "The house",
+      cabanes: "Les Cabanes",
       rooms: "Rooms & suites",
       book: "Book direct",
       offers: "Offers",
@@ -153,6 +156,38 @@ export const en = {
     children: "Children",
     cta: "Check availability",
     note: "Direct bookings get our best rate and free cancellation on flexible plans",
+  },
+
+  brand: {
+    metaTitle: "Maison Vidy · A house by the lake and four cabins in the forest, Lausanne",
+    metaDescription: "Two places, one lake: a ten-room house in Vidy, two hundred metres from the water, and four tree-house cabins in the Jorat forest above it. One reception, one breakfast, one booking.",
+    eyebrow: "Vidy · Lausanne · two places on one lake",
+    title: "One lake,\n*two ways to stay.*",
+    lead: "A house with big windows two hundred metres from the water, and four cabins in the forest twenty minutes above it. One reception, one breakfast, one booking.",
+    heroCaption: "Vidy, Lausanne · Jorat forest",
+    heroAlt: "From the front door of Maison Vidy through the forest to a bath on a cabin terrace above the lake",
+    places: {
+      eyebrow: "Our places",
+      title: "The house *or the trees.*",
+      lead: "Both are ours, both come with the same breakfast and the same people. Sleep by the water, sleep in a tree, or do a few nights of each.",
+      house: { title: "Maison Vidy", line: "Vidy, Lausanne · by the lake", text: "Ten rooms in a lakeside house: big windows, breakfast on the terrace, the Olympic park next door and the Alps across the water." },
+      cabanes: { title: "Les Cabanes", line: "Jorat forest · 20 min above the lake", text: "Four tree-house cabins six metres up, a wood stove and a terrace in the leaves each, a round deck for breakfast and fondue evenings." },
+      from: "from CHF {p} a night",
+      see: "See the place",
+      book: "Book",
+      whole: { text: "A wedding, a cooking weekend, a team of twelve? *The whole of either place is yours* — we quote by hand.", cta: "Ask for the whole place" },
+    },
+    experiences: {
+      eyebrow: "Experiences",
+      title: "Things to do, *with a date on them.*",
+      lead: "The lake, Lavaux, the forest — guided, timed and priced. For our guests and for anyone passing through.",
+      all: "All experiences",
+    },
+    maison: {
+      metaTitle: "The house — ten rooms by the lake in Vidy, Lausanne",
+      metaDescription: "Maison Vidy's house: ten rooms two hundred metres from Lake Geneva, breakfast on the terrace, the Olympic park next door. Book direct for the best rate.",
+      crumb: "The house",
+    },
   },
 
   home: {

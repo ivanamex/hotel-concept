@@ -3,6 +3,7 @@
 import { Container } from "@/components/ui";
 import { useT } from "@/i18n/context";
 import { HOTEL, PROPERTIES } from "@/lib/seed";
+import { SITE } from "@/lib/site";
 import { MapPin } from "lucide-react";
 import { LangSwitch } from "./lang-switch";
 import { Link } from "./link";
@@ -13,9 +14,22 @@ import { SwissCross } from "./swiss";
 export function SiteFooter() {
   const t = useT();
   const f = t.footer;
+  const f2 = SITE.features;
+  const stay = [
+    ...(SITE.brand.multiPlace ? [{ href: "/maison", label: f.links.maison }, { href: "/cabanes", label: f.links.cabanes }] : [{ href: "/rooms", label: f.links.rooms }]),
+    { href: "/book", label: f.links.book },
+    ...(f2.offers ? [{ href: "/offers", label: f.links.offers }] : []),
+    ...(f2.wholePlace ? [{ href: "/request", label: f.links.groups }] : []),
+  ];
+  const discover = [
+    ...(f2.experiences ? [{ href: "/experiences", label: f.links.experiences }] : []),
+    ...(f2.dining ? [{ href: "/dining", label: f.links.dining }] : []),
+    ...(f2.gallery ? [{ href: "/gallery", label: f.links.gallery }] : []),
+    { href: "/contact#find-us", label: f.links.howToGetHere },
+  ];
   const cols = [
-    { title: f.stay, links: [{ href: "/rooms", label: f.links.rooms }, { href: "/book", label: f.links.book }, { href: "/offers", label: f.links.offers }, { href: "/request", label: f.links.groups }] },
-    { title: f.discover, links: [{ href: "/experiences", label: f.links.experiences }, { href: "/dining", label: f.links.dining }, { href: "/gallery", label: f.links.gallery }, { href: "/contact#find-us", label: f.links.howToGetHere }] },
+    { title: f.stay, links: stay },
+    { title: f.discover, links: discover },
     { title: f.house, links: [{ href: "/contact", label: f.links.contact }, { href: "/terms", label: f.links.terms }, { href: "/privacy", label: f.links.privacy }, { href: "/imprint", label: f.links.imprint }] },
   ];
   return (
@@ -49,11 +63,11 @@ export function SiteFooter() {
           ))}
         </div>
         {/* our locations */}
-        <div className="mt-14 border-t border-line pt-8">
+        {SITE.brand.multiPlace && <div className="mt-14 border-t border-line pt-8">
           <h3 className="caps !text-[10px] text-slate">{t.places.footerTitle}</h3>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {[
-              { href: "/", name: t.places.house.name, line: t.places.house.line, tag: t.places.house.tagline, image: PROPERTIES[0].image },
+              { href: "/maison", name: t.places.house.name, line: t.places.house.line, tag: t.places.house.tagline, image: PROPERTIES[0].image },
               { href: "/cabanes", name: t.places.cabanes.name, line: t.places.cabanes.line, tag: t.places.cabanes.tagline, image: PROPERTIES[1].image },
             ].map((pl) => (
               <Link key={pl.href} href={pl.href} className="group lift-sm flex items-center gap-4 rounded-lg bg-white/70 p-3 ring-1 ring-ink/5 transition hover:bg-white">
@@ -66,7 +80,7 @@ export function SiteFooter() {
               </Link>
             ))}
           </div>
-        </div>
+        </div>}
 
         <div className="mt-10 flex flex-col gap-6 border-t border-line pt-8 lg:flex-row lg:items-center lg:justify-between">
           <div>

@@ -4,9 +4,10 @@ Concept showcase for 20 North: a 10-room lakeside boutique hotel in Vidy, Lausan
 Public site with direct booking + back office. Demo data, no backend yet.
 
 ## Now
-- Ivana clicks through STEP-20 (the office on two properties), STEP-21 (experiences) and STEP-22 (two places on the site)
+- Ivana clicks through STEP-23 (brand home + the house landing), STEP-20 (the office on two properties), STEP-21 (experiences) and STEP-22 (two places on the site)
 - Ivana clicks through rounds 4–5 and the four languages; FR proofread; OTA + Amex logo files still welcome
 - Golden aerial clip (Gemini) when it comes → re-cut the lake film with it first
+- Brand film (`public/videos/brand.mp4`) is the hero on `/`; swap the file to change it
 
 ## Next
 - STEP-16 Supabase backend (rooms, reservations, inquiries, subscribers, auth for /office) — replaces the local demo store
@@ -15,6 +16,7 @@ Public site with direct booking + back office. Demo data, no backend yet.
 - STEP-19 Real photography + hotel's own copy, domain, go-live checklist (SEO, analytics, cookie consent)
 
 ## Done
+- STEP-23 Brand home + switchboard — `/` is the brand page (brand film, "one lake, two ways to stay", Where in the booking bar, the two places as cards with from-prices, see · book, the whole place for groups, the six experiences in a carousel, lake film, offers, reviews, both addresses, closing); `/maison` (`/fr/maison` `/de/haus` `/it/casa`) is the house's own landing = the former home; menu, footer, next-page chain, home sections and features (experiences, offers, dining, gallery, whole-place, newsletter, season switch, ticker, WhatsApp) read `src/lib/site.ts` — the next client is a config change plus copy; four languages
 - STEP-22 Two places on the public site — footer "Our locations", Les Cabanes in the menu, a second-place band on the home page and on the rooms track, `/cabanes` location page (story, the four cabins with live prices, the whole site for groups, the fondue evening, good to know, getting there, map), cabin detail pages, rooms page tabs, "Where" in the booking engine and the hero booking bar, confirmation names the place; four languages
 - STEP-21 Experiences, bookable — six experiences with film or photo, details, date · start · people, open to anyone; reserve → XP reference; the fondue evening sells Les Cabanes; office Reservations gets an Experiences tab; four languages
 - STEP-20 Office shell v2 — the template for every property client: two properties (Maison Vidy + Les Cabanes, four tree-house cabins with a "whole site" parent unit), All-locations view + switcher, rail in Daily / Manage groups that collapses to icons, ⌘K search across records and pages, + New menu (reservation, request, out of order, guest note), Today with per-location tiles, today's guests, a needs-attention list, 14-night outlook with month KPIs, channels and latest bookings — panels drag to reorder; inbox as a request pipeline (New → Replied → Offer sent → Won / Lost) with next actions, notes, timeline, a drag board and convert-to-reservation; calendar drag to move or extend with conflicts refused and Undo; Channels and Reports (five, CSV) pages; housekeeping state on units; guest notes; per-property settings (vocabulary, currency, taxes, payment methods)

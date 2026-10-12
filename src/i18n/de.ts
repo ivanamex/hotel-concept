@@ -62,7 +62,8 @@ export const de: Dict = {
     rail: "Maison Vidy · Lausanne",
     bookRail: "Buchen",
     items: {
-      home: { label: "Start", note: "Lausanne, am See" },
+      home: { label: "Start", note: "Ein See, zwei Orte" },
+      maison: { label: "Das Haus", note: "Zehn Zimmer am See" },
       rooms: { label: "Zimmer & Suiten", note: "Zehn Zimmer, drei Aussichten" },
       cabanes: { label: "Les Cabanes", note: "Vier Hütten im Wald" },
       experiences: { label: "Erlebnisse", note: "Der See, Lavaux, die Stadt" },
@@ -85,6 +86,8 @@ export const de: Dict = {
     discover: "Entdecken",
     house: "Das Haus",
     links: {
+      maison: "Das Haus",
+      cabanes: "Les Cabanes",
       rooms: "Zimmer & Suiten",
       book: "Direkt buchen",
       offers: "Angebote",
@@ -154,6 +157,38 @@ export const de: Dict = {
     children: "Kinder",
     cta: "Verfügbarkeit prüfen",
     note: "Bei Direktbuchung erhalten Sie unseren besten Preis und kostenlose Stornierung bei flexiblen Raten",
+  },
+
+  brand: {
+    metaTitle: "Maison Vidy · Ein Haus am See und vier Hütten im Wald, Lausanne",
+    metaDescription: "Zwei Orte, ein See: ein Haus mit zehn Zimmern in Vidy, zweihundert Meter vom Wasser, und vier Baumhütten im Jorat-Wald darüber. Eine Rezeption, ein Frühstück, eine Buchung.",
+    eyebrow: "Vidy · Lausanne · zwei Orte an einem See",
+    title: "Ein See,\n*zwei Arten zu bleiben.*",
+    lead: "Ein Haus mit grossen Fenstern zweihundert Meter vom Wasser, und vier Hütten im Wald zwanzig Minuten darüber. Eine Rezeption, ein Frühstück, eine Buchung.",
+    heroCaption: "Vidy, Lausanne · Jorat-Wald",
+    heroAlt: "Von der Haustür der Maison Vidy durch den Wald bis zu einer Badewanne auf der Terrasse einer Hütte über dem See",
+    places: {
+      eyebrow: "Unsere Orte",
+      title: "Das Haus *oder die Bäume.*",
+      lead: "Beide gehören zu uns, mit demselben Frühstück und denselben Menschen. Schlafen Sie am Wasser, schlafen Sie im Baum, oder ein paar Nächte hier und dort.",
+      house: { title: "Maison Vidy", line: "Vidy, Lausanne · am See", text: "Zehn Zimmer in einem Haus am See: grosse Fenster, Frühstück auf der Terrasse, der Olympiapark nebenan und die Alpen auf der anderen Seite des Wassers." },
+      cabanes: { title: "Les Cabanes", line: "Jorat-Wald · 20 Min. über dem See", text: "Vier Baumhütten sechs Meter über dem Boden, je mit Holzofen und Terrasse im Laub, ein rundes Deck für Frühstück und Fondue-Abende." },
+      from: "ab CHF {p} pro Nacht",
+      see: "Den Ort ansehen",
+      book: "Buchen",
+      whole: { text: "Eine Hochzeit, ein Kochwochenende, ein Team von zwölf? *Der ganze Ort gehört Ihnen* — wir rechnen von Hand.", cta: "Den ganzen Ort anfragen" },
+    },
+    experiences: {
+      eyebrow: "Erlebnisse",
+      title: "Dinge zu tun, *mit einem Datum.*",
+      lead: "Der See, das Lavaux, der Wald — geführt, mit Uhrzeit und Preis. Für unsere Gäste und für alle, die vorbeikommen.",
+      all: "Alle Erlebnisse",
+    },
+    maison: {
+      metaTitle: "Das Haus — zehn Zimmer am See in Vidy, Lausanne",
+      metaDescription: "Das Haus der Maison Vidy: zehn Zimmer zweihundert Meter vom Genfersee, Frühstück auf der Terrasse, der Olympiapark nebenan. Direkt buchen zum besten Preis.",
+      crumb: "Das Haus",
+    },
   },
 
   home: {

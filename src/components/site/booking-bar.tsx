@@ -15,7 +15,7 @@ export function defaultDates() {
   return { checkIn, checkOut: addDays(checkIn, 2) };
 }
 
-export function BookingBar({ compact = false, roomSlug, places = false }: { compact?: boolean; roomSlug?: string; places?: boolean }) {
+export function BookingBar({ compact = false, roomSlug, places = false, place: fixedPlace }: { compact?: boolean; roomSlug?: string; places?: boolean; /** A fixed place: the bar books there without showing the choice. */ place?: "vidy" | "cabanes" }) {
   const router = useRouter();
   const href = useHref();
   const tt = useT();
@@ -32,7 +32,8 @@ export function BookingBar({ compact = false, roomSlug, places = false }: { comp
     e.preventDefault();
     const params = new URLSearchParams({ in: checkIn, out: checkOut, adults: String(adults), children: String(children) });
     if (roomSlug) params.set("room", roomSlug);
-    if (places && place !== "all") params.set("place", place);
+    if (fixedPlace) params.set("place", fixedPlace);
+    else if (places && place !== "all") params.set("place", place);
     router.push(href(`/book?${params.toString()}`));
   };
 

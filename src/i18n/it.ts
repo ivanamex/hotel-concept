@@ -62,7 +62,8 @@ export const it: Dict = {
     rail: "Maison Vidy · Lausanne",
     bookRail: "Prenota",
     items: {
-      home: { label: "Home", note: "Losanna, in riva al lago" },
+      home: { label: "Home", note: "Un lago, due indirizzi" },
+      maison: { label: "La casa", note: "Dieci camere in riva al lago" },
       rooms: { label: "Camere e suite", note: "Dieci camere, tre viste" },
       cabanes: { label: "Les Cabanes", note: "Quattro cabine nel bosco" },
       experiences: { label: "Esperienze", note: "Il lago, Lavaux, la città" },
@@ -85,6 +86,8 @@ export const it: Dict = {
     discover: "Scoprire",
     house: "La casa",
     links: {
+      maison: "La casa",
+      cabanes: "Les Cabanes",
       rooms: "Camere e suite",
       book: "Prenotazione diretta",
       offers: "Offerte",
@@ -154,6 +157,38 @@ export const it: Dict = {
     children: "Bambini",
     cta: "Verifica disponibilità",
     note: "Prenotando direttamente ha la nostra tariffa migliore e la cancellazione gratuita sulle tariffe flessibili",
+  },
+
+  brand: {
+    metaTitle: "Maison Vidy · Una casa in riva al lago e quattro cabanes nel bosco, Losanna",
+    metaDescription: "Due indirizzi, un lago: una casa di dieci camere a Vidy, a duecento metri dall’acqua, e quattro cabanes sugli alberi nel bosco del Jorat, più in alto. Una reception, una colazione, una prenotazione.",
+    eyebrow: "Vidy · Losanna · due indirizzi su un lago",
+    title: "Un lago,\n*due modi di restare.*",
+    lead: "Una casa dalle grandi finestre a duecento metri dall’acqua, e quattro cabanes nel bosco venti minuti più in alto. Una reception, una colazione, una prenotazione.",
+    heroCaption: "Vidy, Losanna · bosco del Jorat",
+    heroAlt: "Dalla porta d’ingresso di Maison Vidy, attraverso il bosco, fino a una vasca sulla terrazza di una cabane sopra il lago",
+    places: {
+      eyebrow: "I nostri indirizzi",
+      title: "La casa *o gli alberi.*",
+      lead: "Sono entrambi nostri, con la stessa colazione e le stesse persone. Dormite in riva all’acqua, dormite su un albero, o qualche notte in ciascuno.",
+      house: { title: "Maison Vidy", line: "Vidy, Losanna · in riva al lago", text: "Dieci camere in una casa sul lago: grandi finestre, colazione in terrazza, il parco olimpico accanto e le Alpi dall’altra parte dell’acqua." },
+      cabanes: { title: "Les Cabanes", line: "Bosco del Jorat · 20 min sopra il lago", text: "Quattro cabanes sugli alberi a sei metri d’altezza, ognuna con stufa a legna e terrazza tra le foglie, un deck rotondo per la colazione e le serate fondue." },
+      from: "da CHF {p} a notte",
+      see: "Vedi l’indirizzo",
+      book: "Prenota",
+      whole: { text: "Un matrimonio, un weekend di cucina, una squadra di dodici? *Uno dei due indirizzi, tutto per voi* — preventivo su misura.", cta: "Chiedi l’indirizzo intero" },
+    },
+    experiences: {
+      eyebrow: "Esperienze",
+      title: "Cose da fare, *con una data.*",
+      lead: "Il lago, il Lavaux, il bosco — guidate, con orario e prezzo. Per i nostri ospiti e per chiunque passi di qui.",
+      all: "Tutte le esperienze",
+    },
+    maison: {
+      metaTitle: "La casa — dieci camere in riva al lago a Vidy, Losanna",
+      metaDescription: "La casa di Maison Vidy: dieci camere a duecento metri dal Lemano, colazione in terrazza, il parco olimpico accanto. Prenotate direttamente alla tariffa migliore.",
+      crumb: "La casa",
+    },
   },
 
   home: {

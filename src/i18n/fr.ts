@@ -62,7 +62,8 @@ export const fr: Dict = {
     rail: "Maison Vidy · Lausanne",
     bookRail: "Réserver",
     items: {
-      home: { label: "Accueil", note: "Lausanne, au bord du lac" },
+      home: { label: "Accueil", note: "Un lac, deux adresses" },
+      maison: { label: "La maison", note: "Dix chambres au bord du lac" },
       rooms: { label: "Chambres & suites", note: "Dix chambres, trois vues" },
       cabanes: { label: "Les Cabanes", note: "Quatre cabanes dans la forêt" },
       experiences: { label: "Expériences", note: "Le lac, Lavaux, la ville" },
@@ -85,6 +86,8 @@ export const fr: Dict = {
     discover: "Découvrir",
     house: "La maison",
     links: {
+      maison: "La maison",
+      cabanes: "Les Cabanes",
       rooms: "Chambres & suites",
       book: "Réserver en direct",
       offers: "Offres",
@@ -154,6 +157,38 @@ export const fr: Dict = {
     children: "Enfants",
     cta: "Voir les disponibilités",
     note: "En réservant en direct, vous obtenez notre meilleur tarif et l’annulation gratuite sur les tarifs flexibles",
+  },
+
+  brand: {
+    metaTitle: "Maison Vidy · Une maison au bord du lac et quatre cabanes dans la forêt, Lausanne",
+    metaDescription: "Deux adresses, un lac : une maison de dix chambres à Vidy, à deux cents mètres de l’eau, et quatre cabanes perchées dans la forêt du Jorat au-dessus. Une réception, un petit-déjeuner, une réservation.",
+    eyebrow: "Vidy · Lausanne · deux adresses sur un lac",
+    title: "Un lac,\n*deux façons de séjourner.*",
+    lead: "Une maison aux grandes fenêtres à deux cents mètres de l’eau, et quatre cabanes dans la forêt vingt minutes plus haut. Une réception, un petit-déjeuner, une réservation.",
+    heroCaption: "Vidy, Lausanne · forêt du Jorat",
+    heroAlt: "De la porte d’entrée de Maison Vidy, par la forêt, jusqu’à une baignoire sur la terrasse d’une cabane au-dessus du lac",
+    places: {
+      eyebrow: "Nos adresses",
+      title: "La maison *ou les arbres.*",
+      lead: "Les deux sont à nous, avec le même petit-déjeuner et les mêmes personnes. Dormez au bord de l’eau, dormez dans un arbre, ou quelques nuits de chaque.",
+      house: { title: "Maison Vidy", line: "Vidy, Lausanne · au bord du lac", text: "Dix chambres dans une maison au bord du lac : de grandes fenêtres, le petit-déjeuner en terrasse, le parc olympique à côté et les Alpes de l’autre côté de l’eau." },
+      cabanes: { title: "Les Cabanes", line: "Forêt du Jorat · 20 min au-dessus du lac", text: "Quatre cabanes perchées à six mètres, chacune avec son poêle à bois et sa terrasse dans les feuilles, un deck rond pour le petit-déjeuner et les soirées fondue." },
+      from: "dès CHF {p} la nuit",
+      see: "Voir l’adresse",
+      book: "Réserver",
+      whole: { text: "Un mariage, un week-end cuisine, une équipe de douze ? *L’une ou l’autre adresse en entier est à vous* — devis sur mesure.", cta: "Demander l’adresse entière" },
+    },
+    experiences: {
+      eyebrow: "Expériences",
+      title: "Des choses à faire, *avec une date.*",
+      lead: "Le lac, Lavaux, la forêt — guidées, à heure fixe, à prix fixe. Pour nos hôtes et pour tous ceux qui passent.",
+      all: "Toutes les expériences",
+    },
+    maison: {
+      metaTitle: "La maison — dix chambres au bord du lac à Vidy, Lausanne",
+      metaDescription: "La maison de Maison Vidy : dix chambres à deux cents mètres du Léman, le petit-déjeuner en terrasse, le parc olympique à côté. Réservez en direct au meilleur tarif.",
+      crumb: "La maison",
+    },
   },
 
   home: {

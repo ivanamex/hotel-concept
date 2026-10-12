@@ -8,6 +8,7 @@ import { fmt } from "@/i18n";
 import { useT } from "@/i18n/context";
 import { Rich } from "@/i18n/rich";
 import { CABINS, HOTEL, PROPERTIES } from "@/lib/seed";
+import { SITE, navKeys } from "@/lib/site";
 import { ContactModal } from "./contact-modal";
 import { Link } from "./link";
 import { InView, Reveal } from "./motion";
@@ -59,7 +60,7 @@ export function Closing() {
             <li><Link href="/book" className={lineCls}>{c.bookRoom} {arrow}</Link></li>
             <li><Link href="/contact#find-us" className={lineCls}>{c.findWay} {arrow}</Link></li>
             <li><button type="button" onClick={() => setContact(true)} className={lineCls}>{c.write} {arrow}</button></li>
-            <li><a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className={lineCls}>{c.whatsapp} {arrow}</a></li>
+            {SITE.features.whatsapp && <li><a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className={lineCls}>{c.whatsapp} {arrow}</a></li>}
           </ul>
         </div>
       </Container>
@@ -115,27 +116,32 @@ export function SecondPlaceBand() {
   );
 }
 
-export function LocationBlock({ compact = false, place = "vidy" }: { compact?: boolean; place?: "vidy" | "cabanes" }) {
+export function LocationBlock({ compact = false, place = "vidy", places }: { compact?: boolean; place?: "vidy" | "cabanes"; /** Several places → every address, one map link each. */ places?: ("vidy" | "cabanes")[] }) {
   const t = useT();
   const l = t.location;
-  const prop = PROPERTIES.find((x) => x.id === place) ?? PROPERTIES[0];
-  const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${prop.name}, ${prop.address}, ${prop.city}`)}`;
+  const list = (places?.length ? places : [place]).map((id) => PROPERTIES.find((x) => x.id === id) ?? PROPERTIES[0]);
+  const mapsUrl = (prop: (typeof PROPERTIES)[number]) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${prop.name}, ${prop.address}, ${prop.city}`)}`;
+  const ticket = "ticket sweep caps inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]";
   return (
     <section id="find-us" className="grid scroll-mt-16 lg:grid-cols-2">
       <div className="relative min-h-[320px] bg-[#f3eee4] sm:min-h-[420px] lg:min-h-[560px]">
         <Image src="/images/around/map.jpg" alt={l.mapAlt} fill sizes="(min-width:1024px) 50vw, 100vw" className="object-cover object-center" />
       </div>
       <div className="flex flex-col items-center justify-center bg-lake-deep px-6 py-16 text-center text-white sm:px-12 lg:py-24">
-        <p className="caps !text-[10px] text-sky">{l.eyebrow}</p>
-        <h2 className="mt-4 font-display text-4xl sm:text-5xl">{prop.name}</h2>
-        <p className="mt-4 text-sky/90">{prop.address}<br />{prop.city}</p>
-        {place === "cabanes" && <p className="mt-2 text-sm text-sky/70">{t.places.page.mapNote}</p>}
-        <a href={maps} target="_blank" rel="noopener" className="ticket sweep caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]">{l.maps} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
+        <p className="caps !text-[10px] text-sky">{list.length > 1 ? t.places.footerTitle : l.eyebrow}</p>
+        {list.map((prop, i) => (
+          <div key={prop.id} className={i ? "mt-10 border-t border-white/15 pt-10" : ""}>
+            <h2 className="mt-4 font-display text-4xl sm:text-5xl">{prop.name}</h2>
+            <p className="mt-4 text-sky/90">{prop.address}<br />{prop.city}</p>
+            {prop.id === "cabanes" && list.length === 1 && <p className="mt-2 text-sm text-sky/70">{t.places.page.mapNote}</p>}
+            <a href={mapsUrl(prop)} target="_blank" rel="noopener" className={`${ticket} mt-6`}>{l.maps} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
+          </div>
+        ))}
         <div className="mt-8 space-y-1 text-sky/90">
           <a href={`mailto:${HOTEL.email}`} className="block hover:text-white">{HOTEL.email}</a>
           <a href={`tel:${HOTEL.phone.replace(/\s/g, "")}`} className="block hover:text-white">T. {HOTEL.phone}</a>
         </div>
-        <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className="ticket sweep caps mt-6 inline-flex h-12 items-center gap-3 rounded-xs px-6 !text-[11px] text-white ring-1 ring-inset ring-white/60 hover:text-ink hover:ring-white [--sweep:#fff]">{l.whatsapp} <ArrowRight className="arrow h-3.5 w-3.5" /></a>
+        {SITE.features.whatsapp && <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className={`${ticket} mt-6`}>{l.whatsapp} <ArrowRight className="arrow h-3.5 w-3.5" /></a>}
         {!compact && (
           <ul className="mt-10 flex items-center gap-5 text-sky/80">
             {l.socials.map((s) => (
@@ -150,16 +156,9 @@ export function LocationBlock({ compact = false, place = "vidy" }: { compact?: b
 
 /* ---------- Next page ---------- */
 
-const ORDER = [
-  { href: "/", key: "home" },
-  { href: "/rooms", key: "rooms" },
-  { href: "/cabanes", key: "cabanes" },
-  { href: "/experiences", key: "experiences" },
-  { href: "/dining", key: "dining" },
-  { href: "/offers", key: "offers" },
-  { href: "/gallery", key: "gallery" },
-  { href: "/contact", key: "contact" },
-] as const;
+/** The next-page chain follows the menu: what the switchboard lists, in its order. */
+const PAGE_HREF: Record<string, string> = { home: "/", maison: "/maison", rooms: "/rooms", cabanes: "/cabanes", experiences: "/experiences", dining: "/dining", offers: "/offers", gallery: "/gallery", contact: "/contact" };
+const ORDER = navKeys().map((key) => ({ key, href: PAGE_HREF[key] ?? `/${key}` }));
 
 export function NextPage({ current }: { current: string }) {
   const t = useT();
@@ -171,7 +170,7 @@ export function NextPage({ current }: { current: string }) {
         <Link href={next.href} className="group flex items-center justify-between py-10 sm:py-14">
           <div>
             <p className="caps !text-[10px] text-slate">{t.common.nextPage}</p>
-            <p className="mt-2 font-display text-3xl text-ink transition group-hover:italic sm:text-4xl lg:text-5xl">{t.nav.items[next.key].label}</p>
+            <p className="mt-2 font-display text-3xl text-ink transition group-hover:italic sm:text-4xl lg:text-5xl">{t.nav.items[next.key as keyof typeof t.nav.items].label}</p>
           </div>
           <span className="flex h-12 w-12 items-center justify-center rounded-xs bg-ink text-white transition duration-500 group-hover:-translate-y-1 group-hover:bg-lake sm:h-14 sm:w-14"><ArrowRight className="h-5 w-5 transition duration-500 group-hover:translate-x-1" /></span>
         </Link>

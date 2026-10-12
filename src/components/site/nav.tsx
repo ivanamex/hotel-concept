@@ -6,7 +6,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useHref, useT } from "@/i18n/context";
+import type { Dict } from "@/i18n";
 import { HOTEL } from "@/lib/seed";
+import { SITE, navKeys } from "@/lib/site";
 import { resolveSeason } from "@/lib/season";
 import { useHotel, useHydrated } from "@/lib/store";
 import { LangMenu, LangSwitch } from "./lang-switch";
@@ -15,16 +17,22 @@ import { Mark } from "./logo";
 import { scrollTo } from "./motion";
 import { whatsappUrl } from "./whatsapp";
 
-export const NAV = [
-  { key: "home", href: "/", image: "/images/lake/aerial-dusk.jpg" },
-  { key: "rooms", href: "/rooms", image: "/images/rooms/room-junior-suite.jpg" },
-  { key: "cabanes", href: "/cabanes", image: "/images/cabins/site.jpg" },
-  { key: "experiences", href: "/experiences", image: "/images/around/lavaux.jpg" },
-  { key: "dining", href: "/dining", image: "/images/house/terrace-dusk.jpg" },
-  { key: "offers", href: "/offers", image: "/images/lake/swans.jpg" },
-  { key: "gallery", href: "/gallery", image: "/images/lake/marina.jpg" },
-  { key: "contact", href: "/contact", image: "/images/lake/terrace-view.jpg" },
-] as const;
+const NAV_PAGES: Record<string, { href: string; image: string }> = {
+  home: { href: "/", image: "/images/lake/aerial-dusk.jpg" },
+  maison: { href: "/maison", image: "/images/house/breakfast-balcony.jpg" },
+  rooms: { href: "/rooms", image: "/images/rooms/room-junior-suite.jpg" },
+  cabanes: { href: "/cabanes", image: "/images/cabins/site.jpg" },
+  experiences: { href: "/experiences", image: "/images/around/lavaux.jpg" },
+  dining: { href: "/dining", image: "/images/house/terrace-dusk.jpg" },
+  offers: { href: "/offers", image: "/images/lake/swans.jpg" },
+  gallery: { href: "/gallery", image: "/images/lake/marina.jpg" },
+  contact: { href: "/contact", image: "/images/lake/terrace-view.jpg" },
+};
+
+type NavKey = keyof Dict["nav"]["items"];
+
+/** The menu: what the switchboard lists, in its order. */
+export const NAV = navKeys().map((key) => ({ key: key as NavKey, ...NAV_PAGES[key] }));
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -75,7 +83,7 @@ export function SiteNav() {
       <header className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-line bg-sand/95 px-5 backdrop-blur lg:hidden">
         <Link href="/" className="inline-flex items-center gap-2" aria-label={t.nav.homeLabel}>
           <Mark className="h-7 w-7" />
-          <span className="font-display text-2xl text-ink">Maison Vidy</span>
+          <span className="font-display text-2xl text-ink">{SITE.brand.name}</span>
         </Link>
         <div className="flex items-center gap-2">
           <Link href="/book" className="sweep caps rounded-xs bg-lake px-3 py-2 !text-[10px] text-white [--sweep:var(--color-lake-deep)]">{t.common.book}</Link>
@@ -99,7 +107,7 @@ export function SiteNav() {
           <div className="flex items-center justify-between">
             <Link href="/" className="inline-flex items-center gap-2.5">
               <Mark className="h-8 w-8" />
-              <span className="font-display text-2xl text-ink">Maison Vidy</span>
+              <span className="font-display text-2xl text-ink">{SITE.brand.name}</span>
             </Link>
             <button type="button" onClick={() => setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-xs text-ink transition hover:bg-ink hover:text-white" aria-label={t.nav.closeMenu}>
               <X className="h-5 w-5" />
@@ -138,7 +146,7 @@ export function SiteNav() {
               <p className="caps mb-2 !text-[10px] text-slate">{t.common.language}</p>
               <LangSwitch />
             </div>
-            <div>
+            {SITE.features.seasonSwitch && <div>
               <p className="caps mb-2 !text-[10px] text-slate">{t.nav.season}</p>
               <div className="inline-flex rounded-xs ring-1 ring-ink/20">
                 {(["winter", "summer"] as const).map((s) => (
@@ -147,11 +155,11 @@ export function SiteNav() {
                   </button>
                 ))}
               </div>
-            </div>
+            </div>}
             <div>
               <p className="caps mb-2 !text-[10px] text-slate">{t.nav.reception}</p>
               <a href={`tel:${HOTEL.phone.replace(/\s/g, "")}`} className="block hover:text-ink">{HOTEL.phone}</a>
-              <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className="block hover:text-ink">WhatsApp</a>
+              {SITE.features.whatsapp && <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className="block hover:text-ink">WhatsApp</a>}
             </div>
             <div>
               <p className="caps mb-2 !text-[10px] text-slate">{t.nav.findUs}</p>

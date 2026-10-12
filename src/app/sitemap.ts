@@ -6,7 +6,7 @@ import { EXPERIENCES } from "@/lib/experiences";
 const BASE = "https://hotel-concept.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["/", "/rooms", "/cabanes", "/book", "/experiences", "/dining", "/offers", "/gallery", "/contact", "/request", "/terms", "/privacy", "/imprint", ...ROOMS.map((r) => `/rooms/${r.slug}`), ...CABINS.filter((c) => c.kind !== "whole").map((c) => `/rooms/${c.slug}`), ...EXPERIENCES.map((e) => `/experiences/${e.slug}`)];
+  const pages = ["/", "/maison", "/rooms", "/cabanes", "/book", "/experiences", "/dining", "/offers", "/gallery", "/contact", "/request", "/terms", "/privacy", "/imprint", ...ROOMS.map((r) => `/rooms/${r.slug}`), ...CABINS.filter((c) => c.kind !== "whole").map((c) => `/rooms/${c.slug}`), ...EXPERIENCES.map((e) => `/experiences/${e.slug}`)];
   return pages.flatMap((internal) =>
     LOCALES.map((lang) => ({
       url: BASE + localePath(lang, internal),
