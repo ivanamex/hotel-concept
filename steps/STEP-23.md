@@ -2,7 +2,7 @@
 
 Status: go 11 Oct 2026 (12:42, "let's start redesigning") · built 12 Oct. Verified on the production build: `/` in four languages, `/maison` · `/fr/maison` · `/de/haus` · `/it/casa`, the menu order, the footer, the book links from the place cards, the sitemap.
 
-The brand film is in: `public/videos/brand.mp4` — the front door opening and a level walk through the hall to the lake doors, the forest walk to the cabins, arriving on the terrace, the bath in the oak, then up through the canopy, out over the lake and down onto the house from the air (27.5 s, 1440×810, 6.6 MB, muted) — the loop lands on the house and opens the door again. The hero on `/` plays it; `/maison` keeps the entrance film.
+The brand film is in: `public/videos/brand.mp4` — the front door opening and a level walk through the hall to the lake doors, the forest walk to the cabins, arriving on the terrace, the bath in the oak, then up through the canopy, out over the lake and down onto the house from the air (21.7 s, 1440×810, 6.4 MB, muted; cut so the camera never halts — the generated clips stop dead at their ends, so each is cut before its stop) — the loop lands on the house and opens the door again. The hero on `/` plays it; `/maison` keeps the entrance film.
 
 Ivana: a new hero film is coming (Gemini, from the cabin photos) and the home page should say "two places" from the first second. The current home page stays as the Lausanne house's landing; `/cabanes` is the cabins'. The whole thing must sell accommodation — one place or all — and then experiences. And it must be composable: for the next client we switch sections and features on or off instead of rebuilding.
 
