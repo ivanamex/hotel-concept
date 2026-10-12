@@ -4,6 +4,7 @@ import Image from "next/image";
 import { NextPage } from "@/components/site/bands";
 import { ExtraIcon } from "@/components/site/extra-icon";
 import { PhotoHero } from "@/components/site/page-intro";
+import { TableForm } from "@/components/site/table-form";
 import { ButtonLink, Container, RuleLink, SectionHeading } from "@/components/ui";
 import { fmt, getDict, localizeExtra, unitLabel } from "@/i18n";
 import { pageMeta, type LangParams } from "@/i18n/meta";
@@ -60,6 +61,13 @@ export default async function DiningPage({ params }: LangParams) {
               <p className="mt-2 text-sm leading-relaxed text-slate">{p}</p>
             </div>
           ))}
+        </Container>
+
+        {/* RESERVE A TABLE — the request lands in the office inbox */}
+        <div id="table" className="scroll-mt-24" />
+        <Container className="mt-16 grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+          <SectionHeading eyebrow={d.table.eyebrow} title={<Rich text={d.table.title} />} lead={d.table.lead} />
+          <TableForm />
         </Container>
       </section>
 

@@ -49,17 +49,22 @@ export default async function ContactPage({ params }: LangParams) {
               <p className="mt-1 mb-6 text-sm text-slate">{c.writeLead} <Link href="/request" className="font-semibold text-lake">{c.writeLeadLink}</Link>.</p>
               <InquiryForm type="contact" />
             </div>
-            <div className="mt-10">
-              <h2 className="font-display text-3xl text-ink"><Rich text={c.faqTitle} /></h2>
-              <dl className="-mx-4 mt-4 divide-y divide-line border-y border-line">
-                {c.faq.map((f) => (
+          </div>
+        </Container>
+        {/* FAQ — full width, the questions in two columns */}
+        <Container className="mt-16 sm:mt-20">
+          <h2 className="font-display text-3xl text-ink"><Rich text={c.faqTitle} /></h2>
+          <div className="mt-4 grid gap-x-16 lg:grid-cols-2">
+            {[c.faq.slice(0, Math.ceil(c.faq.length / 2)), c.faq.slice(Math.ceil(c.faq.length / 2))].map((col, i) => (
+              <dl key={i} className="-mx-4 divide-y divide-line border-y border-line lg:self-start">
+                {col.map((f) => (
                   <details key={f.q} className="group row-plate py-5">
                     <summary className="flex cursor-pointer list-none items-center gap-4 font-semibold text-ink marker:hidden"><span className="plate-icon flex h-9 w-9 shrink-0 items-center justify-center text-lake"><Plus className="h-5 w-5 transition duration-300 group-open:rotate-45" strokeWidth={1.6} /></span>{f.q}</summary>
                     <p className="mt-3 pl-13 text-sm leading-relaxed text-slate">{f.a}</p>
                   </details>
                 ))}
               </dl>
-            </div>
+            ))}
           </div>
         </Container>
       </section>

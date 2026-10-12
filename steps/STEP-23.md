@@ -22,6 +22,8 @@ Sanity: **Sane.** The home page becomes the brand page; the house gets its own l
 - `entrance.mp4` (the house landing's hero) is now the steady walk through the door, so both heroes share it.
 - Selling, not routing: a room page's price card, when the room is taken or too small, lists the three best units that are free for those dates (this place first) with the stay price and a Book that lands on the details step; nothing free → a request. Every room page ends on the experiences carousel (the fondue evening first on a cabin) instead of the next-page link. The booking's extras step offers the experiences that run on a day of the stay (day · start · people), booked with the room as XP references on one confirmation; the summary and the confirm button carry stay + experiences.
 
+- Dining: *Reserve a table* (date · time · people, name, email, a note) under the terrace section — lands in the office inbox as a concierge request "Restaurant table"; four languages. Contact: the FAQ sits under the contact grid as a full-width two-column block instead of a long right column.
+
 ## What the switchboard drives today
 `brand.multiPlace` (brand home + place landings vs. one house), `places` (order of the cards and the addresses), `home.film`, `home.sections` (order and presence of every home block), `features.experiences / offers / dining / gallery / wholePlace / newsletter / seasonSwitch / ticker / whatsapp` — read by the menu, the footer, the next-page chain, the home page, the house landing, the layout (lightbox, WhatsApp button) and the closing section.
 
