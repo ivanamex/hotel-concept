@@ -46,7 +46,7 @@ export default async function HomePage({ params }: LangParams) {
         <Container className="flex min-h-[92svh] flex-col justify-end pb-28 pt-24 sm:pb-16">
           <div className="hero-words max-w-3xl">
             <Eyebrow light className="mb-5">{b.eyebrow}</Eyebrow>
-            <Reveal as="h1" delay={2} className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
+            <Reveal as="h1" delay={0.15} className="font-display text-[3.4rem] leading-[0.95] text-white sm:text-7xl lg:text-[6.5rem]">
               <Rich text={b.title} />
             </Reveal>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">{b.lead}</p>

@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
-import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { createContext, createElement, useContext, useEffect, useRef, type ElementType, type ReactNode } from "react";
 import { isStale } from "./stale-guard";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -163,6 +163,9 @@ export function MotionProvider({ children }: { children: ReactNode }) {
 }
 
 /** Headline that reveals line by line when it scrolls into view. */
+/** Inside a hero that holds its words back (HeroFilm), a Reveal waits for this gate instead of the scroll position. */
+export const RevealGate = createContext<boolean | undefined>(undefined);
+
 export function Reveal({
   as = "h2",
   children,
@@ -177,6 +180,7 @@ export function Reveal({
   once?: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
+  const gate = useContext(RevealGate);
 
   useEffect(() => {
     const el = ref.current;
@@ -188,6 +192,10 @@ export function Reveal({
       if (cancelled) return;
       ctx = gsap.context(() => {
         split = SplitText.create(el, { type: "lines", mask: "lines", linesClass: "reveal-line" });
+        if (gate === false) {
+          gsap.set(split.lines, { yPercent: 110, opacity: 0 });
+          return;
+        }
         gsap.from(split.lines, {
           yPercent: 110,
           opacity: 0,
@@ -195,7 +203,7 @@ export function Reveal({
           delay,
           ease: "power3.out",
           stagger: 0.09,
-          scrollTrigger: { trigger: el, start: "top 88%", once },
+          scrollTrigger: gate === undefined ? { trigger: el, start: "top 88%", once } : undefined,
         });
       });
     });
@@ -204,7 +212,7 @@ export function Reveal({
       ctx?.revert();
       split?.revert();
     };
-  }, [delay, once]);
+  }, [delay, once, gate]);
 
   return createElement(as, { ref, className }, children);
 }

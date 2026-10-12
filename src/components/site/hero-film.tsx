@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useT } from "@/i18n/context";
+import { RevealGate } from "./motion";
 import { VideoLayer } from "./video-layer";
 
 /**
@@ -20,7 +21,7 @@ export function HeroFilm({ children, caption, video = "/videos/entrance.mp4", im
     <section className="relative min-h-[92svh] overflow-hidden bg-ink" data-show={show ? "1" : "0"}>
       <VideoLayer video={video} image={image} alt={alt ?? t.home.heroAlt} drift driftVideo={false} priority onPlaying={() => setPlaying(true)} />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/45 via-ink/10 to-ink/65" />
-      <div className="relative">{children}</div>
+      <RevealGate.Provider value={show}><div className="relative">{children}</div></RevealGate.Provider>
       <div className="absolute bottom-6 right-6 z-10 hidden sm:block lg:right-12">
         <span className="caps !text-[10px] text-white/70">{caption ?? t.home.heroCaption}</span>
       </div>
