@@ -77,7 +77,7 @@ export interface HotelState {
   resetDemo: () => void;
 }
 
-const SEED_VERSION = 10;
+const SEED_VERSION = 11;
 export const PROMO_CODE = "VIDY10";
 export const PROMO_RATE = 0.1;
 
