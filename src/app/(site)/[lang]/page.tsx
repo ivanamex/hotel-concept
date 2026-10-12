@@ -78,7 +78,7 @@ const PLACE_PAGE: Record<string, { href: string; copy: "house" | "cabanes"; unit
 function Places({ t }: { t: Dict }) {
   const p = t.brand.places;
   return (
-    <section className="py-20 sm:py-28 lg:py-36">
+    <section className="pt-20 sm:pt-28 lg:pt-36">
       <Container>
         <SectionHeading eyebrow={p.eyebrow} title={<Rich text={p.title} />} lead={p.lead} />
         <div className="mt-12 grid gap-6 lg:grid-cols-2 lg:gap-8">
