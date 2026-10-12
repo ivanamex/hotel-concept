@@ -43,8 +43,8 @@ export function LoginForm() {
           <Link href="/" className="inline-flex items-center gap-2.5"><Mark light /><span className="font-display text-xl font-semibold">Maison Vidy</span></Link>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky/80">Back office</p>
-            <h1 className="mt-3 max-w-md font-display text-4xl font-semibold leading-tight">Ten rooms, one screen.</h1>
-            <p className="mt-3 max-w-md text-sky/85">Reservations, the calendar, rates, guests and every message — in one place, for the whole team.</p>
+            <h1 className="mt-3 max-w-md font-display text-4xl font-semibold leading-tight">Two places, one screen.</h1>
+            <p className="mt-3 max-w-md text-sky/85">The house and the cabins — reservations, the calendar, rates, guests and every message in one place, for the whole team.</p>
           </div>
           <p className="text-xs text-sky/60">by 20°N</p>
         </div>
