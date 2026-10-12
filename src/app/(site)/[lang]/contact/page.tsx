@@ -10,6 +10,7 @@ import { getDict } from "@/i18n";
 import { pageMeta, type LangParams } from "@/i18n/meta";
 import { Rich } from "@/i18n/rich";
 import { HOTEL } from "@/lib/seed";
+import { SITE } from "@/lib/site";
 
 export async function generateMetadata({ params }: LangParams): Promise<Metadata> {
   const { lang } = await params;
@@ -68,7 +69,7 @@ export default async function ContactPage({ params }: LangParams) {
           </div>
         </Container>
       </section>
-      <LocationBlock compact />
+      <LocationBlock compact places={SITE.places as ("vidy" | "cabanes")[]} />
       <NextPage current="/contact" />
     </>
   );
