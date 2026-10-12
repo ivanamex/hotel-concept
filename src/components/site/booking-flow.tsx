@@ -220,6 +220,16 @@ export function BookingFlow() {
         <div className="flex justify-between gap-3"><dt className="text-slate">{b.summary.guests}</dt><dd className="font-medium text-ink">{guestsLabelL(adults, children, t)}</dd></div>
         <div className="flex justify-between gap-3"><dt className="text-slate">{b.summary.room}</dt><dd className="text-right font-medium text-ink">{selectedRoom ? selectedRoom.name : <span className="text-slate">—</span>}</dd></div>
         {selectedRoom && <div className="flex justify-between gap-3"><dt className="text-slate">{b.summary.rate}</dt><dd className="text-right font-medium text-ink">{plan.short}</dd></div>}
+        {xpLines.length > 0 && (
+          <div className="flex justify-between gap-3">
+            <dt className="text-slate">{b.summary.experiences}</dt>
+            <dd className="text-right font-medium text-ink">
+              {xpLines.map((l) => (
+                <span key={l.e.slug} className="block">{t.experiences.catalog[l.e.slug]?.name}<span className="block text-xs font-normal text-slate">{fmtDateL(l.date, t, "weekday")} · {l.time} · {l.people}</span></span>
+              ))}
+            </dd>
+          </div>
+        )}
       </dl>
       {q && (
         <>
@@ -241,7 +251,7 @@ export function BookingFlow() {
             <>
               <dl className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
                 {xpLines.map((l) => (
-                  <div key={l.e.slug} className="flex justify-between gap-3"><dt className="text-slate">{t.experiences.catalog[l.e.slug]?.name}<span className="block text-xs">{fmtDateL(l.date, t, "short")} · {l.time} · {l.people}</span></dt><dd className="text-ink">{chf(l.total)}</dd></div>
+                  <div key={l.e.slug} className="flex justify-between gap-3"><dt className="text-slate">{t.experiences.catalog[l.e.slug]?.name} <span className="text-xs">× {l.people}</span></dt><dd className="text-ink">{chf(l.total)}</dd></div>
                 ))}
               </dl>
               <div className="mt-3 flex items-baseline justify-between">
@@ -610,7 +620,7 @@ export function BookingFlow() {
         {/* summary: mobile */}
         <div className="fixed inset-x-0 bottom-0 z-30 lg:hidden">
           <button type="button" onClick={() => setSummaryOpen((v) => !v)} className="flex w-full items-center justify-between border-t border-line bg-white px-5 py-3 text-sm shadow-[0_-8px_24px_-12px_rgba(23,26,31,0.25)]">
-            <span className="font-semibold text-ink">{q ? chf(q.total + xpTotal, { decimals: true }) : nightsLabel(nights, t)}</span>
+            <span className="min-w-0 text-left"><span className="block font-semibold text-ink">{q ? chf(q.total + xpTotal, { decimals: true }) : nightsLabel(nights, t)}</span>{selectedRoom && <span className="block truncate text-xs text-slate">{selectedRoom.name}{xpLines.map((l) => ` + ${t.experiences.catalog[l.e.slug]?.name}`).join("")}</span>}</span>
             <span className="inline-flex items-center gap-1 text-lake">{b.summary.title} <ChevronDown className={clsx("h-4 w-4 transition", summaryOpen && "rotate-180")} /></span>
           </button>
           {summaryOpen && <div className="max-h-[60vh] overflow-y-auto bg-sand p-4">{Summary}</div>}
