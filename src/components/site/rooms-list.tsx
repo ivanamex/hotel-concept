@@ -12,9 +12,9 @@ const HOUSE_VIEWS: ViewType[] = ["Lake", "Garden", "Courtyard"];
 const CABIN_VIEWS: ViewType[] = ["Forest"];
 
 /** The house's rooms, and — when `cabins` is given — a second tab for Les Cabanes. */
-export function RoomsList({ rooms: house, cabins }: { rooms: Room[]; cabins?: Room[] }) {
+export function RoomsList({ rooms: house, cabins, initialPlace = "house" }: { rooms: Room[]; cabins?: Room[]; initialPlace?: "house" | "cabanes" }) {
   const t = useT();
-  const [place, setPlace] = useState<"house" | "cabanes">("house");
+  const [place, setPlace] = useState<"house" | "cabanes">(cabins ? initialPlace : "house");
   const [guests, setGuests] = useState<number | null>(null);
   const [view, setView] = useState<ViewType | null>(null);
   const rooms = place === "cabanes" && cabins ? cabins : house;

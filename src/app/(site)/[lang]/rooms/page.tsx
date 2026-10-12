@@ -14,15 +14,16 @@ export async function generateMetadata({ params }: LangParams): Promise<Metadata
   return pageMeta(lang, "/rooms", { title: t.rooms.metaTitle, description: t.rooms.metaDescription });
 }
 
-export default async function RoomsPage({ params }: LangParams) {
+export default async function RoomsPage({ params, searchParams }: LangParams & { searchParams: Promise<{ place?: string }> }) {
   const { lang } = await params;
+  const { place } = await searchParams;
   const t = getDict(lang);
   return (
     <>
       <PageIntro eyebrow={t.rooms.eyebrow} title={<Rich text={t.rooms.title} />} lead={t.rooms.lead} crumb={t.nav.items.rooms.label} />
       <section className="pb-24">
         <Container>
-          <RoomsList rooms={ROOMS} cabins={CABINS} />
+          <RoomsList rooms={ROOMS} cabins={CABINS} initialPlace={place === "cabanes" ? "cabanes" : "house"} />
           <div className="lift-sm mt-16 rounded-lg bg-lake-deep p-8 text-white sm:p-10 lg:flex lg:items-center lg:justify-between">
             <div>
               <h2 className="font-display text-2xl"><Rich text={t.rooms.groupTitle} /></h2>

@@ -141,7 +141,6 @@ export function LocationBlock({ compact = false, place = "vidy", places }: { com
           <a href={`mailto:${HOTEL.email}`} className="block hover:text-white">{HOTEL.email}</a>
           <a href={`tel:${HOTEL.phone.replace(/\s/g, "")}`} className="block hover:text-white">T. {HOTEL.phone}</a>
         </div>
-        {SITE.features.whatsapp && <a href={whatsappUrl(t.common.whatsappGreeting)} target="_blank" rel="noopener" className={`${ticket} mt-6`}>{l.whatsapp} <ArrowRight className="arrow h-3.5 w-3.5" /></a>}
         {!compact && (
           <ul className="mt-10 flex items-center gap-5 text-sky/80">
             {l.socials.map((s) => (

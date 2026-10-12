@@ -10,6 +10,7 @@ import { localizeRoom, viewLabel } from "@/i18n";
 import { useT } from "@/i18n/context";
 import { Rich } from "@/i18n/rich";
 import { chf } from "@/lib/format";
+import { SITE } from "@/lib/site";
 import type { Room } from "@/lib/types";
 import { Link } from "./link";
 import { prefersReducedMotion, scrollTo } from "./motion";
@@ -24,9 +25,11 @@ const PACE = 0.72;
  * arrows jump a room at a time, "Skip" drops to the next section.
  * Below lg: a native swipe track.
  */
-export function RoomsTrack({ rooms }: { rooms: Room[] }) {
+export function RoomsTrack({ rooms, place = "house" }: { rooms: Room[]; /** Which place's units these are — picks the copy and the links of the closing card. */ place?: "house" | "cabanes" }) {
   const t = useT();
-  const r = t.home.rooms;
+  const r = place === "cabanes" ? t.places.page.track : t.home.rooms;
+  const other = place === "cabanes" ? { card: t.places.page.track.otherCard, cta: t.places.page.track.otherCta, href: "/maison" } : { card: t.places.trackCard, cta: t.places.trackCta, href: "/cabanes" };
+  const allHref = place === "cabanes" ? "/rooms?place=cabanes" : "/rooms";
   const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const bar = useRef<HTMLDivElement>(null);
@@ -145,9 +148,13 @@ export function RoomsTrack({ rooms }: { rooms: Room[] }) {
         <div className="flex w-[70vw] shrink-0 items-center justify-center sm:w-[40vw] lg:w-[26vw]">
           <div className="text-center">
             <p className="font-display text-3xl text-ink"><Rich text={r.allTitle} /></p>
-            <RuleLink href="/rooms" className="mt-6">{r.all}</RuleLink>
-            <p className="mt-10 font-display text-2xl text-ink-soft"><Rich text={t.places.trackCard} /></p>
-            <RuleLink href="/cabanes" className="mt-4">{t.places.trackCta}</RuleLink>
+            <RuleLink href={allHref} className="mt-6">{r.all}</RuleLink>
+            {SITE.brand.multiPlace && (
+              <>
+                <p className="mt-10 font-display text-2xl text-ink-soft"><Rich text={other.card} /></p>
+                <RuleLink href={other.href} className="mt-4">{other.cta}</RuleLink>
+              </>
+            )}
           </div>
         </div>
       </div>

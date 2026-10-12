@@ -5,7 +5,7 @@ import { LocationBlock, NextPage } from "@/components/site/bands";
 import { Link } from "@/components/site/link";
 import { FadeIn, Parallax, Reveal } from "@/components/site/motion";
 import { PhotoHero } from "@/components/site/page-intro";
-import { RoomCard } from "@/components/site/room-card";
+import { RoomsTrack } from "@/components/site/rooms-track";
 import { ButtonLink, Container, Eyebrow, RuleLink, SectionHeading } from "@/components/ui";
 import { fmt, getDict } from "@/i18n";
 import { pageMeta, type LangParams } from "@/i18n/meta";
@@ -69,14 +69,12 @@ export default async function CabanesPage({ params }: LangParams) {
         </Container>
       </section>
 
-      {/* THE CABINS */}
-      <section className="bg-paper py-20 sm:py-28">
-        <Container>
-          <SectionHeading eyebrow={t.places.cabanes.name} title={<Rich text={p.cabinsTitle} />} lead={p.cabinsLead} />
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {cabins.map((c, i) => <RoomCard key={c.id} room={c} priority={i < 2} />)}
-          </div>
+      {/* THE CABINS — the same track as the house */}
+      <RoomsTrack rooms={cabins} place="cabanes" />
 
+      {/* THE WHOLE SITE */}
+      <section className="bg-paper pb-20 sm:pb-28">
+        <Container>
           <div className="lift-sm mt-10 grid gap-8 rounded-lg bg-lake-deep p-8 text-white sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="caps !text-[10px] text-sky">{t.places.cabanes.name}</p>

@@ -16,6 +16,11 @@ Sanity: **Sane.** The home page becomes the brand page; the house gets its own l
 4. **Copy** for the brand hero, the places section and the new nav items in EN · FR · DE · IT.
 5. Sitemap and hreflang carry `/maison`.
 
+## Polish after the click-through (12 Oct)
+- The cabins page shows its cabins on the same pinned track as the house ("Pick your tree"), the closing card points back to the house; `/rooms?place=cabanes` opens the rooms page on the cabins tab.
+- The "Send us a WhatsApp" ticket is gone from the locations block — the floating button is the one WhatsApp entry.
+- `entrance.mp4` (the house landing's hero) is now the steady walk through the door, so both heroes share it.
+
 ## What the switchboard drives today
 `brand.multiPlace` (brand home + place landings vs. one house), `places` (order of the cards and the addresses), `home.film`, `home.sections` (order and presence of every home block), `features.experiences / offers / dining / gallery / wholePlace / newsletter / seasonSwitch / ticker / whatsapp` — read by the menu, the footer, the next-page chain, the home page, the house landing, the layout (lightbox, WhatsApp button) and the closing section.
 
